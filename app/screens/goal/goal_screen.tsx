@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 export const GoalScreen = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text>Goal</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
 });
 
