@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -48,9 +48,16 @@ const logoSection = () => {
 };
 
 const ButtonSection = () => {
+  const router = useRouter();
+
+  const handleGoogleLogin = () => {
+    // 탭바 네비게이션 화면으로 전환
+    router.replace('/(tabs)/home');
+  };
+
   return (
     <View style={styles.buttonContainer}>
-      <View style={styles.googleButton}>
+      <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
         <View style={{ position: 'relative', flex: 1, justifyContent: 'center' }}>
           <Image 
             source={require('../../../assets/images/login/login_google_logo.png')} 
@@ -58,7 +65,7 @@ const ButtonSection = () => {
           />
           <Text style={styles.googleButtonText}>구글 로그인</Text>
         </View>
-      </View>
+      </TouchableOpacity>
       <View style={styles.appleButton}>
         <View style={{ position: 'relative', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Image 
