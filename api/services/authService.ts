@@ -39,11 +39,11 @@ export const AuthService = {
   /**
    * 회원가입
    */
-  register: async (name: string, email: string, password: string) => {
+  signup: async (name: string, email: string, userId: string, socialType: number) => {
     try {
       const response = await apiClient.post<ApiResponse<AuthResponse>>(
-        AuthEndpoints.REGISTER,
-        { name, email, password }
+        AuthEndpoints.SIGNUP,
+        { name, email, userId, socialType }
       );
       
       // 회원가입 성공 시 토큰 저장

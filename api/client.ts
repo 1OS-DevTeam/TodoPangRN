@@ -8,7 +8,6 @@ const baseConfig: AxiosRequestConfig = {
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer `,
   },
 };
 

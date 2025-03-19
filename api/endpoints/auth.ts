@@ -6,7 +6,7 @@
 export const LOGIN = '/auth/login';
 
 // 회원가입
-export const REGISTER = '/auth/register';
+export const SIGNUP = '/auth/signup';
 
 // 로그아웃
 export const LOGOUT = '/auth/logout';

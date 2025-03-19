@@ -97,8 +97,15 @@ const ButtonSection = () => {
         // 서버 로그인 실패 처리 (필요시 사용자에게 알림)
         if (serverError.response && serverError.response.status === 404) {
           console.log('회원가입 페이지로 이동');
-          // 404 에러 발생 시 회원가입 페이지로 이동
-          router.replace('/screens/signup/signup_screen');
+          // 파라미터와 함께 회원가입 페이지로 이동
+          router.replace({
+            pathname: '/screens/signup/signup_screen',
+            params: {
+              userId: userId,
+              email: userCredential.user.email,
+              socialType: 1
+            }
+          });
         }
       }
     } catch (error) {
