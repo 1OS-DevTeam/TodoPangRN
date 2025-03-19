@@ -18,7 +18,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sungyeonkim.TodoPangRN",
+      "package": "com.team1os.teamplan",
       "googleServicesFile": "./google-services.json"
     },
     "web": {
@@ -45,6 +45,14 @@
       "image": "./assets/images/launchScreen/splash_logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "fd98344b-57af-4585-b72c-4163c5e953ec"
+      }
     }
   }
 }
