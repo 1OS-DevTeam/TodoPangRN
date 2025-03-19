@@ -8,6 +8,7 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
 import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID, GOOGLE_ANDROID_CLIENT_ID } from '@env';
 import { AuthService } from '../../../api/services/authService';
+
 GoogleSignin.configure({
   webClientId: GOOGLE_WEB_CLIENT_ID, // 파이어베이스 콘솔에서 받은 웹 클라이언트 ID
   iosClientId: GOOGLE_IOS_CLIENT_ID, // Google Cloud Console에서 받은 iOS 클라이언트 ID
@@ -16,6 +17,7 @@ GoogleSignin.configure({
 
 const handleTermsClick = () => {
     // 나중에 서비스 이용약관 페이지로 이동하는 로직 추가
+    console.log('서비스 이용약관 클릭됨');
 };
 
 const handlePrivacyPolicyClick = () => {
@@ -63,10 +65,10 @@ const ButtonSection = () => {
     try {
       // Google Play 서비스 확인 (Android에서 필요)
       await GoogleSignin.hasPlayServices();
-  
+
       // Google 로그인 요청
       const userInfo = await GoogleSignin.signIn();
-  
+
       // ID 토큰 가져오기
       const idToken = userInfo.data?.idToken;
       if (!idToken) {
@@ -75,7 +77,7 @@ const ButtonSection = () => {
 
       // 파이어베이스 인증 크리덴셜 생성
       const googleCredential = GoogleAuthProvider.credential(idToken);
-  
+
       // 파이어베이스로 로그인
       const userCredential = await signInWithCredential(auth, googleCredential);
       
@@ -95,7 +97,8 @@ const ButtonSection = () => {
         // 서버 로그인 실패 처리 (필요시 사용자에게 알림)
         if (serverError.response && serverError.response.status === 404) {
           console.log('회원가입 페이지로 이동');
-          router.replace('/signup');
+          // 404 에러 발생 시 회원가입 페이지로 이동
+          router.replace('/screens/signup/signup_screen');
         }
       }
     } catch (error) {
