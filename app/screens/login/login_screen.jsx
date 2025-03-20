@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../_layout'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
-import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID, GOOGLE_ANDROID_CLIENT_ID } from '@env';
+import { signInWithCredential, GoogleAuthProvider, OAuthProvider } from 'firebase/auth';
+import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from '@env';
 import { AuthService } from '../../../api/services/authService';
+import * as AppleAuthentication from 'expo-apple-authentication';
 
 GoogleSignin.configure({
   webClientId: GOOGLE_WEB_CLIENT_ID, // 파이어베이스 콘솔에서 받은 웹 클라이언트 ID
@@ -128,6 +129,85 @@ const ButtonSection = () => {
     }
   };
 
+  const handleAppleLogin = async () => {
+    console.log('애플 로그인 시도');
+    
+    try {
+      // 애플 로그인 가능 여부 확인
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
+      if (!isAvailable) {
+        console.log('애플 로그인을 사용할 수 없습니다.');
+        return;
+      }
+  
+      // 애플 인증 요청
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+  
+      // identityToken이 있는지 확인
+      if (!credential.identityToken) {
+        throw new Error('애플 ID 토큰을 가져올 수 없습니다.');
+      }
+  
+      // Firebase 인증을 위한 OAuthProvider 생성
+      const provider = new OAuthProvider('apple.com');
+      const oAuthCredential = provider.credential({
+        idToken: credential.identityToken,
+        rawNonce: credential.nonce, // 보안을 위한 nonce 값
+      });
+  
+      // Firebase로 로그인
+      const userCredential = await signInWithCredential(auth, oAuthCredential);
+      
+      // Firebase 사용자 ID와 토큰 가져오기
+      const userId = userCredential.user.uid;
+      const firebaseIdToken = await userCredential.user.getIdToken();
+      
+      try {
+        // 서버 로그인 요청 - API 호출 (AuthService의 appleLogin 메서드 사용)
+        const loginResponse = await AuthService.appleLogin(credential.identityToken);
+        console.log('서버 애플 로그인 성공:', loginResponse);
+        
+        // 로그인 성공 후 홈 화면으로 이동
+        router.replace('/(tabs)/home');
+      } catch (serverError) {
+        console.error('서버 로그인 중 오류 발생:', serverError);
+        
+        // 새 사용자인 경우 회원가입 페이지로 이동 (404 상태코드는 사용자가 없다는 의미라고 가정)
+        if (serverError.response && serverError.response.status === 404) {
+          console.log('회원가입 페이지로 이동');
+          router.replace({
+            pathname: '/screens/signup/signup_screen',
+            params: {
+              userId: userId,
+              email: userCredential.user.email,
+              socialType: 2 // 애플 로그인은 소셜 타입 2로 가정
+            }
+          });
+        }
+      }
+    } catch (error) {
+      console.error('애플 로그인 중 오류:', error);
+      
+      // 에러 타입 확인 및 처리
+      if (error.code === 'ERR_CANCELED') {
+        console.log('사용자가 애플 로그인을 취소했습니다.');
+      } else if (error.code === 'ERR_APPLE_AUTHENTICATION_UNAVAILABLE') {
+        console.log('이 기기에서는 애플 로그인을 사용할 수 없습니다.');
+      } else if (error.code === 'ERR_APPLE_AUTHENTICATION_INVALID_SCOPE') {
+        console.log('요청된 스코프가 잘못되었습니다.');
+      } else if (error.code === 'ERR_APPLE_AUTHENTICATION_REQUEST_FAILED') {
+        console.log('인증 요청이 실패했습니다.');
+      } else {
+        console.log('알 수 없는 오류 발생:', error.message || '상세 정보 없음');
+      }
+    }
+  };
+
   return (
     <View style={styles.buttonContainer}>
       <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
@@ -138,16 +218,18 @@ const ButtonSection = () => {
           />
           <Text style={styles.googleButtonText}>구글 로그인</Text>
         </View>
-      </TouchableOpacity>
-      <View style={styles.appleButton}>
-        <View style={{ position: 'relative', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Image 
-            source={require('../../../assets/images/login/login_apple_logo.png')} 
-            style={{ position: 'absolute', left: 40 }}
-          />
-          <Text style={styles.appleButtonText}>애플 로그인</Text>
-        </View>
-      </View>
+      </TouchableOpacity> 
+      {Platform.OS === 'ios' && (
+        <TouchableOpacity style={styles.appleButton} onPress={handleAppleLogin}>
+          <View style={{ position: 'relative', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Image 
+              source={require('../../../assets/images/login/login_apple_logo.png')} 
+              style={{ position: 'absolute', left: 40 }}
+            />
+            <Text style={styles.appleButtonText}>애플 로그인</Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

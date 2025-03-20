@@ -11,7 +11,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.team1os.teamplan",
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
