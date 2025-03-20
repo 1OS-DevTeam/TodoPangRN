@@ -66,3 +66,27 @@ export interface UpdateTodoRequest {
   dueDate?: string;
   priority?: 'low' | 'medium' | 'high';
 }
+
+export interface PopularChallenge {
+  title: string;
+  category: number;
+  diff: number;
+  popularity: number;
+}
+
+export interface HomeData {
+  userName: string;
+  finishedProjects: number;
+  registeredProjects: number;
+  categories: {
+    [key: string]: string;
+  };
+  popularChallenges: PopularChallenge[];
+}
+
+export interface HomeResponse {
+  status: number;
+  result: string;
+  message: string;
+  data: HomeData;
+} 

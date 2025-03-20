@@ -1,6 +1,7 @@
 import apiClient from '../client';
 import * as HomeEndpoints from '../endpoints/home';
 import { ApiResponse } from '../types';
+import { HomeData } from '../types';
 
 /**
  * 인증 관련 API 서비스
@@ -11,7 +12,7 @@ export const HomeService = {
    */
   getHome: async (userId: string) => {
     try {
-      const response = await apiClient.post<ApiResponse<Boolean>>(
+      const response = await apiClient.post<ApiResponse<HomeData>>(
         HomeEndpoints.HOME,
         { userId }
       );
@@ -25,7 +26,7 @@ export const HomeService = {
       
       return response.data;
     } catch (error) {
-      console.error('로그인 중 오류 발생:', error);
+      console.error('홈 데이터 로딩 중 오류 발생:', error);
       throw error;
     }
   }
