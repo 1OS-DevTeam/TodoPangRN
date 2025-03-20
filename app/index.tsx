@@ -4,6 +4,9 @@ import LoginScreen from './screens/login/login_screen';
 import { Stack, useRouter } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './_layout';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,6 +19,7 @@ export default function App() {
       if (user) {
         // 사용자가 로그인되어 있으면 홈 화면으로 이동
         console.log('사용자 로그인 상태: 로그인됨', user.uid);
+        AsyncStorage.setItem('userId', user.uid);
         router.replace('/(tabs)/home');
       } else {
         // 로그인되어 있지 않으면 현재 로그인 화면 유지
