@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { HomeService } from '../../../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HomeData } from '../../../api/types';
 import { COLORS } from '../../../assets/colors/colors'
+import { SubHeadText, CaptionText } from '@/app/components/texts';
+
 
 export const HomeScreen = () => {
   const [homeData, setHomeData] = useState<HomeData | null>(null);
@@ -50,23 +52,137 @@ export const HomeScreen = () => {
     );
   };
 
+  // 도전중인 목표 클릭 이벤트 핸들러
+  const handleChallengingGoalsClick = () => {
+    console.log('도전중인 목표 클릭됨');
+    // 네비게이션 기능이 추가되면 다음과 같이 구현할 수 있습니다:
+    // navigation.navigate('ChallengingGoals');
+  };
+
+  // 달성한 목표 클릭 이벤트 핸들러
+  const handleCompletedGoalsClick = () => {
+    console.log('달성한 목표 클릭됨');
+    // 네비게이션 기능이 추가되면 다음과 같이 구현할 수 있습니다:
+    // navigation.navigate('CompletedGoals');
+  };
+
+  // 카테고리 클릭 이벤트 핸들러
+  const handleCategoryClick = (id: string, name: string) => {
+    console.log(`카테고리 클릭됨: ${id}, ${name}`);
+    // 네비게이션 기능이 추가되면 다음과 같이 구현할 수 있습니다:
+    // navigation.navigate('CategoryGoals', { categoryId: id, categoryName: name });
+  };
+
+  // 인기 목표 카드 클릭 이벤트 핸들러
+  const handlePopularChallengeClick = (challenge: any) => {
+    console.log(`인기 목표 카드 클릭됨: ${challenge.title}`);
+    // 네비게이션 기능이 추가되면 다음과 같이 구현할 수 있습니다:
+    // navigation.navigate('ChallengeDetail', { challengeId: challenge.id });
+  };
+
   const challengeBoxSection = () => {
     return (
       <View style={styles.challengeBoxSection}>
-        <View style={styles.challengingBox}>
+        <TouchableOpacity 
+          style={styles.challengingBox}
+          onPress={handleChallengingGoalsClick}
+          activeOpacity={0.7}
+        >
           <Image source={require('../../../assets/images/home/home_arm.png')} style={styles.arm} />
           <View style={styles.challengingContent}>
             <Text style={styles.challengingTitle}>도전중인 목표</Text>
             <Text style={styles.challengingNumber}>12</Text>
           </View>
           <Image source={require('../../../assets/images/home/home_chevron_right.png')} style={styles.arrow} />
-        </View>
-        <View style={styles.completedBox}>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.completedBox}
+          onPress={handleCompletedGoalsClick}
+          activeOpacity={0.7}
+        >
           <View style={styles.completedContent}>
             <Text style={styles.completedTitle}>달성한 목표</Text>
             <Text style={styles.completedNumber}>12</Text>
           </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const categorySection = () => {
+    return (
+      <View style={styles.categorySection}>
+        <SubHeadText>키워드별 도전 목표</SubHeadText>
+        <ScrollView 
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categoryScrollContainer}
+        >
+          {homeData?.categories && Object.entries(homeData.categories).map(([id, name]) => (
+            <TouchableOpacity 
+              key={id} 
+              style={styles.categoryItem}
+              onPress={() => handleCategoryClick(id, name)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.categoryItemText}>{name}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  };
+
+  // 인기 목표 전체보기 기능 처리 함수
+  const handleViewAllPopularChallenges = () => {
+    // 여기에 전체보기 클릭 시 실행할 코드를 작성합니다.
+    // 예: 인기 목표 전체 목록 화면으로 이동
+    console.log('인기 목표 전체보기 클릭됨');
+    // 네비게이션 기능이 추가되면 다음과 같이 구현할 수 있습니다:
+    // navigation.navigate('AllPopularChallenges');
+  };
+
+  const popularChallengeSection = () => {
+    return (
+      <View style={styles.popularChallengeSection}>
+        <View style={styles.popularChallengeTitleContainer}>
+          <SubHeadText>지금 인기있는 목표에요!</SubHeadText>
+          <TouchableOpacity 
+            style={styles.popularChallengeTitleButton}
+            onPress={handleViewAllPopularChallenges}
+            activeOpacity={0.7}
+          >
+            <CaptionText color={COLORS.grey}>전체보기</CaptionText>
+            <Image source={require('../../../assets/images/home/home_chevron_right.png')} style={styles.popularChallengeTitleButtonImage} />
+          </TouchableOpacity>
         </View>
+        
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.popularChallengeScrollContainer}
+        >
+          {homeData?.popularChallenges && 
+            homeData.popularChallenges.slice(0, 10).map((challenge, index) => (
+              <TouchableOpacity 
+                key={index} 
+                style={styles.popularChallengeCard}
+                onPress={() => handlePopularChallengeClick(challenge)}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.popularChallengeCardTitle}>{challenge.title}</Text>
+                <View style={styles.popularChallengeInfo}>
+                  <Text style={styles.popularChallengeDifficulty}>
+                    난이도: {challenge.diff === 1 ? '쉬움' : challenge.diff === 2 ? '보통' : '어려움'}
+                  </Text>
+                  <Text style={styles.popularChallengePopularity}>
+                    인기도: {challenge.popularity}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))
+          }
+        </ScrollView>
       </View>
     );
   };
@@ -96,6 +212,8 @@ export const HomeScreen = () => {
             {navigationSection()}
             {headerSection()}
             {challengeBoxSection()}
+            {categorySection()}
+            {popularChallengeSection()}
           </View>
         </View>
       </ScrollView>
@@ -269,6 +387,95 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#333333',
     marginTop: 4,
+  },
+  categorySection: {
+    paddingHorizontal: 16,
+    paddingTop: 40,
+  },
+  categoryTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.black,
+    marginBottom: 12,
+  },
+  categoryScrollContainer: {
+    paddingTop: 25,
+    paddingRight: 16,
+  },
+  categoryList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  categoryItem: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    marginRight: 10,
+  },
+  categoryItemText: {
+    fontSize: 14,
+    color: COLORS.black,
+  },
+  popularChallengeSection: {
+    paddingHorizontal: 16,
+    paddingTop: 40,
+  },
+  popularChallengeTitleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  popularChallengeTitleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  popularChallengeTitleButtonImage: {
+    width: 16,
+    height: 16,
+  },
+  popularChallengeScrollContainer: {
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  popularChallengeCard: {
+    width: 139,
+    height: 160,
+    backgroundColor: COLORS.white,
+    borderRadius: 8,
+    marginRight: 12,
+    padding: 16,
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  popularChallengeCardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.black,
+    marginBottom: 8,
+  },
+  popularChallengeInfo: {
+    marginTop: 'auto',
+  },
+  popularChallengeDifficulty: {
+    fontSize: 12,
+    color: COLORS.grey,
+    marginBottom: 4,
+  },
+  popularChallengePopularity: {
+    fontSize: 12,
+    color: COLORS.grey,
   },
 });
 

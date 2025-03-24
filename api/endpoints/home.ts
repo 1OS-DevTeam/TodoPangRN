@@ -3,4 +3,4 @@
  */
 
 // 홈화면 정보 조회
-export const HOME = '/home/get';
+export const HOME = '/home/data';
