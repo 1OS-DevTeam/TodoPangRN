@@ -1,0 +1,1 @@
+export const CHALLENGE_INFO_LIST = '/challenge/info/list';

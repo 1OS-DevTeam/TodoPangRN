@@ -89,4 +89,19 @@ export interface HomeResponse {
   result: string;
   message: string;
   data: HomeData;
+}
+
+export interface Challenge {
+  id: number;
+  category: number;
+  title: string;
+  diff: number;
+  popularity: number;
+}
+
+export interface ChallengeInfoList {
+  categories: {
+    [key: string]: string;
+  };
+  infoData: Challenge[];
 } 
