@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'rea
 import { COLORS } from '../../../assets/colors/colors'
 import { SubHeadText, CaptionText } from '@/app/components/texts';
 import { useHomeData } from '../../../hooks/home/useHomeData';
-import { PopularChallenge, HomeData } from '../../../api/types';
+import { PopularChallenge } from '../../../api/types';
 
 export const HomeScreen = () => {
   const { 
