@@ -8,7 +8,7 @@ export const SectionTitleText = ({
   color?: string;
 }) => {
   return (
-    <Text style={{ fontSize: 20, fontWeight: 'bold', color }}>{children}</Text>
+    <Text style={{ fontSize: 17, fontWeight: 'bold', color }}>{children}</Text>
   );
 };
 
