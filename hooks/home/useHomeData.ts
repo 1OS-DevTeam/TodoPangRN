@@ -14,6 +14,8 @@ export const useHomeData = () => {
         if (userId) {
           const response = await HomeService.getHome(userId);
           setHomeData(response.data);
+        } else {
+          console.log('userId가 없습니다.');
         }
       } catch (error) {
         console.error('홈 데이터 로딩 오류:', error);

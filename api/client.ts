@@ -4,7 +4,7 @@ import { responseSuccessInterceptor, responseErrorInterceptor } from './intercep
 
 // 기본 설정
 const baseConfig: AxiosRequestConfig = {
-  baseURL: 'https://todopang.uk',
+  baseURL: 'https://todopang.uk/main',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

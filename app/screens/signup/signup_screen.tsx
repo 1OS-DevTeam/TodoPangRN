@@ -27,7 +27,7 @@ const greetingSection = () => {
 
 const nicknameInputSection = () => {
     const router = useRouter();
-    const { userId, email, socialType } = useLocalSearchParams();
+    const { userId, email, socialType, idToken } = useLocalSearchParams();
 
     const trySignup = async () => {
         if (!nickname.trim()) {
@@ -39,7 +39,8 @@ const nicknameInputSection = () => {
                 nickname, 
                 String(email), 
                 String(userId), 
-                Number(socialType)
+                Number(socialType),
+                String(idToken)
             );
             
             console.log('회원가입 성공:', signupResponse);

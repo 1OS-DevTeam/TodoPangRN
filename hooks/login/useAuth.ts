@@ -5,7 +5,7 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { auth } from '../../app/_layout';
 import { AuthService } from '../../api/services/authService';
 import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from '@env';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 GoogleSignin.configure({
     webClientId: GOOGLE_WEB_CLIENT_ID, // 파이어베이스 콘솔에서 받은 웹 클라이언트 ID
     iosClientId: GOOGLE_IOS_CLIENT_ID, // Google Cloud Console에서 받은 iOS 클라이언트 ID
@@ -45,6 +45,7 @@ export const useAuth = () => {
             try {
                 const loginResponse = await AuthService.login(userId, firebaseIdToken);
                 console.log('서버 로그인 성공:', loginResponse);
+                await AsyncStorage.setItem('auth_token', firebaseIdToken);
                 router.replace('/(tabs)/home');
             } catch (serverError: unknown) {
                 const error = serverError as ServerError;
@@ -55,7 +56,8 @@ export const useAuth = () => {
                         params: {
                             userId: userId,
                             email: userCredential.user.email,
-                            socialType: 1
+                            socialType: 1,
+                            idToken: firebaseIdToken 
                         }
                     });
                 }

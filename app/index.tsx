@@ -18,9 +18,9 @@ export default function App() {
       setIsLoading(false);
       if (user) {
         // 사용자가 로그인되어 있으면 홈 화면으로 이동
-        console.log('사용자 로그인 상태: 로그인됨', user.uid);
-        AsyncStorage.setItem('userId', user.uid);
-        router.replace('/(tabs)/home');
+        // console.log('사용자 로그인 상태: 로그인됨', user.uid);
+        // AsyncStorage.setItem('userId', user.uid);
+        // router.replace('/(tabs)/home');
       } else {
         // 로그인되어 있지 않으면 현재 로그인 화면 유지
         console.log('사용자 로그인 상태: 로그아웃됨');

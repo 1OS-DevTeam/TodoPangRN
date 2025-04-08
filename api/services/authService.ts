@@ -23,10 +23,9 @@ export const AuthService = {
       );
       
       // 로그인 성공 시 토큰 저장
-      if (response.data.result === 'success') {
-        // const { token, refreshToken } = response.data.data;
-        // await AsyncStorage.setItem('auth_token', token);
-        // await AsyncStorage.setItem('refresh_token', refreshToken);
+      if (response.data.data === true) {
+        await AsyncStorage.setItem('id_token', idToken);
+        await AsyncStorage.setItem('userId', userId);
       }
       
       return response.data;
@@ -39,18 +38,22 @@ export const AuthService = {
   /**
    * 회원가입
    */
-  signup: async (name: string, email: string, userId: string, socialType: number) => {
+  signup: async (name: string, email: string, userId: string, socialType: number, idToken: string) => {
     try {
-      const response = await apiClient.post<ApiResponse<AuthResponse>>(
+      const response = await apiClient.post<ApiResponse<Boolean>>(
         AuthEndpoints.SIGNUP,
-        { name, email, userId, socialType }
+        { name, email, userId, socialType },
+        {
+          headers: {
+            Authorization: `Bearer ${idToken}`
+          }
+        }
       );
       
       // 회원가입 성공 시 토큰 저장
-      if (response.data.result === 'success') {
-        const { token, refreshToken } = response.data.data;
-        await AsyncStorage.setItem('auth_token', token);
-        await AsyncStorage.setItem('refresh_token', refreshToken);
+      if (response.data.data === true) {
+        await AsyncStorage.setItem('id_token', idToken);
+        await AsyncStorage.setItem('userId', userId);
       }
       
       return response.data;
