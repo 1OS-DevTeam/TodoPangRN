@@ -105,3 +105,16 @@ export interface ChallengeInfoList {
   };
   infoData: Challenge[];
 } 
+
+export interface ChallengeDetail {
+  challengeId: number;
+  category: number;
+  term: number;
+  diff: number;
+  todoList: Todo[];
+}
+
+export interface Todo {
+  todoId: number;
+  desc: string;
+}
