@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ChallengeService } from '../../api/services/challengeService';
 import { ChallengeInfoList, Challenge } from '../../api/types';
+import { useRouter } from 'expo-router';
 
 export const useChallengeHome = () => {
+  const router = useRouter();
   const [challengeInfoList, setChallengeInfoList] = useState<ChallengeInfoList | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -31,8 +33,15 @@ export const useChallengeHome = () => {
   // 챌린지 클릭 이벤트 핸들러
   const handleChallengePress = (challenge: Challenge) => {
     console.log('챌린지 선택됨:', challenge);
-    // 여기에 챌린지 선택 시 동작 추가 (예: 상세 페이지로 이동)
-    // navigation.navigate('ChallengeDetail', { challengeId: challenge.id });
+
+    router.push({
+      pathname: '/challenge/challenge-detail',
+      params: { 
+        challengeId: challenge.id,
+        headerTitle: '목표 상세',
+        headerBackTitle: '도전과제',
+      }
+    });
   };
 
   // 최초 로딩 시 첫 번째 카테고리 자동 선택

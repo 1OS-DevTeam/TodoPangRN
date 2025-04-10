@@ -1,0 +1,29 @@
+import { useState, useEffect } from 'react';
+import { ChallengeService } from '../../api/services/challengeService';
+import { ChallengeDetail } from '../../api/types';
+
+export const useUserChallengeDetail = (challengeId: string) => {
+    const [challengeDetail, setChallengeDetail] = useState<ChallengeDetail | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchChallengeDetail = async () => {
+            try {
+                const response = await ChallengeService.getChallengeDetail(Number(challengeId));
+                setChallengeDetail(response.data);
+                
+            } catch (error) {
+                console.error('도전과제 상세 조회 오류:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchChallengeDetail();
+    }, [challengeId]);
+
+    return { 
+        challengeDetail, 
+        loading 
+    };
+}   

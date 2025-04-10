@@ -41,7 +41,7 @@ export const useAuth = () => {
 
             const userId = userCredential.user.uid;
             const firebaseIdToken = await userCredential.user.getIdToken();
-
+            console.log('firebaseIdToken', firebaseIdToken);
             try {
                 const loginResponse = await AuthService.login(userId, firebaseIdToken);
                 console.log('서버 로그인 성공:', loginResponse);

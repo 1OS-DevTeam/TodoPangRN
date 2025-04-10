@@ -9,7 +9,7 @@ interface GoalCardProps {
   onPress?: (challenge: Challenge) => void;
 }
 
-export const GoalCard = ({ challenge, onPress }: GoalCardProps) => {
+export const ChallengeCard = ({ challenge, onPress }: GoalCardProps) => {
   const difficultyText = challenge.diff === 1 ? '쉬움' : challenge.diff === 2 ? '보통' : '어려움';
   
   return (
@@ -62,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GoalCard;
+export default ChallengeCard;
