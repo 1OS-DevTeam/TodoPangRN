@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Image } from 'react-native';
 import LoginScreen from './screens/login/login_screen';
 import { Stack, useRouter } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './_layout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,16 +12,19 @@ export default function App() {
 
   useEffect(() => {
     // 로그인 상태 확인을 위한 리스너 설정
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setIsLoading(false);
       if (user) {
         // 사용자가 로그인되어 있으면 홈 화면으로 이동
         // console.log('사용자 로그인 상태: 로그인됨', user.uid);
-        // AsyncStorage.setItem('userId', user.uid);
-        // router.replace('/(tabs)/home');
+        // console.log('사용자 토큰: ', await user.getIdToken());
+        
+        AsyncStorage.setItem('userId', user.uid);
+        AsyncStorage.setItem('auth_token', await user.getIdToken());
+        router.replace('/(tabs)/home');
       } else {
-        // 로그인되어 있지 않으면 현재 로그인 화면 유지
-        console.log('사용자 로그인 상태: 로그아웃됨');
+        // 로그인되어 있지 않으면 현재 로그인 화면 전환
+        router.replace('/screens/login/login_screen');
       }
     });
 
@@ -32,22 +33,22 @@ export default function App() {
   }, [router]);
 
   // 로딩 중일 때 로딩 인디케이터 표시
-  if (isLoading) {
-    return (
-      <>
-        <Stack.Screen options={{ headerShown: false, title: "로딩 중" }} />
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      </>
-    );
-  }
-
-  // 로그인되어 있지 않은 경우 로그인 화면 표시
   return (
     <>
-      <Stack.Screen options={{ headerShown: false, title: "로그인" }} />
-      <LoginScreen />
+      <Stack.Screen options={{ headerShown: false, title: "로딩 중" }} />
+      <View style={{ 
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        backgroundColor: '#7248E1'
+      }}>
+        <Image 
+          source={require('../assets/images/launchScreen/splash_logo.png')} 
+          style={{
+            resizeMode: 'contain'
+          }}
+        />
+      </View>
     </>
   );
 } 

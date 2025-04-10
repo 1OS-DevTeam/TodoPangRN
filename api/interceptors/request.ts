@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  */
 export const requestInterceptor = async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
   // 로컬 스토리지에서 토큰 가져오기
-  const token = await AsyncStorage.getItem('id_token');
+  const token = await AsyncStorage.getItem('auth_token');
   console.log('토큰확인');
   console.log('token', token);  // 토큰이 있으면 헤더에 추가
   if (token) {
