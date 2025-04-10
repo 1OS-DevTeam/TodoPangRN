@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { COLORS } from '../../../assets/colors/colors'
 import { SubHeadText, CaptionText } from '@/app/components/texts';
 import { useHomeData } from '../../../hooks/home/useHomeData';
@@ -151,7 +151,7 @@ export const HomeScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
@@ -172,7 +172,7 @@ export const HomeScreen = () => {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

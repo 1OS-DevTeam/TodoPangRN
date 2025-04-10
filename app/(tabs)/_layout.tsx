@@ -1,5 +1,4 @@
 import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'react-native';
 import { COLORS } from '../../assets/colors/colors';
 
@@ -10,7 +9,8 @@ export default function TabsLayout() {
       tabBarInactiveTintColor: COLORS.grey,
       tabBarStyle: {
         backgroundColor: '#fff',
-        borderTopWidth: 0
+        borderTopWidth: 0,
+        height: 80
       },
       tabBarIconStyle: {
         marginBottom: 4,
