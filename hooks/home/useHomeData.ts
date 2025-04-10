@@ -55,14 +55,14 @@ export const useHomeData = () => {
   const handlePopularChallengeClick = (challenge: PopularChallenge) => {
     console.log(`인기 목표 카드 클릭됨: ${challenge.title}`);
     // 네비게이션 기능이 추가되면 다음과 같이 구현할 수 있습니다:
-    // router.push({
-    //   pathname: '/challenge/challenge-detail',
-    //   params: { 
-    //     challengeId: challenge.id,
-    //     headerTitle: '목표 상세',
-    //     headerBackTitle: '도전과제',
-    //   }
-    // });
+    router.push({
+      pathname: '/challenge/challenge-detail',
+      params: { 
+        challengeId: challenge.challengeId,
+        headerTitle: '목표 상세',
+        headerBackTitle: '도전과제',
+      }
+    });
   };
 
   // 인기 목표 전체보기 기능 처리 함수

@@ -68,6 +68,7 @@ export interface UpdateTodoRequest {
 }
 
 export interface PopularChallenge {
+  challengeId: number;
   title: string;
   category: number;
   diff: number;
