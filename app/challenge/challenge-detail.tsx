@@ -15,6 +15,7 @@ export default function ChallengeDetailPage() {
                     headerShown: true,
                     headerTitle: '목표 상세',
                     headerBackTitle: '도전과제',
+                    headerShadowVisible: false,
                 }}
             />
             <ChallengeDetailScreen route={{ params: { challengeId: challengeId as string } }} />

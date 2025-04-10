@@ -22,8 +22,13 @@ export const useUserChallengeDetail = (challengeId: string) => {
         fetchChallengeDetail();
     }, [challengeId]);
 
+    const handleRegister = () => {
+        console.log('등록하기', challengeDetail);
+    }
+
     return { 
         challengeDetail, 
-        loading 
+        loading,
+        handleRegister
     };
 }   

@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HomeService } from '../../api';
 import { HomeData, PopularChallenge } from '../../api/types';
+import { useRouter } from 'expo-router';
+
 
 export const useHomeData = () => {
+    const router = useRouter();
+
   const [homeData, setHomeData] = useState<HomeData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -45,14 +49,20 @@ export const useHomeData = () => {
   const handleCategoryClick = (id: string, name: string) => {
     console.log(`카테고리 클릭됨: ${id}, ${name}`);
     // 네비게이션 기능이 추가되면 다음과 같이 구현할 수 있습니다:
-    // navigation.navigate('CategoryGoals', { categoryId: id, categoryName: name });
   };
 
   // 인기 목표 카드 클릭 이벤트 핸들러
   const handlePopularChallengeClick = (challenge: PopularChallenge) => {
     console.log(`인기 목표 카드 클릭됨: ${challenge.title}`);
     // 네비게이션 기능이 추가되면 다음과 같이 구현할 수 있습니다:
-    // navigation.navigate('ChallengeDetail', { challengeId: challenge.id });
+    // router.push({
+    //   pathname: '/challenge/challenge-detail',
+    //   params: { 
+    //     challengeId: challenge.id,
+    //     headerTitle: '목표 상세',
+    //     headerBackTitle: '도전과제',
+    //   }
+    // });
   };
 
   // 인기 목표 전체보기 기능 처리 함수

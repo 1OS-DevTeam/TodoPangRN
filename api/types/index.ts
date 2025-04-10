@@ -107,14 +107,23 @@ export interface ChallengeInfoList {
 } 
 
 export interface ChallengeDetail {
+  title: string;
+  popularity: number;
   challengeId: number;
   category: number;
   term: number;
   diff: number;
   todoList: Todo[];
+  reviewList: Review[];
 }
 
 export interface Todo {
   todoId: number;
   desc: string;
+}
+
+export interface Review {
+  reviewId: number;
+  desc: string;
+  count: number;
 }
