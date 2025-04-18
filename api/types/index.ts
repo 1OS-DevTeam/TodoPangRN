@@ -128,3 +128,25 @@ export interface Review {
   desc: string;
   count: number;
 }
+
+export interface WishInfoList {
+  userName: string;
+  registeredChallenges: number;
+  challenges: Challenge[];
+}
+
+export interface WishInfoChallenge {
+  challengeId: number;
+  challengeName: string;
+  todoList: WishInfoTodo[];
+}
+
+export interface WishInfoTodo {
+  title: string;
+  challengeId: number;
+  todoId: number;
+  status: number;
+}
+
+
+

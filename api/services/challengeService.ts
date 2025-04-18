@@ -3,7 +3,6 @@ import * as ChallengeEndpoints from '../endpoints/challenge';
 import { ApiResponse } from '../types';
 import { ChallengeInfoList, ChallengeDetail } from '../types';
 
-
 /**
  * 도전가제 관련 API 서비스
  */

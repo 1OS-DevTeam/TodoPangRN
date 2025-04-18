@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
-import { useChallengeHome } from '../../../hooks/challenge/useChallengeHome';
+import { useWishHome } from '../../../hooks/wish/useWishHome';
 
 const GoalScreen = () => {
-  const { challengeInfoList, loading } = useChallengeHome();
-  console.log(challengeInfoList);
+  const { wishInfoList, loading } = useWishHome();
+  console.log('위시 정보:', wishInfoList);
 
   return (
     <SafeAreaView style={styles.container}>
