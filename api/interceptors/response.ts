@@ -1,4 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
+import { retryRequestWithNewToken } from '../utils/tokenRefresher';
 
 /**
  * 성공 응답 인터셉터
@@ -30,7 +31,7 @@ export const responseSuccessInterceptor = (response: AxiosResponse): AxiosRespon
  * 오류 응답 인터셉터
  * API 요청 중 오류가 발생했을 때 실행됩니다.
  */
-export const responseErrorInterceptor = (error: AxiosError): Promise<never> => {
+export const responseErrorInterceptor = (error: AxiosError): Promise<any> => {
   const { response, request, message, config } = error;
   
   if (__DEV__) {
@@ -74,9 +75,11 @@ export const responseErrorInterceptor = (error: AxiosError): Promise<never> => {
     }
     
     // 401 Unauthorized 오류 처리
-    if (response.status === 401) {
-      // 로그인 페이지로 리디렉션 또는 토큰 갱신 로직
-      // 예: store.dispatch(logoutUser()) 또는 토큰 갱신 로직
+    if (response.status === 401 && config) {
+      console.log('토큰이 만료되었습니다. 토큰 갱신 후 요청을 재시도합니다.');
+      
+      // 토큰 갱신 및 요청 재시도 로직
+      return retryRequestWithNewToken(config);
     }
   } 
   // 요청은 만들어졌지만 응답이 없는 경우 (네트워크 오류)
