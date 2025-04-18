@@ -48,5 +48,25 @@ export const ChallengeService = {
       console.error('도전과제 상세 조회 중 오류 발생:', error);
       throw error;
     }
+  },
+
+  /**
+   * 도전과제 등록하기
+   */
+  registerChallenge: async (challengeId: number, todoIds: number[]) => {
+    try {
+      const response = await apiClient.post<ApiResponse<Boolean>>(
+        ChallengeEndpoints.CHALLENGE_REGISTER,
+        { challengeId, todoIds }
+      );  
+
+      if (response.data.status === 200) {
+
+      }
+      
+      return response.data;
+    } catch (error) {
+      
+    }
   }
 }; 

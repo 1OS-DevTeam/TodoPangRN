@@ -22,8 +22,20 @@ export const useUserChallengeDetail = (challengeId: string) => {
         fetchChallengeDetail();
     }, [challengeId]);
 
-    const handleRegister = () => {
-        console.log('등록하기', challengeDetail);
+    const handleRegister = async () => {
+        try {
+            const challengeId = challengeDetail?.challengeId;
+            const todoIds = challengeDetail?.todoList.map((todo) => todo.todoId);
+            
+            if (challengeId && todoIds) {
+                console.log('등록하기', challengeId, todoIds);
+                const response = await ChallengeService.registerChallenge(challengeId, todoIds);
+            } else {
+                console.error('도전과제 또는 할일 정보가 없습니다.');
+            }
+        } catch (error) {
+            console.error('도전과제 등록 오류:', error);
+        }   
     }
 
     return { 

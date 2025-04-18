@@ -58,7 +58,7 @@ export default function TabsLayout() {
       <Tabs.Screen 
         name="challenge" 
         options={{ 
-          title: "목표", 
+          title: "나의 위시", 
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image 
