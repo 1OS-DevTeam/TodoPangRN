@@ -39,7 +39,7 @@ export default function TabsLayout() {
         }} 
       />
       <Tabs.Screen 
-        name="goal" 
+        name="challenge" 
         options={{ 
           title: "도전과제", 
           headerShown: false,
@@ -56,7 +56,7 @@ export default function TabsLayout() {
         }} 
       />
       <Tabs.Screen 
-        name="challenge" 
+        name="mywish" 
         options={{ 
           title: "나의 위시", 
           headerShown: false,

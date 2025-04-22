@@ -11,7 +11,7 @@ export const useWishHome = () => {
     const fetchData = async () => {
       try {
         const response = await WishService.getWishInfoList();
-        console.log('위시리스트 정보:', response.data);
+        console.log('위시리스트 정보:', JSON.stringify(response.data, null, 2));
         setWishInfoList(response.data);
       } catch (error) {
         console.error('위시리스트 조회 오류:', error);

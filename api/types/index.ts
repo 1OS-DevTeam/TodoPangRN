@@ -132,7 +132,7 @@ export interface Review {
 export interface WishInfoList {
   userName: string;
   registeredChallenges: number;
-  challenges: Challenge[];
+  challenges: WishInfoChallenge[];
 }
 
 export interface WishInfoChallenge {
