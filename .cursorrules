@@ -1,0 +1,149 @@
+# .cursorrules for TodoPang App
+
+## Project Overview
+This is a React Native project using TypeScript and JavaScript, built with Expo (prebuild). The app, TodoPang, helps users set, track, and complete goals and todos. Features include social logins, goal discovery, challenge registration, and todo management.
+
+## Technology Stack
+- Languages: JavaScript, TypeScript
+- Framework: React Native, Expo (prebuild)
+- Key Libraries/Packages:
+  - firebase
+  - expo-image
+  - axios
+  - expo-router
+  - expo-apple-authentication
+  - @react-native-google-signin/google-signin
+  - @react-native-async-storage/async-storage
+- Navigation: Expo Router
+- Styling: React Native StyleSheet
+- State Management: React hooks and context (no Redux)
+- Backend: Firebase (Authentication, Firestore, Storage) + custom server for API logic
+- API Client: axios with configuration in `api/client.ts`
+
+## File Structure
+- Main Tabs: `app/(tabs)` - Contains tab bar navigation screens
+- API Related:
+  - `api/endpoints` - API endpoint definitions
+  - `api/interceptors` - Axios interceptors
+  - `api/services` - API request logic
+  - `api/types` - TypeScript interfaces for API models
+  - `api/utils/tokenRefresher` - Token refresh logic
+  - `api/client.ts` - Axios client (base URL, interceptors)
+  - `api/index.ts` - API module exports
+- Firebase Services: `src/services/RestaurantRegisterService` - Firestore/Storage operations
+- Hooks: `hooks/` - Custom hooks for view/logic separation
+- Navigation: `app/` - Expo Router file-based navigation
+
+## Design Patterns
+- Preferred:
+  - Custom hooks for separating view and logic
+  - Functional components with TypeScript
+  - Modular, reusable components
+- Avoid:
+  - Singleton pattern
+  - Class-based components
+  - Redux
+  - React Native Navigation (use Expo Router)
+
+## Coding Style
+- Styling: Use `StyleSheet.create` for all styles
+- Type Safety: Use TypeScript for components, hooks, and API logic
+- File Naming: Kebab-case (e.g., `my-component.tsx`)
+- Exports: Named exports for components, hooks, utilities
+- Error Handling: Try-catch for async operations with user-friendly errors
+- Comments: JSDoc for functions and complex logic
+
+## Authentication
+- Provider: Firebase Authentication
+- Persistence: `getReactNativePersistence(AsyncStorage)` for session storage
+- Auto-Login:
+  - Use `onAuthStateChanged` to check login state on app start
+  - Store `auth_token`, `id_token`, `userId` in AsyncStorage
+  - Redirect to `app/(tabs)` (home) if logged in, else login screen
+- Social Login:
+  - Google: `@react-native-google-signin/google-signin` with web/iOS client IDs
+  - Apple: `expo-apple-authentication` requesting name and email
+  - Pass credentials to Firebase Authentication
+- Server Sync:
+  - Send Firebase token to custom server for login
+  - On 404 (user not found), redirect to signup screen
+  - Store server tokens in AsyncStorage
+- Token Management:
+  - Store `auth_token`, `id_token`, `userId` in AsyncStorage
+  - Refresh tokens with `refreshFirebaseToken`
+  - Update AsyncStorage with new tokens
+
+## Features
+### Login Screen
+- Buttons for Google and Apple login
+- Firebase Authentication for token retrieval
+- Server login:
+  - 200: Navigate to `app/(tabs)` (home)
+  - 404: Navigate to signup screen
+
+### Home Screen (`app/(tabs)/home`)
+- Shows current and completed goals
+- Horizontal scroll for popular goals
+
+### Challenges Tab (`app/(tabs)/challenges`)
+- Lists app-provided challenges
+- Click to view challenge details
+- Register challenges as user goals
+- Category sorting at the top
+
+### My Wish Tab (`app/(tabs)/my-wish`)
+- Scrollable list of user-registered challenges
+- Complete challenges; toggle todos with checkboxes
+
+### My Page (`app/(tabs)/my-page`)
+- To be implemented
+
+## Constraints
+- Avoid:
+  - React Native Navigation
+  - Redux
+  - Singleton pattern
+- Dependencies: Use only listed packages unless justified
+- Performance: Optimize for mobile (memoize components, avoid heavy re-renders)
+
+## Development Guidelines
+- Commits: Clear messages (e.g., `feat: add google login`, `fix: token refresh bug`)
+- Testing: Unit tests for hooks/services with Jest
+- Linting: Follow ESLint and Prettier
+- Types: Interfaces for API responses and props
+- Async Operations: Use async/await, not `.then`
+- Navigation: Use Expo Router (`app/` directory)
+
+## Example Code Snippets
+**Example of preferred component structure:**
+```typescript
+const RestaurantDetailScreen = () => {
+    // Helper function for image section
+    const imageSection = () => (
+        <View style={styles.imageSliderContainer}>
+            <FlatList data={imageUrls} ... />
+            <View style={styles.paginationContainer}>...</View>
+        </View>
+    );
+    
+    // Helper function for main info section
+    const mainInfoSection = () => (
+        <View style={styles.restaurantInfoSection}>
+            <Text style={styles.restaurantName}>{restaurantName}</Text>
+            ...
+        </View>
+    );
+    
+    return (
+        <View style={styles.container}>
+            {imageSection()}
+            <ScrollView>
+                {mainInfoSection()}
+                {corkageInfoSection()}
+                {businessInfoSection()}
+                {commentSection()}
+            </ScrollView>
+        </View>
+    );
+};
+```
