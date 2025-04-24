@@ -8,9 +8,10 @@ import { WishTodoRow } from './wish_todo_row';
 interface WishCardProps {
   challenge: WishInfoChallenge;
   onPress?: (challenge: WishInfoChallenge) => void;
+  handleTodoToggle?: (todoId: number) => void;
 }
 
-export const WishListCard = ({ challenge, onPress }: WishCardProps) => {
+export const WishListCard = ({ challenge, onPress, handleTodoToggle }: WishCardProps) => {
 
   const wishHeaderSection = () => {
     return (
@@ -38,6 +39,7 @@ export const WishListCard = ({ challenge, onPress }: WishCardProps) => {
             key={todo.todoId} 
             todo={todo} 
             isLast={index === challenge.todoList.length - 1} 
+            onToggleStatus={handleTodoToggle}
           />
         ))}
       </View>

@@ -23,8 +23,14 @@ export const useWishHome = () => {
     fetchData();
   }, []);
 
+    // 도전중인 목표 클릭 이벤트 핸들러
+    const handleTodoToggle = (todoId: number) => {
+      console.log('투두 클릭됨', todoId);
+    };
+
   return { 
     wishInfoList, 
-    loading
+    loading,
+    handleTodoToggle
   };
 };

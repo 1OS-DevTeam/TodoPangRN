@@ -14,6 +14,7 @@ interface GoalCardProps {
 export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus }: GoalCardProps) => {
   
   const handleToggle = () => {
+    console.log('handleToggle', todo.todoId);
     if (onToggleStatus) {
       onToggleStatus(todo.todoId);
     }

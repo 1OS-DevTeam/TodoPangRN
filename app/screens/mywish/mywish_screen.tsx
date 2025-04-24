@@ -8,7 +8,9 @@ import { COLORS } from '../../../assets/colors/colors';
 
 const MyWishScreen = () => {
   const { 
-    wishInfoList, loading 
+    wishInfoList, 
+    loading,
+    handleTodoToggle
   } = useWishHome();
 
   const headerSection = () => {
@@ -58,7 +60,7 @@ const MyWishScreen = () => {
             challengeName: challenge.challengeName,
             todoList: challenge.todoList,
           }) as WishInfoChallenge)}
-          renderItem={({ item }) => <WishListCard challenge={item} />}
+          renderItem={({ item }) => <WishListCard challenge={item} handleTodoToggle={handleTodoToggle} />}
           ItemSeparatorComponent={() => <View style={{ height: 16 }}>
             <View style={{ height: 1, backgroundColor: COLORS.whiteGrey, width: '100%' }} />
           </View>}
