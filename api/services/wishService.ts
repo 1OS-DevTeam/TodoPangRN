@@ -1,6 +1,6 @@
 import apiClient from '../client';
 import * as WishEndpoints from '../endpoints/wish';
-import { ApiResponse, WishInfoList, WishUpdateRequest } from '../types';
+import { ApiResponse, WishInfoList, WishUpdateRequest, WishCompleteRequest } from '../types';
 
 
 /**
@@ -28,7 +28,7 @@ export const WishService = {
     },
 
     /**
-     * 위시 업데이트
+     * 투두 업데이트
      */
     updateWish: async (challeneges: WishUpdateRequest) => {
       try {
@@ -40,6 +40,23 @@ export const WishService = {
         return response.data;
       } catch (error) {
         console.error('위시 업데이트 중 오류 발생:', error);
+        throw error;
+      }
+    },
+
+    /**
+     * 위시 완료
+     */
+    completeWish: async (challengeList: WishCompleteRequest) => {
+      try {
+        const response = await apiClient.post<ApiResponse<Boolean>>(
+          WishEndpoints.WISH_COMPLETE,
+          challengeList
+        );
+
+        return response.data;
+      } catch (error) {
+        console.error('위시 완료 중 오류 발생:', error);
         throw error;
       }
     }

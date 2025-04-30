@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, FlatList } from 'react-native';
 import { useWishHome } from '../../../hooks/wish/useWishHome';
 import { HeadText } from '@/app/components/texts';
@@ -7,11 +7,33 @@ import { WishInfoChallenge } from '../../../api/types';
 import { COLORS } from '../../../assets/colors/colors';
 
 const MyWishScreen = () => {
+  const [loadingTodoId, setLoadingTodoId] = useState<number | undefined>(undefined);
+  const [loadingWishId, setLoadingWishId] = useState<number | undefined>(undefined);
+  
   const { 
     wishInfoList, 
     loading,
-    handleTodoToggle
+    handleTodoToggle,
+    handleWishComplete
   } = useWishHome();
+
+  const onTodoToggle = async (todoId: number) => {
+    setLoadingTodoId(todoId);
+    try {
+      await handleTodoToggle?.(todoId);
+    } finally {
+      setLoadingTodoId(undefined);
+    }
+  };
+
+  const onWishComplete = async (challenge: WishInfoChallenge) => {
+    setLoadingWishId(challenge.challengeId);
+    try {
+      await handleWishComplete?.(challenge);
+    } finally {
+      setLoadingWishId(undefined);
+    }
+  };
 
   const headerSection = () => {
     return (
@@ -60,10 +82,20 @@ const MyWishScreen = () => {
             challengeName: challenge.challengeName,
             todoList: challenge.todoList,
           }) as WishInfoChallenge)}
-          renderItem={({ item }) => <WishListCard challenge={item} handleTodoToggle={handleTodoToggle} />}
-          ItemSeparatorComponent={() => <View style={{ height: 16 }}>
-            <View style={{ height: 1, backgroundColor: COLORS.whiteGrey, width: '100%' }} />
-          </View>}
+          renderItem={({ item }) => (
+            <WishListCard 
+              challenge={item} 
+              handleTodoToggle={onTodoToggle}
+              handleWishComplete={onWishComplete}
+              isLoading={loadingWishId === item.challengeId}
+              loadingTodoId={loadingTodoId}
+            />
+          )}
+          ItemSeparatorComponent={() => (
+            <View style={{ height: 16 }}>
+              <View style={{ height: 1, backgroundColor: COLORS.whiteGrey, width: '100%' }} />
+            </View>
+          )}
           style={styles.wishList}
         />
       </View>

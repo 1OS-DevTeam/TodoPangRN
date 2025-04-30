@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { WishInfoChallenge } from '../../../../api/types';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { WishInfoChallenge, WishCompleteRequest } from '../../../../api/types';
 import { COLORS } from '../../../../assets/colors/colors';  
 import { CaptionText, SectionTitleText } from '@/app/components/texts';
 import { WishTodoRow } from './wish_todo_row';
@@ -9,16 +9,34 @@ interface WishCardProps {
   challenge: WishInfoChallenge;
   onPress?: (challenge: WishInfoChallenge) => void;
   handleTodoToggle?: (todoId: number) => void;
+  handleWishComplete?: (challenge: WishInfoChallenge) => void;
+  isLoading?: boolean;
+  loadingTodoId?: number;
 }
 
-export const WishListCard = ({ challenge, onPress, handleTodoToggle }: WishCardProps) => {
+export const WishListCard = ({ 
+  challenge, 
+  onPress, 
+  handleTodoToggle, 
+  handleWishComplete,
+  isLoading,
+  loadingTodoId 
+}: WishCardProps) => {
 
   const wishHeaderSection = () => {
     return (
       <View style={styles.wishHeaderSection}>
           <Text style={styles.wishHeaderText}>{challenge.challengeName}</Text>
-          <TouchableOpacity style={styles.wishCompleteButton}>
-            <Text style={styles.wishCompleteButtonText}>이루기</Text>
+          <TouchableOpacity 
+            style={styles.wishCompleteButton}
+            onPress={() => handleWishComplete?.(challenge)}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator size="small" color={COLORS.mainPurple} />
+            ) : (
+              <Text style={styles.wishCompleteButtonText}>이루기</Text>
+            )}
           </TouchableOpacity>
       </View>
     );
@@ -40,6 +58,7 @@ export const WishListCard = ({ challenge, onPress, handleTodoToggle }: WishCardP
             todo={todo} 
             isLast={index === challenge.todoList.length - 1} 
             onToggleStatus={handleTodoToggle}
+            isLoading={isLoading && loadingTodoId === todo.todoId}
           />
         ))}
       </View>

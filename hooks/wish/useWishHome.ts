@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { WishService } from '../../api/services/wishService';
-import { WishInfoList, WishUpdateRequest, WishUpdateTodo } from '../../api/types';
+import { WishInfoList, WishUpdateRequest, WishUpdateTodo, WishInfoChallenge, WishCompleteRequest } from '../../api/types';
 
 // 투두 변경사항 타입 정의
 type TodoChange = {
@@ -199,9 +199,29 @@ export const useWishHome = () => {
     }, 0);
   };
 
+  // 이루기 이벤트 핸들러
+  const handleWishComplete = (challenge: WishInfoChallenge) => {
+    console.log('이루기 이벤트 핸들러', challenge);
+
+    const completeRequest: WishCompleteRequest = {
+      challengeList: [
+        {
+          challengeId: challenge.challengeId,
+          challengeStatus: 3
+        } 
+      ]
+    };
+
+    WishService.completeWish(completeRequest)
+      .then(response => {
+        console.log('위시 완료 성공:', response);
+      });
+  };
+
   return { 
     wishInfoList, 
     loading,
-    handleTodoToggle
+    handleTodoToggle,
+    handleWishComplete
   };
 };

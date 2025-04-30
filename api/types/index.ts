@@ -162,4 +162,13 @@ export interface WishUpdateTodo {
   status: number;
 }
 
+export interface WishCompleteRequest {
+  challengeList: WishCompleteChallenge[];
+}
+
+export interface WishCompleteChallenge {
+  challengeId: number;
+  challengeStatus: number;
+}
+
 
