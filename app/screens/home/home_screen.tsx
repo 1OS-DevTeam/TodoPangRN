@@ -29,8 +29,8 @@ export const HomeScreen = () => {
     return (
       <View style={styles.headerSection}>
         <View style={styles.headerDescription}>
-          <Text style={styles.headerText}>{homeData?.userName}님, 지금까지</Text>
-          <Text style={styles.headerText}>총 <Text style={styles.headerTextBold}>20개</Text>의 목표를 달성했어요!</Text>
+          <Text style={styles.headerText}>{homeData?.userData?.userName}님, 지금까지</Text>
+          <Text style={styles.headerText}>총 <Text style={styles.headerTextBold}>{homeData?.userData?.finishedProjects}개</Text>의 목표를 달성했어요!</Text>
         </View>
         <View style={styles.headerBomb}>
           <Image source={require('../../../assets/images/home/home_bomb.png')} style={styles.bomb} />
@@ -50,7 +50,7 @@ export const HomeScreen = () => {
           <Image source={require('../../../assets/images/home/home_arm.png')} style={styles.arm} />
           <View style={styles.challengingContent}>
             <Text style={styles.challengingTitle}>도전중인 목표</Text>
-            <Text style={styles.challengingNumber}>12</Text>
+            <Text style={styles.challengingNumber}>{homeData?.userData?.registeredProjects}</Text>
           </View>
           <Image source={require('../../../assets/images/home/home_chevron_right.png')} style={styles.arrow} />
         </TouchableOpacity>
@@ -61,7 +61,7 @@ export const HomeScreen = () => {
         >
           <View style={styles.completedContent}>
             <Text style={styles.completedTitle}>달성한 목표</Text>
-            <Text style={styles.completedNumber}>12</Text>
+            <Text style={styles.completedNumber}>{homeData?.userData?.finishedProjects}</Text>
           </View>
         </TouchableOpacity>
       </View>

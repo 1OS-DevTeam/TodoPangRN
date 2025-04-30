@@ -76,9 +76,11 @@ export interface PopularChallenge {
 }
 
 export interface HomeData {
-  userName: string;
-  finishedProjects: number;
-  registeredProjects: number;
+  userData: {
+    userName: string;
+    finishedProjects: number;
+    registeredProjects: number;
+  };
   categories: {
     [key: string]: string;
   };

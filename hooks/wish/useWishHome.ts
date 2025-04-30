@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
 import { WishService } from '../../api/services/wishService';
 import { WishInfoList, WishUpdateRequest, WishInfoChallenge, WishCompleteRequest } from '../../api/types';
 import Toast from 'react-native-toast-message';
@@ -9,22 +11,24 @@ export const useWishHome = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [loadingTodoId, setLoadingTodoId] = useState<number | null>(null);
 
-  // 데이터 로드
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await WishService.getWishInfoList();
-        console.log('위시리스트 정보:', JSON.stringify(response.data, null, 2));
-        setWishInfoList(response.data);
-      } catch (error) {
-        console.error('위시리스트 조회 오류:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await WishService.getWishInfoList();
+      console.log('위시리스트 정보:', JSON.stringify(response.data, null, 2));
+      setWishInfoList(response.data);
+    } catch (error) {
+      console.error('위시리스트 조회 오류:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   // 투두 토글 이벤트 핸들러
   const handleTodoToggle = async (todoId: number) => {

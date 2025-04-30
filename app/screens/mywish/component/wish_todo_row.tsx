@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { Image } from 'expo-image';
 import { Challenge, WishInfoTodo } from '../../../../api/types';
 import { COLORS } from '../../../../assets/colors/colors';  
 import { CaptionText, SectionTitleText } from '@/app/components/texts';
@@ -42,6 +43,8 @@ export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isL
           ? require('../../../../assets/images/mywish/wish_todo_check_off.png')
           : require('../../../../assets/images/mywish/wish_todo_check_on.png')}
         style={styles.todoCheck}
+        contentFit="contain"
+        cachePolicy="memory-disk"
       />
     );
   };
@@ -60,6 +63,8 @@ export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isL
         <Image
           source={require('../../../../assets/images/mywish/wish_todo_menu.png')}
           style={styles.todoMenu}
+          contentFit="contain"
+          cachePolicy="memory-disk"
         />
       </View>
       {!isLast && (
@@ -67,6 +72,8 @@ export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isL
           <Image 
             source={require('../../../../assets/images/challenge/todolist_divider.png')} 
             style={styles.divider}
+            contentFit="contain"
+            cachePolicy="memory-disk"
           /> 
         </TouchableOpacity>
       )}

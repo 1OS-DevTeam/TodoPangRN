@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, ActivityIndicator } from 'react-native';
 import { useWishHome } from '../../../hooks/wish/useWishHome';
 import { HeadText } from '@/app/components/texts';
 import { WishListCard } from './component/wish_list_card';
@@ -71,8 +71,8 @@ const MyWishScreen = () => {
   const wishListSection = () => {
     if (loading || !wishInfoList?.challenges) {
       return (
-        <View style={styles.wishListSection}>
-          <Text>로딩 중...</Text>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.mainPurple} />
         </View>
       );
     }
@@ -194,6 +194,12 @@ const styles = StyleSheet.create({
   },
   wishList: {
     width: '100%',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff'
   },
 });
 
