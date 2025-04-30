@@ -58,7 +58,7 @@ export const WishListCard = ({
             todo={todo} 
             isLast={index === challenge.todoList.length - 1} 
             onToggleStatus={handleTodoToggle}
-            isLoading={isLoading && loadingTodoId === todo.todoId}
+            isLoading={loadingTodoId === todo.todoId}
           />
         ))}
       </View>

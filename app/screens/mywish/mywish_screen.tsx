@@ -5,6 +5,7 @@ import { HeadText } from '@/app/components/texts';
 import { WishListCard } from './component/wish_list_card';
 import { WishInfoChallenge } from '../../../api/types';
 import { COLORS } from '../../../assets/colors/colors';
+import Toast from 'react-native-toast-message';
 
 const MyWishScreen = () => {
   const [loadingTodoId, setLoadingTodoId] = useState<number | undefined>(undefined);
@@ -18,10 +19,12 @@ const MyWishScreen = () => {
   } = useWishHome();
 
   const onTodoToggle = async (todoId: number) => {
+    if (loadingTodoId) return; // 이미 로딩 중이면 리턴
     setLoadingTodoId(todoId);
     try {
       await handleTodoToggle?.(todoId);
-    } finally {
+      setLoadingTodoId(undefined);
+    } catch (error) {
       setLoadingTodoId(undefined);
     }
   };

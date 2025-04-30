@@ -15,7 +15,7 @@ interface GoalCardProps {
 export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isLoading }: GoalCardProps) => {
   
   const handleToggle = () => {
-    console.log('handleToggle', todo.todoId);
+    if (isLoading) return;
     if (onToggleStatus) {
       onToggleStatus(todo.todoId);
     }
@@ -27,40 +27,49 @@ export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isL
     }
   };
   
+  const renderCheckbox = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.checkboxContainer}>
+          <ActivityIndicator size="small" color={COLORS.mainPurple} />
+        </View>
+      );
+    }
+
+    return (
+      <Image
+        source={todo.status === 2 
+          ? require('../../../../assets/images/mywish/wish_todo_check_off.png')
+          : require('../../../../assets/images/mywish/wish_todo_check_on.png')}
+        style={styles.todoCheck}
+      />
+    );
+  };
+  
   return (
-    <View style={[styles.wishTodoRow, !isLast && styles.borderBottom]}>  
-        <View style={styles.contents}>
+    <View style={styles.wishTodoRow}>  
+      <View style={styles.contents}>
         <TouchableOpacity 
-          style={styles.checkbox}
           onPress={handleToggle}
           disabled={isLoading}
+          style={styles.checkboxTouchable}
         >
-          {isLoading ? (
-            <ActivityIndicator size="small" color={COLORS.mainPurple} />
-          ) : (
-            <View style={[
-              styles.checkboxInner,
-              todo.status === 2 && styles.checkboxChecked
-            ]} />
-          )}
+          {renderCheckbox()}
         </TouchableOpacity>
-        <Text style={[
-          styles.todoTitle,
-          todo.status === 2 && styles.todoTextCompleted
-        ]}>{todo.title || ''}</Text>
+        <Text style={styles.todoTitle}>{todo.title || ''}</Text>
         <Image
-            source={require('../../../../assets/images/mywish/wish_todo_menu.png')}
-            style={styles.todoMenu}
+          source={require('../../../../assets/images/mywish/wish_todo_menu.png')}
+          style={styles.todoMenu}
         />
-        </View>
-        {!isLast && (
+      </View>
+      {!isLast && (
         <TouchableOpacity onPress={tapTodoMenu}>
-            <Image 
-                source={require('../../../../assets/images/challenge/todolist_divider.png')} 
-                style={styles.divider}
-            /> 
+          <Image 
+            source={require('../../../../assets/images/challenge/todolist_divider.png')} 
+            style={styles.divider}
+          /> 
         </TouchableOpacity>
-        )}
+      )}
     </View>
   );
 };
@@ -70,36 +79,28 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'column',
     height: 66,
-    // alignItems: 'center',
     justifyContent: 'space-between',
   },
-  borderBottom: {
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.whiteGrey,
+  todoCheck: {
+    width: 25,
+    height: 25,
   },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: COLORS.mainPurple,
-    marginLeft: 16,
+  checkboxContainer: {
+    width: 25,
+    height: 25,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  checkboxInner: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-  },
-  checkboxChecked: {
-    backgroundColor: COLORS.mainPurple,
+  checkboxTouchable: {
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   todoTitle: {
     fontSize: 14,
     fontWeight: 'regular',
     color: '#1E1E1E',
-    paddingLeft: 16,
+    paddingLeft: 8,
   },
   todoMenu: {
     width: 16,
@@ -116,10 +117,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 1,
     marginTop: 'auto',
-  },
-  todoTextCompleted: {
-    textDecorationLine: 'line-through',
-    color: COLORS.grey,
   },
 });
 

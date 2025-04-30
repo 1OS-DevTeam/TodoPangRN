@@ -149,7 +149,7 @@ export interface WishInfoTodo {
 }
 
 export interface WishUpdateRequest {
-  challengeList: WishInfoChallenge[];
+  challengeList: WishUpdateChallenge[];
 }
 
 export interface WishUpdateChallenge {
@@ -159,7 +159,8 @@ export interface WishUpdateChallenge {
 
 export interface WishUpdateTodo {
   todoId: number;
-  status: number;
+  challengeId: number;
+  updatedStatus: number;
 }
 
 export interface WishCompleteRequest {

@@ -29,7 +29,7 @@ export const HomeScreen = () => {
     return (
       <View style={styles.headerSection}>
         <View style={styles.headerDescription}>
-          <Text style={styles.headerText}>하나님, 지금까지</Text>
+          <Text style={styles.headerText}>{homeData?.userName}님, 지금까지</Text>
           <Text style={styles.headerText}>총 <Text style={styles.headerTextBold}>20개</Text>의 목표를 달성했어요!</Text>
         </View>
         <View style={styles.headerBomb}>
