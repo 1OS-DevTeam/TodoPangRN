@@ -5,7 +5,7 @@ import { Stack, useRouter } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './_layout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { AuthService } from '../api/services/authService';
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -22,6 +22,18 @@ export default function App() {
         AsyncStorage.setItem('userId', user.uid);
         AsyncStorage.setItem('auth_token', await user.getIdToken());
         router.replace('/(tabs)/home');
+        const userId = user.uid;
+        const firebaseIdToken = await user.getIdToken();
+        console.log('firebaseIdToken', firebaseIdToken);
+        try {
+            const loginResponse = await AuthService.login(userId, firebaseIdToken);
+            console.log('서버 로그인 성공:', loginResponse);
+            await AsyncStorage.setItem('auth_token', firebaseIdToken);
+            router.replace('/(tabs)/home');
+        } catch (serverError: unknown) {
+            console.error('서버 로그인 중 오류 발생:', serverError);
+            router.replace('/screens/login/login_screen');
+        }
       } else {
         // 로그인되어 있지 않으면 현재 로그인 화면 전환
         router.replace('/screens/login/login_screen');
