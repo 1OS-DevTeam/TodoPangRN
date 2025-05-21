@@ -120,10 +120,25 @@ export const useWishHome = () => {
   const handleTodoDelete = async (todo: WishInfoTodo) => {
     console.log('두투 삭제 이벤트 핸들러', todo);
 
+    if (!wishInfoList) return;
+
+    let targetChallenge = null;
+    
+    for (const challenge of wishInfoList.challenges) {
+      const foundTodo = challenge.todoList.find(t => t.todoId === todo.todoId);
+      if (foundTodo) {
+        targetChallenge = challenge;
+        break;
+      }
+    }
+
+    if (!targetChallenge) return;
+    const challengeId = targetChallenge.challengeId;
+
     try {
       const updateRequest: WishUpdateRequest = {
         challengeList: [{
-          challengeId: todo.challengeId,
+          challengeId: challengeId,
           todoList: [{
             todoId: todo.todoId,
             updatedStatus: 4
