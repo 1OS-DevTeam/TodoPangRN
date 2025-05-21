@@ -19,6 +19,7 @@ const MyWishScreen = () => {
     loading,
     handleTodoToggle,
     handleWishComplete,
+    handleTodoDelete,
     fetchData
   } = useWishHome();
 
@@ -105,6 +106,7 @@ const MyWishScreen = () => {
               handleWishComplete={onWishComplete}
               isLoading={loadingWishId === item.challengeId}
               loadingTodoId={loadingTodoId}
+              handleTodoDelete={handleTodoDelete}
             />
           )}
           ItemSeparatorComponent={() => (

@@ -163,7 +163,6 @@ export interface WishUpdateChallenge {
 
 export interface WishUpdateTodo {
   todoId: number;
-  challengeId: number;
   updatedStatus: number;
 }
 

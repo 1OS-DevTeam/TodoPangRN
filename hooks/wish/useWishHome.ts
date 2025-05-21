@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import { WishService } from '../../api/services/wishService';
-import { WishInfoList, WishUpdateRequest, WishInfoChallenge, WishCompleteRequest } from '../../api/types';
+import { WishInfoList, WishUpdateRequest, WishInfoChallenge, WishCompleteRequest, WishInfoTodo } from '../../api/types';
 import Toast from 'react-native-toast-message';
 
 export const useWishHome = () => {
@@ -65,7 +65,6 @@ export const useWishHome = () => {
           challengeId,
           todoList: [{
             todoId,
-            challengeId,
             updatedStatus: newStatus
           }]
         }]
@@ -117,6 +116,55 @@ export const useWishHome = () => {
     }
   };
 
+  // 두투 삭제 이벤트 핸들러
+  const handleTodoDelete = async (todo: WishInfoTodo) => {
+    console.log('두투 삭제 이벤트 핸들러', todo);
+
+    try {
+      const updateRequest: WishUpdateRequest = {
+        challengeList: [{
+          challengeId: todo.challengeId,
+          todoList: [{
+            todoId: todo.todoId,
+            updatedStatus: 4
+          }]
+        }]
+      };
+
+      const response = await WishService.updateWish(updateRequest);
+      
+      if (response.data && wishInfoList) {
+        // 성공 시 UI에서 해당 Todo 제거
+        setWishInfoList({
+          ...wishInfoList,
+          challenges: wishInfoList.challenges.map(challenge => {
+            if (challenge.challengeId !== todo.challengeId) return challenge;
+            
+            return {
+              ...challenge,
+              todoList: challenge.todoList.filter(t => t.todoId !== todo.todoId)
+            };
+          })
+        });
+
+        Toast.show({
+          type: 'success',
+          text1: '할 일이 삭제되었습니다.',
+          position: 'bottom',
+          visibilityTime: 2000,
+        });
+      }
+    } catch (error) {
+      console.error('두투 삭제 실패:', error);
+      Toast.show({
+        type: 'error',
+        text1: '삭제에 실패했습니다.',
+        position: 'bottom',
+        visibilityTime: 2000,
+      });
+    }
+  };
+
   // 이루기 이벤트 핸들러
   const handleWishComplete = async (challenge: WishInfoChallenge) => {
     console.log('이루기 이벤트 핸들러', challenge);
@@ -160,6 +208,7 @@ export const useWishHome = () => {
     loadingTodoId,
     handleTodoToggle,
     handleWishComplete,
+    handleTodoDelete,
     fetchData
   };
 };

@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Animated } from 'react-native';
 import { Image } from 'expo-image';
 import { Challenge, WishInfoTodo } from '../../../../api/types';
 import { COLORS } from '../../../../assets/colors/colors';  
 import { CaptionText, SectionTitleText } from '@/app/components/texts';
+import { Swipeable } from 'react-native-gesture-handler';
 
 interface GoalCardProps {
   todo: WishInfoTodo;
@@ -11,21 +12,57 @@ interface GoalCardProps {
   isLast?: boolean;
   onToggleStatus?: (todoId: number) => void;
   isLoading?: boolean;
+  handleTodoDelete?: (todo: WishInfoTodo) => void;
 }
 
-export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isLoading }: GoalCardProps) => {
+export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isLoading, handleTodoDelete }: GoalCardProps) => {
   
-  const handleToggle = () => {
+  const handleToggle = () => {  
     if (isLoading) return;
     if (onToggleStatus) {
       onToggleStatus(todo.todoId);
     }
   };
 
+  const handleDeleteTodo = () => {
+    if (isLoading) return;
+    if (handleTodoDelete) {
+      handleTodoDelete(todo);
+    }
+  }
+
   const tapTodoMenu = () => {
     if (onPress) {
       onPress(todo);
     }
+  };
+
+  const renderRightActions = (
+    progress: Animated.AnimatedInterpolation<number>,
+    dragX: Animated.AnimatedInterpolation<number>
+  ) => {
+    const trans = dragX.interpolate({
+      inputRange: [-120, 0],
+      outputRange: [0, 120],
+    });
+
+    return (
+      <Animated.View 
+        style={[
+          styles.rightAction,
+          {
+            transform: [{ translateX: trans }],
+          },
+        ]}
+      >
+        <TouchableOpacity 
+          style={styles.deleteButton}
+          onPress={() => handleTodoDelete?.(todo)}
+        >
+          <Text style={styles.deleteText}>삭제</Text>
+        </TouchableOpacity>
+      </Animated.View>
+    );
   };
   
   const renderCheckbox = () => {
@@ -50,34 +87,39 @@ export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isL
   };
   
   return (
-    <View style={styles.wishTodoRow}>  
-      <View style={styles.contents}>
-        <TouchableOpacity 
-          onPress={handleToggle}
-          disabled={isLoading}
-          style={styles.checkboxTouchable}
-        >
-          {renderCheckbox()}
-        </TouchableOpacity>
-        <Text style={styles.todoTitle}>{todo.title || ''}</Text>
-        <Image
-          source={require('../../../../assets/images/mywish/wish_todo_menu.png')}
-          style={styles.todoMenu}
-          contentFit="contain"
-          cachePolicy="memory-disk"
-        />
-      </View>
-      {!isLast && (
-        <TouchableOpacity onPress={tapTodoMenu}>
-          <Image 
-            source={require('../../../../assets/images/challenge/todolist_divider.png')} 
-            style={styles.divider}
+    <Swipeable
+      renderRightActions={renderRightActions}
+      rightThreshold={40}
+    >
+      <View style={styles.wishTodoRow}>  
+        <View style={styles.contents}>
+          <TouchableOpacity 
+            onPress={handleToggle}
+            disabled={isLoading}
+            style={styles.checkboxTouchable}
+          >
+            {renderCheckbox()}
+          </TouchableOpacity>
+          <Text style={styles.todoTitle}>{todo.title || ''}</Text>
+          <Image
+            source={require('../../../../assets/images/mywish/wish_todo_menu.png')}
+            style={styles.todoMenu}
             contentFit="contain"
             cachePolicy="memory-disk"
-          /> 
-        </TouchableOpacity>
-      )}
-    </View>
+          />
+        </View>
+        {!isLast && (
+          <TouchableOpacity onPress={tapTodoMenu}>
+            <Image 
+              source={require('../../../../assets/images/challenge/todolist_divider.png')} 
+              style={styles.divider}
+              contentFit="contain"
+              cachePolicy="memory-disk"
+            /> 
+          </TouchableOpacity>
+        )}
+      </View>
+    </Swipeable>
   );
 };
 
@@ -87,6 +129,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: 66,
     justifyContent: 'space-between',
+    backgroundColor: 'white',
   },
   todoCheck: {
     width: 25,
@@ -124,6 +167,22 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 1,
     marginTop: 'auto',
+  },
+  rightAction: {
+    width: 120,
+    height: '100%',
+  },
+  deleteButton: {
+    flex: 1,
+    backgroundColor: '#FF3B30',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  deleteText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { WishInfoChallenge, WishCompleteRequest } from '../../../../api/types';
+import { WishInfoChallenge, WishCompleteRequest, WishInfoTodo } from '../../../../api/types';
 import { COLORS } from '../../../../assets/colors/colors';  
 import { CaptionText, SectionTitleText } from '@/app/components/texts';
 import { WishTodoRow } from './wish_todo_row';
@@ -12,6 +12,7 @@ interface WishCardProps {
   handleWishComplete?: (challenge: WishInfoChallenge) => void;
   isLoading?: boolean;
   loadingTodoId?: number;
+  handleTodoDelete?: (todo: WishInfoTodo) => void;
 }
 
 export const WishListCard = ({ 
@@ -20,7 +21,8 @@ export const WishListCard = ({
   handleTodoToggle, 
   handleWishComplete,
   isLoading,
-  loadingTodoId 
+  loadingTodoId,
+  handleTodoDelete
 }: WishCardProps) => {
 
   const wishHeaderSection = () => {
@@ -59,6 +61,7 @@ export const WishListCard = ({
             isLast={index === challenge.todoList.length - 1} 
             onToggleStatus={handleTodoToggle}
             isLoading={loadingTodoId === todo.todoId}
+            handleTodoDelete={handleTodoDelete}
           />
         ))}
       </View>
