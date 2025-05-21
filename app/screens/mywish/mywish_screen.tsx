@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, ActivityIndicator } from 'react-native';
 import { useWishHome } from '../../../hooks/wish/useWishHome';
 import { HeadText } from '@/app/components/texts';
 import { WishListCard } from './component/wish_list_card';
 import { WishInfoChallenge } from '../../../api/types';
 import { COLORS } from '../../../assets/colors/colors';
-import Toast from 'react-native-toast-message';
+import { TwoButtonBottomSheet } from '@/app/components/bottomSheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 const MyWishScreen = () => {
   const [loadingTodoId, setLoadingTodoId] = useState<number | undefined>(undefined);
   const [loadingWishId, setLoadingWishId] = useState<number | undefined>(undefined);
-  
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
   const { 
     wishInfoList, 
     loading,
@@ -30,12 +33,18 @@ const MyWishScreen = () => {
   };
 
   const onWishComplete = async (challenge: WishInfoChallenge) => {
-    setLoadingWishId(challenge.challengeId);
-    try {
-      await handleWishComplete?.(challenge);
-    } finally {
-      setLoadingWishId(undefined);
-    }
+    // setLoadingWishId(challenge.challengeId);
+    bottomSheetRef.current?.expand();
+
+    // try {
+    //   const success = await handleWishComplete(challenge);
+    //   console.log('위시 완료 응답:', success);
+    //   bottomSheetRef.current?.expand();
+    // } catch (error) {
+    //   console.error('위시 완료 에러:', error);
+    // } finally {
+    //   setLoadingWishId(undefined);
+    // }
   };
 
   const headerSection = () => {
@@ -106,12 +115,24 @@ const MyWishScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        {headerSection()}
-        {wishListSection()}
-      </View>
-    </SafeAreaView>
+    <GestureHandlerRootView style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          {headerSection()}
+          {wishListSection()}
+        </View>
+        <TwoButtonBottomSheet
+          ref={bottomSheetRef}
+          title="위시"
+          message={`수빈지킴이! 이번 목표를 기반으로
+다른 목표들도 도전해봐! 넌 할 수 있어!`}
+          firstButtonLabel="닫기"
+          firstButtonEvent={() => bottomSheetRef.current?.close()}
+          secondButtonLabel="목표 후기 남기기"
+          secondButtonEvent={() => bottomSheetRef.current?.close()}
+        />
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 

@@ -118,22 +118,39 @@ export const useWishHome = () => {
   };
 
   // 이루기 이벤트 핸들러
-  const handleWishComplete = (challenge: WishInfoChallenge) => {
+  const handleWishComplete = async (challenge: WishInfoChallenge) => {
     console.log('이루기 이벤트 핸들러', challenge);
 
     const completeRequest: WishCompleteRequest = {
       challengeList: [
         {
           challengeId: challenge.challengeId,
-          challengeStatus: 3
+          updatedStatus: 2
         } 
       ]
     };
 
-    WishService.completeWish(completeRequest)
-      .then(response => {
-        console.log('위시 완료 성공:', response);
-      });
+    try {
+      const response = await WishService.completeWish(completeRequest);
+      console.log('위시 완료 성공:', response);
+      
+      // 성공 시 위시리스트 상태 업데이트
+      if (wishInfoList) {
+        setWishInfoList({
+          ...wishInfoList,
+          challenges: wishInfoList.challenges.map(c => 
+            c.challengeId === challenge.challengeId 
+              ? { ...c, status: 2 }
+              : c
+          )
+        });
+      }
+
+      return true;
+    } catch (error) {
+      console.error('위시 완료 실패:', error);
+      return false;
+    }
   };
 
   return { 

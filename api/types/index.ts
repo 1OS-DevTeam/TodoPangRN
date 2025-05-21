@@ -139,6 +139,8 @@ export interface WishInfoList {
 
 export interface WishInfoChallenge {
   challengeId: number;
+  originChallengeId: number;
+  challengeStatus: number;
   challengeName: string;
   todoList: WishInfoTodo[];
 }
@@ -171,7 +173,7 @@ export interface WishCompleteRequest {
 
 export interface WishCompleteChallenge {
   challengeId: number;
-  challengeStatus: number;
+  updatedStatus: number;
 }
 
 
