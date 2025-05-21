@@ -159,6 +159,7 @@ export const useWishHome = () => {
     isProcessing,
     loadingTodoId,
     handleTodoToggle,
-    handleWishComplete
+    handleWishComplete,
+    fetchData
   };
 };

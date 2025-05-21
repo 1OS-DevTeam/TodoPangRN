@@ -18,7 +18,8 @@ const MyWishScreen = () => {
     wishInfoList, 
     loading,
     handleTodoToggle,
-    handleWishComplete
+    handleWishComplete,
+    fetchData
   } = useWishHome();
 
   const onTodoToggle = async (todoId: number) => {
@@ -33,18 +34,21 @@ const MyWishScreen = () => {
   };
 
   const onWishComplete = async (challenge: WishInfoChallenge) => {
-    // setLoadingWishId(challenge.challengeId);
+    setLoadingWishId(challenge.challengeId);
     bottomSheetRef.current?.expand();
 
-    // try {
-    //   const success = await handleWishComplete(challenge);
-    //   console.log('위시 완료 응답:', success);
-    //   bottomSheetRef.current?.expand();
-    // } catch (error) {
-    //   console.error('위시 완료 에러:', error);
-    // } finally {
-    //   setLoadingWishId(undefined);
-    // }
+    try {
+      const success = await handleWishComplete(challenge);
+      console.log('위시 완료 응답:', success);
+      if (success) {
+        await fetchData(); // 성공 시 데이터 새로고침
+      }
+      bottomSheetRef.current?.expand();
+    } catch (error) {
+      console.error('위시 완료 에러:', error);
+    } finally {
+      setLoadingWishId(undefined);
+    }
   };
 
   const headerSection = () => {
