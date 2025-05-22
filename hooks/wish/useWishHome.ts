@@ -137,16 +137,26 @@ export const useWishHome = () => {
 
     // 먼저 로컬 상태 업데이트
     const previousWishInfoList = wishInfoList;
+    
+    // 업데이트된 챌린지 리스트 생성
+    const updatedChallenges = wishInfoList.challenges.map(challenge => {
+      if (challenge.challengeId !== challengeId) return challenge;
+      
+      // 해당 투두를 제외한 새로운 투두 리스트 생성
+      const updatedTodoList = challenge.todoList.filter(t => t.todoId !== todo.todoId);
+      
+      return {
+        ...challenge,
+        todoList: updatedTodoList
+      };
+    });
+
+    // 투두가 없는 챌린지 필터링
+    const filteredChallenges = updatedChallenges.filter(challenge => challenge.todoList.length > 0);
+
     setWishInfoList({
       ...wishInfoList,
-      challenges: wishInfoList.challenges.map(challenge => {
-        if (challenge.challengeId !== challengeId) return challenge;
-        
-        return {
-          ...challenge,
-          todoList: challenge.todoList.filter(t => t.todoId !== todo.todoId)
-        };
-      })
+      challenges: filteredChallenges
     });
 
     try {
