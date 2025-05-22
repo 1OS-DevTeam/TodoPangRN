@@ -135,6 +135,20 @@ export const useWishHome = () => {
     if (!targetChallenge) return;
     const challengeId = targetChallenge.challengeId;
 
+    // 먼저 로컬 상태 업데이트
+    const previousWishInfoList = wishInfoList;
+    setWishInfoList({
+      ...wishInfoList,
+      challenges: wishInfoList.challenges.map(challenge => {
+        if (challenge.challengeId !== challengeId) return challenge;
+        
+        return {
+          ...challenge,
+          todoList: challenge.todoList.filter(t => t.todoId !== todo.todoId)
+        };
+      })
+    });
+
     try {
       const updateRequest: WishUpdateRequest = {
         challengeList: [{
@@ -148,20 +162,7 @@ export const useWishHome = () => {
 
       const response = await WishService.updateWish(updateRequest);
       
-      if (response.data && wishInfoList) {
-        // 성공 시 UI에서 해당 Todo 제거
-        setWishInfoList({
-          ...wishInfoList,
-          challenges: wishInfoList.challenges.map(challenge => {
-            if (challenge.challengeId !== todo.challengeId) return challenge;
-            
-            return {
-              ...challenge,
-              todoList: challenge.todoList.filter(t => t.todoId !== todo.todoId)
-            };
-          })
-        });
-
+      if (response.data) {
         Toast.show({
           type: 'success',
           text1: '할 일이 삭제되었습니다.',
@@ -171,6 +172,8 @@ export const useWishHome = () => {
       }
     } catch (error) {
       console.error('두투 삭제 실패:', error);
+      // 실패 시 이전 상태로 복원
+      setWishInfoList(previousWishInfoList);
       Toast.show({
         type: 'error',
         text1: '삭제에 실패했습니다.',
