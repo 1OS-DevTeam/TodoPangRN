@@ -175,4 +175,19 @@ export interface WishCompleteChallenge {
   updatedStatus: number;
 }
 
+export interface ReviewList {
+  reviewList: Review[];
+}
+
+export interface Review {
+  reviewId: number;
+  emoji: number;
+  title: string;
+}
+
+export interface ReviewUpdateRequest {
+  originChallengeId: number;
+  selectedReviewId: number;
+  satisfiedRating: number;
+}
 
