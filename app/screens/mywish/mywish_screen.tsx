@@ -20,7 +20,8 @@ const MyWishScreen = () => {
     handleTodoToggle,
     handleWishComplete,
     handleTodoDelete,
-    fetchData
+    fetchData,
+    useWishNavigation
   } = useWishHome();
 
   const onTodoToggle = async (todoId: number) => {
@@ -38,18 +39,18 @@ const MyWishScreen = () => {
     setLoadingWishId(challenge.challengeId);
     bottomSheetRef.current?.expand();
 
-    try {
-      const success = await handleWishComplete(challenge);
-      console.log('위시 완료 응답:', success);
-      if (success) {
-        await fetchData(); // 성공 시 데이터 새로고침
-      }
-      bottomSheetRef.current?.expand();
-    } catch (error) {
-      console.error('위시 완료 에러:', error);
-    } finally {
-      setLoadingWishId(undefined);
-    }
+    // try {
+    //   const success = await handleWishComplete(challenge);
+    //   console.log('위시 완료 응답:', success);
+    //   if (success) {
+    //     await fetchData(); // 성공 시 데이터 새로고침
+    //   }
+    //   bottomSheetRef.current?.expand();
+    // } catch (error) {
+    //   console.error('위시 완료 에러:', error);
+    // } finally {
+    //   setLoadingWishId(undefined);
+    // }
   };
 
   const headerSection = () => {
@@ -135,7 +136,7 @@ const MyWishScreen = () => {
           firstButtonLabel="닫기"
           firstButtonEvent={() => bottomSheetRef.current?.close()}
           secondButtonLabel="목표 후기 남기기"
-          secondButtonEvent={() => bottomSheetRef.current?.close()}
+          secondButtonEvent={() => useWishNavigation()}
         />
       </SafeAreaView>
     </GestureHandlerRootView>

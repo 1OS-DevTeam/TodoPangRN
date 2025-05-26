@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useFocusEffect } from 'expo-router';
+import { useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback } from 'react';
 import { WishService } from '../../api/services/wishService';
 import { WishInfoList, WishUpdateRequest, WishInfoChallenge, WishCompleteRequest, WishInfoTodo } from '../../api/types';
 import Toast from 'react-native-toast-message';
 
 export const useWishHome = () => {
+  const router = useRouter();
+  
   const [wishInfoList, setWishInfoList] = useState<WishInfoList | null>(null);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -229,6 +231,16 @@ export const useWishHome = () => {
     }
   };
 
+  const useWishNavigation = () => {
+
+    console.log('router');
+    router.push({
+      pathname: '/review/review',
+
+    });
+
+  }
+
   return { 
     wishInfoList, 
     loading,
@@ -237,6 +249,7 @@ export const useWishHome = () => {
     handleTodoToggle,
     handleWishComplete,
     handleTodoDelete,
-    fetchData
+    fetchData,
+    useWishNavigation
   };
 };

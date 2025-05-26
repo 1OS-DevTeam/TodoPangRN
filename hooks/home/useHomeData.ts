@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 
 
 export const useHomeData = () => {
-    const router = useRouter();
+  const router = useRouter();
 
   const [homeData, setHomeData] = useState<HomeData | null>(null);
   const [loading, setLoading] = useState(true);

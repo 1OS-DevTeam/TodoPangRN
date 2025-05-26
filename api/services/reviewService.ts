@@ -5,7 +5,7 @@ import { ApiResponse, ReviewList, ReviewUpdateRequest } from '../types';
 /**
  * 리뷰 관련 API 서비스
  */
-export const WishService = {
+export const ReviewService = {
     /**
      * 리뷰 목록 조회
      */
