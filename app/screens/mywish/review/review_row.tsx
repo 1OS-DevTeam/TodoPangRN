@@ -6,6 +6,9 @@ import { CaptionText, SectionTitleText } from '@/app/components/texts';
 
 interface ReviewRowProps {
     review: ReviewResponse;
+    isSelected?: boolean;
+    onSelect?: () => void;
+    disabled?: boolean;
 }
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -30,12 +33,29 @@ const convertEmojiNumber = (emojiNumber: number): string => {
     return emojiMap[emojiNumber] || '🎯';
 };
 
-export const ReviewRow = ({ review }: ReviewRowProps) => {
+export const ReviewRow = ({ review, isSelected = false, onSelect, disabled = false }: ReviewRowProps) => {
     return (
-        <TouchableOpacity style={styles.reviewRow}>
+        <TouchableOpacity 
+            style={[
+                styles.reviewRow,
+                isSelected && styles.selectedReviewRow,
+                disabled && styles.disabledReviewRow
+            ]}
+            onPress={onSelect}
+            disabled={disabled}
+        >
             <View style={styles.contentContainer}>
                 <Text style={styles.emojiText}>{convertEmojiNumber(review.emoji)}</Text>
-                <Text style={styles.reviewRowText} numberOfLines={1}>{review.title}</Text>
+                <Text 
+                    style={[
+                        styles.reviewRowText,
+                        isSelected && styles.selectedReviewRowText,
+                        disabled && styles.disabledReviewRowText
+                    ]} 
+                    numberOfLines={1}
+                >
+                    {review.title}
+                </Text>
             </View>
         </TouchableOpacity>
     );
@@ -55,6 +75,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 4,
     },
+    selectedReviewRow: {
+        borderColor: COLORS.mainPurple,
+        backgroundColor: COLORS.mainPurple,
+    },
+    disabledReviewRow: {
+        opacity: 0.5,
+    },
     contentContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -65,6 +92,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         color: COLORS.black,
+    },
+    selectedReviewRowText: {
+        color: COLORS.white,
+    },
+    disabledReviewRowText: {
+        color: COLORS.darkGrey,
     },
     emojiText: {
         fontSize: 16,

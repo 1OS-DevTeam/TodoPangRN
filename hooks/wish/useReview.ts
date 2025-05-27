@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
-import { ReviewList, ReviewResponse } from '@/api/types';
+import { ReviewResponse } from '@/api/types';
 import { ReviewService } from '@/api/services/reviewService';
 import { ReviewUpdateRequest } from '@/api/types';
 
@@ -10,15 +10,21 @@ export const useReview = () => {
   const [reviewList, setReviewList] = useState<ReviewResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [loadingTodoId, setLoadingTodoId] = useState<number | null>(null);
   const [rating, setRating] = useState<number>(0);
   const [hasRated, setHasRated] = useState<boolean>(false);
+  const [selectedReview, setSelectedReview] = useState<ReviewResponse | null>(null);
+  const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
         fetchData();
     }, [])
   );
+
+  useEffect(() => {
+    // 별점과 리뷰가 모두 선택되었는지 확인
+    setIsNextButtonEnabled(hasRated && selectedReview !== null);
+  }, [hasRated, selectedReview]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -40,14 +46,27 @@ export const useReview = () => {
     setHasRated(true);
   };
 
-  const updateReview = async (review: ReviewUpdateRequest) => {
+  const handleReviewSelect = (review: ReviewResponse) => {
+    // 이미 선택된 리뷰를 다시 클릭하면 선택 해제
+    if (selectedReview?.reviewId === review.reviewId) {
+      setSelectedReview(null);
+    } else {
+      setSelectedReview(review);
+    }
+  };
+
+  const updateReview = async () => {
     setIsProcessing(true);
+    const review: ReviewUpdateRequest = {
+      originChallengeId: 0,
+      selectedReviewId: selectedReview?.reviewId ?? 0,
+      satisfiedRating: rating
+    }
     try {
-        const response = await ReviewService.updateReview({
-            ...review,
-            satisfiedRating: rating
-        });
-        await fetchData();
+        const response = await ReviewService.updateReview(review);
+        if (response.status === 200) {
+            console.log('리뷰 업데이트 성공');
+        }
     } catch (error) {
         console.error('리뷰 업데이트 오류:', error);
     } finally {
@@ -59,10 +78,12 @@ export const useReview = () => {
     reviewList,
     loading,
     isProcessing,
-    loadingTodoId,
     updateReview,
     rating,
     hasRated,
-    handleRating
+    handleRating,
+    selectedReview,
+    handleReviewSelect,
+    isNextButtonEnabled
   };
 }

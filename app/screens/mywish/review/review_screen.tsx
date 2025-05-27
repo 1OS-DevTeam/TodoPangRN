@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, FlatList, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { useReview } from '../../../../hooks/wish/useReview';
 import { HeadText } from '@/app/components/texts';
 import { COLORS } from '../../../../assets/colors/colors';
@@ -12,12 +12,23 @@ const ReviewScreen = () => {
         reviewList,
         loading,
         isProcessing,
-        loadingTodoId,
         updateReview,
-        rating,
-        hasRated,
-        handleRating
+        rating,  
+        handleRating,
+        selectedReview,
+        handleReviewSelect,
+        isNextButtonEnabled
     } = useReview();
+
+    if (loading) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color={COLORS.mainPurple} />
+                </View>
+            </SafeAreaView>
+        );
+    }
 
     const satiesfiedSection = () => {
         return (
@@ -29,6 +40,7 @@ const ReviewScreen = () => {
                         <TouchableOpacity
                             key={index}
                             onPress={() => handleRating(index)}
+                            disabled={isProcessing}
                         >
                             <Image 
                                 source={
@@ -51,14 +63,18 @@ const ReviewScreen = () => {
                 <Text style={{fontSize: 18, color: COLORS.darkGrey}}>
                     키워드를 골라주세요 (1개)
                 </Text>
-
             </View>
         )
     }
 
     const renderItem = ({ item }: { item: ReviewResponse }) => (
         <View style={styles.itemContainer}>
-            <ReviewRow review={item} />
+            <ReviewRow 
+                review={item} 
+                isSelected={selectedReview?.reviewId === item.reviewId}
+                onSelect={() => handleReviewSelect(item)}
+                disabled={isProcessing}
+            />
         </View>
     );
 
@@ -81,7 +97,16 @@ const ReviewScreen = () => {
     const bottomButtonSection = () => {
         return (
           <View style={styles.bottomButtonSection}>
-            <MainActionButton text="다음" onClick={() => {}} />
+            <MainActionButton 
+                disabled={!isNextButtonEnabled || isProcessing} 
+                text={isProcessing ? "처리중..." : "다음"}
+                onClick={updateReview} 
+            />
+            {isProcessing && (
+                <View style={styles.processingSpinner}>
+                    <ActivityIndicator size="small" color={COLORS.mainPurple} />
+                </View>
+            )}
           </View>
         );
     };
@@ -105,6 +130,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLORS.white,
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     satisfiedSection: {
         paddingHorizontal: 16,
         paddingTop: 16,
@@ -115,12 +145,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         gap: 12
-    },
-    ratingText: {
-        textAlign: 'center',
-        fontSize: 16,
-        color: COLORS.darkGrey,
-        marginTop: 8
     },
     goalDescroptionSection: {
         paddingHorizontal: 16,
@@ -147,5 +171,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: COLORS.white,
         paddingHorizontal: 20,
+    },
+    processingSpinner: {
+        position: 'absolute',
+        right: 40,
     }
 });
