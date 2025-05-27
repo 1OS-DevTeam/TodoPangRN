@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
-import { ReviewList } from '@/api/types';
+import { ReviewList, ReviewResponse } from '@/api/types';
 import { ReviewService } from '@/api/services/reviewService';
 import { ReviewUpdateRequest } from '@/api/types';
 
 export const useReview = () => {
     
-  const [reviewList, setReviewList] = useState<ReviewList | null>(null);
+  const [reviewList, setReviewList] = useState<ReviewResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [loadingTodoId, setLoadingTodoId] = useState<number | null>(null);
@@ -24,7 +24,10 @@ export const useReview = () => {
     setLoading(true);
     try {
         const response = await ReviewService.getReviewList();
-        setReviewList(response.data);
+        console.log('response: 성공', response);
+        if (response.status === 200) {
+            setReviewList(response.data);
+        }
     } catch (error) {
         console.error('위시리스트 조회 오류:', error);
     } finally {
@@ -44,7 +47,7 @@ export const useReview = () => {
             ...review,
             satisfiedRating: rating
         });
-        await fetchData(); // 업데이트 후 리스트 새로고침
+        await fetchData();
     } catch (error) {
         console.error('리뷰 업데이트 오류:', error);
     } finally {

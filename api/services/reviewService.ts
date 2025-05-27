@@ -1,6 +1,6 @@
 import apiClient from '../client';
 import * as ReviewEndpoints from '../endpoints/review';
-import { ApiResponse, ReviewList, ReviewUpdateRequest } from '../types';
+import { ApiResponse, ReviewResponse, ReviewUpdateRequest } from '../types';
 
 /**
  * 리뷰 관련 API 서비스
@@ -11,7 +11,7 @@ export const ReviewService = {
      */
     getReviewList: async () => {
       try {
-        const response = await apiClient.post<ApiResponse<ReviewList>>(
+        const response = await apiClient.post<ApiResponse<ReviewResponse[]>>(
           ReviewEndpoints.REVIEW_LIST
         );
         

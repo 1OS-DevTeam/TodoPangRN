@@ -1,8 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, FlatList, Dimensions } from 'react-native';
 import { useReview } from '../../../../hooks/wish/useReview';
 import { HeadText } from '@/app/components/texts';
 import { COLORS } from '../../../../assets/colors/colors';
+import MainActionButton from '@/app/components/buttons/main_action_button';
+import { ReviewRow } from './review_row';
+import { ReviewResponse } from '@/api/types';
 
 const ReviewScreen = () => {
     const {
@@ -40,10 +43,57 @@ const ReviewScreen = () => {
             </View>
         )
     }
+
+    const goalDescroptionSection = () => {
+        return (
+            <View style={styles.goalDescroptionSection}>
+                <HeadText>목표 키워드</HeadText>
+                <Text style={{fontSize: 18, color: COLORS.darkGrey}}>
+                    키워드를 골라주세요 (1개)
+                </Text>
+
+            </View>
+        )
+    }
+
+    const renderItem = ({ item }: { item: ReviewResponse }) => (
+        <View style={styles.itemContainer}>
+            <ReviewRow review={item} />
+        </View>
+    );
+
+    const reviewListSection = () => {
+        return (
+            <View style={styles.reviewListSection}>
+                <FlatList
+                    data={reviewList}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.reviewId.toString()}
+                    numColumns={2}
+                    columnWrapperStyle={styles.reviewRow}
+                    scrollEnabled={false}
+                    contentContainerStyle={styles.reviewListContainer}
+                />
+            </View>
+        )
+    }
+
+    const bottomButtonSection = () => {
+        return (
+          <View style={styles.bottomButtonSection}>
+            <MainActionButton text="다음" onClick={() => {}} />
+          </View>
+        );
+    };
     
     return (
         <SafeAreaView style={styles.container}>
-            {satiesfiedSection()}
+            <ScrollView>
+                {satiesfiedSection()}
+                {goalDescroptionSection()}
+                {reviewListSection()}
+            </ScrollView>
+            {bottomButtonSection()}
         </SafeAreaView>
     )
 }
@@ -53,6 +103,7 @@ export default ReviewScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: COLORS.white,
     },
     satisfiedSection: {
         paddingHorizontal: 16,
@@ -70,5 +121,31 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.darkGrey,
         marginTop: 8
+    },
+    goalDescroptionSection: {
+        paddingHorizontal: 16,
+        paddingTop: 51,
+        gap: 16
+    },
+    reviewListSection: {
+        paddingHorizontal: 16,
+        paddingTop: 51,
+    },
+    reviewListContainer: {
+        gap: 8,
+    },
+    itemContainer: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    reviewRow: {
+        gap: 8,
+    },
+    bottomButtonSection: {
+        height: 74,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: COLORS.white,
+        paddingHorizontal: 20,
     }
 });

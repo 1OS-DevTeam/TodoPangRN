@@ -176,10 +176,10 @@ export interface WishCompleteChallenge {
 }
 
 export interface ReviewList {
-  reviewList: Review[];
+  reviewList: ReviewResponse[];
 }
 
-export interface Review {
+export interface ReviewResponse {
   reviewId: number;
   emoji: number;
   title: string;
