@@ -231,12 +231,12 @@ export const useWishHome = () => {
     }
   };
 
-  const useWishNavigation = () => {
+  const useWishNavigation = (originChallengeId: number) => {
 
     console.log('router');
     router.push({
       pathname: '/review/review',
-
+      params: { originChallengeId }
     });
 
   }

@@ -12,6 +12,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 const MyWishScreen = () => {
   const [loadingTodoId, setLoadingTodoId] = useState<number | undefined>(undefined);
   const [loadingWishId, setLoadingWishId] = useState<number | undefined>(undefined);
+  const [selectedChallenge, setSelectedChallenge] = useState<WishInfoChallenge | null>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const { 
@@ -39,18 +40,20 @@ const MyWishScreen = () => {
     setLoadingWishId(challenge.challengeId);
     bottomSheetRef.current?.expand();
 
-    // try {
-    //   const success = await handleWishComplete(challenge);
-    //   console.log('위시 완료 응답:', success);
-    //   if (success) {
-    //     await fetchData(); // 성공 시 데이터 새로고침
-    //   }
-    //   bottomSheetRef.current?.expand();
-    // } catch (error) {
-    //   console.error('위시 완료 에러:', error);
-    // } finally {
-    //   setLoadingWishId(undefined);
-    // }
+    try {
+      const success = await handleWishComplete(challenge);
+      console.log('위시 완료 응답:', success);
+      if (success) {
+        await fetchData(); // 성공 시 데이터 새로고침
+      }
+      setSelectedChallenge(challenge);
+      bottomSheetRef.current?.expand();
+      setLoadingWishId(undefined);
+    } catch (error) {
+      console.error('위시 완료 에러:', error);
+    } finally {
+      setLoadingWishId(undefined);
+    }
   };
 
   const headerSection = () => {
@@ -97,8 +100,10 @@ const MyWishScreen = () => {
         <FlatList
           data={wishInfoList.challenges.map(challenge => ({
             challengeId: challenge.challengeId,
+            originChallengeId: challenge.originChallengeId,
             challengeName: challenge.challengeName,
             todoList: challenge.todoList,
+            challengeStatus: challenge.challengeStatus
           }) as WishInfoChallenge)}
           renderItem={({ item }) => (
             <WishListCard 
@@ -134,9 +139,17 @@ const MyWishScreen = () => {
           message={`수빈지킴이! 이번 목표를 기반으로
 다른 목표들도 도전해봐! 넌 할 수 있어!`}
           firstButtonLabel="닫기"
-          firstButtonEvent={() => bottomSheetRef.current?.close()}
+          firstButtonEvent={() => {
+            setSelectedChallenge(null);
+            bottomSheetRef.current?.close();
+          }}
           secondButtonLabel="목표 후기 남기기"
-          secondButtonEvent={() => useWishNavigation()}
+          secondButtonEvent={() => {
+            if (selectedChallenge) {
+                console.log('[MyWishScreen] originChallengeId:', selectedChallenge.originChallengeId);
+                useWishNavigation(selectedChallenge.originChallengeId);
+            }
+          }}
         />
       </SafeAreaView>
     </GestureHandlerRootView>

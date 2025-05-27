@@ -4,7 +4,7 @@ import ReviewScreen from '../screens/mywish/review/review_screen';
 
 export default function ReviewPage() {
 
-    const { challengeId } = useLocalSearchParams();
+    const { originChallengeId } = useLocalSearchParams();
 
     return (
         <>
@@ -16,7 +16,7 @@ export default function ReviewPage() {
                     headerShadowVisible: false,
                 }}
             />
-            <ReviewScreen />
+            <ReviewScreen route={{ params: { originChallengeId: parseInt(originChallengeId as string) } }} />
         </>
     );
 } 

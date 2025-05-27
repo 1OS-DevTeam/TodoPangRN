@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, router } from 'expo-router';
 import { useCallback } from 'react';
 import { ReviewResponse } from '@/api/types';
 import { ReviewService } from '@/api/services/reviewService';
 import { ReviewUpdateRequest } from '@/api/types';
 
-export const useReview = () => {
+export const useReview = (originChallengeId: number) => {
+    console.log('[useReview] originChallengeId received:', originChallengeId);
     
   const [reviewList, setReviewList] = useState<ReviewResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,7 +59,7 @@ export const useReview = () => {
   const updateReview = async () => {
     setIsProcessing(true);
     const review: ReviewUpdateRequest = {
-      originChallengeId: 0,
+      originChallengeId: originChallengeId,
       selectedReviewId: selectedReview?.reviewId ?? 0,
       satisfiedRating: rating
     }
@@ -66,6 +67,8 @@ export const useReview = () => {
         const response = await ReviewService.updateReview(review);
         if (response.status === 200) {
             console.log('리뷰 업데이트 성공');
+            // 성공시에만 화면 이동
+            router.replace('/(tabs)/mywish');
         }
     } catch (error) {
         console.error('리뷰 업데이트 오류:', error);

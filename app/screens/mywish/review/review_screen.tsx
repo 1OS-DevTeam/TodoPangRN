@@ -7,7 +7,7 @@ import MainActionButton from '@/app/components/buttons/main_action_button';
 import { ReviewRow } from './review_row';
 import { ReviewResponse } from '@/api/types';
 
-const ReviewScreen = () => {
+const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number } } }) => {    
     const {
         reviewList,
         loading,
@@ -18,7 +18,7 @@ const ReviewScreen = () => {
         selectedReview,
         handleReviewSelect,
         isNextButtonEnabled
-    } = useReview();
+    } = useReview(route.params.originChallengeId);
 
     if (loading) {
         return (
