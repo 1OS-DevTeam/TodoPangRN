@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useWishHome } from '../../../hooks/wish/useWishHome';
 import { HeadText } from '@/app/components/texts';
 import { WishListCard } from './component/wish_list_card';
@@ -126,13 +126,34 @@ const MyWishScreen = () => {
     );
   };
 
+  const noWishSection = () => {
+    return (
+      <View style={styles.noWishContainer}>
+        <Text style={styles.noWishTitle}>위시가 비어 있어요</Text>
+        <View style={styles.noWishDescription}>
+          <Text style={styles.noWishDescriptionText}>당신의 마음이 이끄는대로-</Text>
+          <Text style={styles.noWishDescriptionText}>일상을 설레게 만들어줄 위시를 추가해봐!</Text>
+        </View>
+        <Image
+          source={require('../../../assets/images/mywish/wish_tung.png')}
+          style={styles.noWishImage}
+        />
+        <TouchableOpacity style={styles.noWishButton}>
+          <Text style={styles.noWishButtonText}>위시 탐색소 바로가기</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-          {headerSection()}
-          {wishListSection()}
-        </View>
+        {wishInfoList?.challenges.length === 0 ? noWishSection() : (
+          <View style={styles.content}>
+            {headerSection()}
+            {wishListSection()}
+          </View>
+        )}
         <TwoButtonBottomSheet
           ref={bottomSheetRef}
           title="위시"
@@ -241,6 +262,46 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff'
+  },
+  noWishContainer: {
+    marginTop: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noWishTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: COLORS.mainPurple,
+  },
+  noWishDescription: {
+    marginTop: 16,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noWishDescriptionText: {
+    fontSize: 14,
+    fontWeight: 'regular',
+    color: COLORS.darkGrey,
+  },
+  noWishImage: {
+    marginTop: 12,
+    width: 178,
+    height: 188,
+  },
+  noWishButton: {
+    marginTop: 19,
+    width: 200,
+    height: 44,
+    backgroundColor: COLORS.mainPurple,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noWishButtonText: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: COLORS.white,
   },
 });
 
