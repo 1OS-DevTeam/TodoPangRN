@@ -41,11 +41,11 @@ export default function TabsLayout() {
       <Tabs.Screen 
         name="challenge" 
         options={{ 
-          title: "도전과제", 
+          title: "위시 탐색소", 
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image 
-              source={require('../../assets/images/common/tabbar_goal.png')} 
+              source={require('../../assets/images/common/tabbar_wish.png')} 
               style={{ 
                 width: 24, 
                 height: 24,
@@ -62,7 +62,7 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image 
-              source={require('../../assets/images/common/tabbar_challenge.png')} 
+              source={require('../../assets/images/common/tabbar_mywish.png')} 
               style={{ 
                 width: 24, 
                 height: 24,
