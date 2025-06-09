@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native';
+
 /**
  * API 응답 공통 타입
  */
@@ -191,3 +193,8 @@ export interface ReviewUpdateRequest {
   satisfiedRating: number;
 }
 
+export interface MyPageMenu {
+  title: string;
+  image?: ImageSourcePropType;
+  appVersion?: string;
+}
