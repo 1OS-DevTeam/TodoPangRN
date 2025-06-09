@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, Image, FlatList } from 'react-nat
 import { COLORS } from '../../../assets/colors/colors';
 import { MyPageMenu } from '../../../api/types';
 import MyPageMenuRow from './component/mypage_menu_row';
-
+import DeviceInfo from 'react-native-device-info';
 
 const menuList: MyPageMenu[] = [
   {
@@ -24,7 +24,7 @@ const menuList: MyPageMenu[] = [
   },
   {
     title: '앱버전',
-    appVersion: '1.16.0',
+    appVersion: DeviceInfo.getVersion(),
   },
 ];
 
