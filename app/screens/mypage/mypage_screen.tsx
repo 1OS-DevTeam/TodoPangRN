@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, FlatList } from 'react-native';
 import { COLORS } from '../../../assets/colors/colors';
 import { MyPageMenu } from '../../../api/types';
 import MyPageMenuRow from './component/mypage_menu_row';
 import DeviceInfo from 'react-native-device-info';
+import { useMypage } from '../../../hooks/mypasge/useMypage';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { TwoButtonBottomSheet } from '@/app/components/bottomSheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const menuList: MyPageMenu[] = [
   {
@@ -28,81 +32,87 @@ const menuList: MyPageMenu[] = [
   },
 ];
 
-const hadleTapGuide = () => {
-  console.log('guide');
-};
+export const MyPageScreen = () => {
 
-const handleTapNotice = () => {
-  console.log('notice');
-};
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
-const handleTapInquiry = () => {
-  console.log('inquiry');
-};
+  const { 
+    loading,
+    tapWithdraw,
+    tapLogout,
+    tapSetting,
+    tapGuide,
+  } = useMypage();
 
-const handleTapSetting = () => {
-  console.log('setting');
-};
-
-const handleTapLogout = () => {
-  console.log('logout');
-};
-
-const handleTapWithdraw = () => {
-  console.log('withdraw');
-};
-
-
-const headerSection = () => {
-  return (
-    <View style={styles.headerSection}>
-      <Text style={styles.headerTitle}>마이페이지</Text>
-      <View style={styles.headerContents}>
-        <Image
-          source={require('../../../assets/images/mypage/bomb_icon.png')}
-          style={styles.headerImage}
-        />
-        <Text style={styles.myName}>김하나님</Text>
-      </View>
-    </View>
-  );
-};
-
-const menuSection = () => {
-  const handleMenuPress = (menu: MyPageMenu) => {
-    switch (menu.title) {
-      case '가이드북':
-        hadleTapGuide();
-        break;
-      case '탈퇴하기':
-        handleTapWithdraw();
-        break;
-      case '로그아웃':
-        handleTapLogout();
-        break;
-      case '환경설정':
-        handleTapSetting();
-        break;
-    }
+  const showWithdrawBottomSheet = () => {
+    bottomSheetRef.current?.expand();
   };
 
+  const headerSection = () => {
+    return (
+      <View style={styles.headerSection}>
+        <Text style={styles.headerTitle}>마이페이지</Text>
+        <View style={styles.headerContents}>
+          <Image
+            source={require('../../../assets/images/mypage/bomb_icon.png')}
+            style={styles.headerImage}
+          />
+          <Text style={styles.myName}>김하나님</Text>
+        </View>
+      </View>
+    );
+  };
+  
+  const menuSection = () => {
+    const handleMenuPress = (menu: MyPageMenu) => {
+      switch (menu.title) {
+        case '가이드북':
+          tapGuide();
+          break;
+        case '탈퇴하기':
+          showWithdrawBottomSheet();
+          break;
+        case '로그아웃':
+          tapLogout();
+          break;
+        case '환경설정':
+          tapSetting();
+          break;
+      }
+    };
+  
+    return (
+      <View style={styles.menuSection}>
+          <FlatList
+            data={menuList}
+            renderItem={({ item }) => <MyPageMenuRow menu={item} onPress={handleMenuPress} />}
+            contentContainerStyle={styles.menuListContainer}
+          />
+      </View>
+    );
+  };
   return (
-    <View style={styles.menuSection}>
-        <FlatList
-          data={menuList}
-          renderItem={({ item }) => <MyPageMenuRow menu={item} onPress={handleMenuPress} />}
-          contentContainerStyle={styles.menuListContainer}
-        />
-    </View>
-  );
-};
-
-export const MyPageScreen = () => {
-  return (
+    <GestureHandlerRootView style={styles.container}>
     <SafeAreaView style={styles.container}>
       {headerSection()}
       {menuSection()}
+
+      <TwoButtonBottomSheet
+          ref={bottomSheetRef}
+          title="탈퇴하기"
+          message={`탈퇴하기 전에 확인해주세요!`}
+          firstButtonLabel="닫기"
+          firstButtonEvent={() => {
+            bottomSheetRef.current?.close();
+          }}
+          secondButtonLabel="탈퇴하기"
+          secondButtonEvent={() => {
+            tapWithdraw();
+            bottomSheetRef.current?.close();
+          }}
+        />
     </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 
