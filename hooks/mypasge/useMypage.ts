@@ -5,16 +5,9 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import { AuthService } from '@/api/services/authService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../../app/_layout';
+import { BottomSheetState } from '@/api/types';
 
-interface BottomSheetState {
-  visible: boolean;
-  title: string;
-  message: string;
-  firstButtonLabel: string;
-  secondButtonLabel: string;
-  onFirstButtonPress?: () => void;
-  onSecondButtonPress?: () => void;
-}
+
 
 export const useMypage = () => {
   const router = useRouter();
@@ -31,7 +24,8 @@ export const useMypage = () => {
 
   const tapWithdraw = () => {
     console.log('탈퇴하기');
-  };
+    router.push('/withdraw/withdraw');
+  }
 
   const tapLogout = async () => {
     try {

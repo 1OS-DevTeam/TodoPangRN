@@ -6,6 +6,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './_layout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthService } from '../api/services/authService';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();

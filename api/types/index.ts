@@ -198,3 +198,22 @@ export interface MyPageMenu {
   image?: ImageSourcePropType;
   appVersion?: string;
 }
+
+export interface WithdrawReasonList {
+  reasonList: WithdrawReason[];
+}
+
+export interface WithdrawReason {
+  reasonId: number;
+  reasonDesc: string;
+}
+
+export interface BottomSheetState {
+  visible: boolean;
+  title: string;
+  message: string;
+  firstButtonLabel: string;
+  secondButtonLabel: string;
+  onFirstButtonPress?: () => void;
+  onSecondButtonPress?: () => void;
+}

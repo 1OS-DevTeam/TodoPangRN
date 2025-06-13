@@ -67,7 +67,7 @@ export const MyPageScreen = () => {
           tapGuide();
           break;
         case '탈퇴하기':
-          showWithdrawBottomSheet();
+          tapWithdraw();
           break;
         case '로그아웃':
           showLogoutBottomSheet();
