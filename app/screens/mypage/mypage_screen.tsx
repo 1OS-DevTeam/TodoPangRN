@@ -1,11 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, FlatList } from 'react-native';
 import { COLORS } from '../../../assets/colors/colors';
 import { MyPageMenu } from '../../../api/types';
 import MyPageMenuRow from './component/mypage_menu_row';
 import DeviceInfo from 'react-native-device-info';
 import { useMypage } from '../../../hooks/mypasge/useMypage';
-import BottomSheet from '@gorhom/bottom-sheet';
 import { TwoButtonBottomSheet } from '@/app/components/bottomSheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -34,19 +33,19 @@ const menuList: MyPageMenu[] = [
 
 export const MyPageScreen = () => {
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
 
   const { 
-    loading,
     tapWithdraw,
     tapLogout,
     tapSetting,
     tapGuide,
+    showWithdrawBottomSheet,
+    showLogoutBottomSheet,
+    bottomSheetRef,
+    bottomSheetState,
   } = useMypage();
 
-  const showWithdrawBottomSheet = () => {
-    bottomSheetRef.current?.expand();
-  };
+
 
   const headerSection = () => {
     return (
@@ -73,7 +72,7 @@ export const MyPageScreen = () => {
           showWithdrawBottomSheet();
           break;
         case '로그아웃':
-          tapLogout();
+          showLogoutBottomSheet();
           break;
         case '환경설정':
           tapSetting();
@@ -83,35 +82,31 @@ export const MyPageScreen = () => {
   
     return (
       <View style={styles.menuSection}>
-          <FlatList
-            data={menuList}
-            renderItem={({ item }) => <MyPageMenuRow menu={item} onPress={handleMenuPress} />}
-            contentContainerStyle={styles.menuListContainer}
-          />
+        <FlatList
+          data={menuList}
+          renderItem={({ item }) => <MyPageMenuRow menu={item} onPress={handleMenuPress} />}
+          contentContainerStyle={styles.menuListContainer}
+        />
       </View>
     );
   };
+
   return (
     <GestureHandlerRootView style={styles.container}>
-    <SafeAreaView style={styles.container}>
-      {headerSection()}
-      {menuSection()}
+      <SafeAreaView style={styles.container}>
+        {headerSection()}
+        {menuSection()}
 
-      <TwoButtonBottomSheet
+        <TwoButtonBottomSheet
           ref={bottomSheetRef}
-          title="탈퇴하기"
-          message={`탈퇴하기 전에 확인해주세요!`}
-          firstButtonLabel="닫기"
-          firstButtonEvent={() => {
-            bottomSheetRef.current?.close();
-          }}
-          secondButtonLabel="탈퇴하기"
-          secondButtonEvent={() => {
-            tapWithdraw();
-            bottomSheetRef.current?.close();
-          }}
+          title={bottomSheetState.title}
+          message={bottomSheetState.message}
+          firstButtonLabel={bottomSheetState.firstButtonLabel}
+          firstButtonEvent={bottomSheetState.onFirstButtonPress || (() => {})}
+          secondButtonLabel={bottomSheetState.secondButtonLabel}
+          secondButtonEvent={bottomSheetState.onSecondButtonPress || (() => {})}
         />
-    </SafeAreaView>
+      </SafeAreaView>
     </GestureHandlerRootView>
   );
 };
@@ -122,11 +117,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   headerSection: {
-  },
-  headerTitle: {
     paddingTop: 16,
     paddingBottom: 18,
     paddingLeft: 17,
+  },
+  headerTitle: {
     fontSize: 20,
     fontWeight: '400',
     color: COLORS.black,
