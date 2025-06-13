@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MypageService } from '../../api/services/mypageService';
 import { useRouter } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
+import { AuthService } from '@/api/services/authService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { auth } from '../../app/_layout';
 
 interface BottomSheetState {
   visible: boolean;
@@ -16,6 +19,7 @@ interface BottomSheetState {
 export const useMypage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [bottomSheetState, setBottomSheetState] = useState<BottomSheetState>({
     visible: false,
@@ -29,8 +33,24 @@ export const useMypage = () => {
     console.log('탈퇴하기');
   };
 
-  const tapLogout = () => {
-    console.log('로그아웃');
+  const tapLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      setLoading(true);
+      const response = await AuthService.logout();
+      if (response.data === true) {
+        await auth.signOut();
+        await AsyncStorage.removeItem('userId');
+        await AsyncStorage.removeItem('auth_token');
+        router.replace('/screens/login/login_screen');
+      }
+    } catch (error) {
+      console.error('로그아웃 중 오류가 발생했습니다:', error);
+      // 에러 처리 로직 추가
+    } finally {
+      setIsLoggingOut(false);
+      setLoading(false);
+    }
   };
 
   const tapSetting = () => {
@@ -83,6 +103,7 @@ export const useMypage = () => {
 
   return {
     loading,
+    isLoggingOut,
     tapWithdraw,
     tapLogout,
     tapSetting,

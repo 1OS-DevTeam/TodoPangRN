@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, ActivityIndicator } from 'react-native';
 import { COLORS } from '../../../assets/colors/colors';
 import { MyPageMenu } from '../../../api/types';
 import MyPageMenuRow from './component/mypage_menu_row';
@@ -32,8 +32,6 @@ const menuList: MyPageMenu[] = [
 ];
 
 export const MyPageScreen = () => {
-
-
   const { 
     tapWithdraw,
     tapLogout,
@@ -43,9 +41,9 @@ export const MyPageScreen = () => {
     showLogoutBottomSheet,
     bottomSheetRef,
     bottomSheetState,
+    isLoggingOut,
+    loading,
   } = useMypage();
-
-
 
   const headerSection = () => {
     return (
@@ -94,6 +92,11 @@ export const MyPageScreen = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaView style={styles.container}>
+        {loading && (
+          <View>
+            <ActivityIndicator size="large" color={COLORS.mainPurple} />
+          </View>
+        )}
         {headerSection()}
         {menuSection()}
 

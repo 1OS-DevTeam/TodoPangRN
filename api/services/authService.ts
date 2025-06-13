@@ -62,4 +62,21 @@ export const AuthService = {
       throw error;
     }
   },
+
+  /**
+   * 로그아웃
+   */
+  logout: async () => {
+    try {
+      const response = await apiClient.post<ApiResponse<Boolean>>(
+        AuthEndpoints.LOGOUT
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('로그아웃 중 오류 발생:', error);
+      throw error;
+    }
+  }
 }; 
+
