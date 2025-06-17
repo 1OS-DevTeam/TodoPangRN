@@ -20,7 +20,7 @@ export const HomeScreen = () => {
     return (
       <View style={styles.navigationSection}>
         <Image source={require('../../../assets/images/home/home_todopang_logo.png')} style={styles.logo} />
-        <Image source={require('../../../assets/images/home/home_bell.png')} style={styles.bell} />
+        {/* <Image source={require('../../../assets/images/home/home_bell.png')} style={styles.bell} /> */}
       </View>
     );
   };
@@ -28,12 +28,24 @@ export const HomeScreen = () => {
   const headerSection = () => {
     return (
       <View style={styles.headerSection}>
-        <View style={styles.headerDescription}>
-          <Text style={styles.headerText}>{homeData?.userData?.userName}님, 지금까지</Text>
-          <Text style={styles.headerText}>총 <Text style={styles.headerTextBold}>{homeData?.userData?.finishedProjects}개</Text>의 목표를 달성했어요!</Text>
+        <View style={styles.headerCharacter}>
+          <Image source={require('../../../assets/images/home/home_character.png')} style={styles.character} />
         </View>
-        <View style={styles.headerBomb}>
-          <Image source={require('../../../assets/images/home/home_bomb.png')} style={styles.bomb} />
+        <View style={styles.headerRightContents}>
+          <View style={styles.headerRightContentBox}>
+            <Image source={require('../../../assets/images/home/home_character_days.png')} style={styles.headerRightCharacter} />
+            <View style={styles.headerRightContentTexts}>
+              <Text style={styles.headerRightContentTextDescription}>투두팡과 함께한지</Text>
+              <Text style={styles.headerRightContentTextValue}>{homeData?.userData.serviceUsedDays}일</Text>
+            </View>
+          </View>
+          <View style={styles.headerRightContentBox}>
+            <Image source={require('../../../assets/images/home/home_character_wish.png')} style={styles.headerRightCharacter} />
+            <View style={styles.headerRightContentTexts}>
+              <Text style={styles.headerRightContentTextDescription}>지금까찌 이룬 위시</Text>
+              <Text style={styles.headerRightContentTextValue}>{homeData?.userData.completeProjects}개</Text>
+            </View>
+          </View>
         </View>
       </View>
     );
@@ -242,24 +254,53 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   headerSection: {
+    flexDirection: 'row',
     paddingTop: 44,
     paddingHorizontal: 16,
     justifyContent: 'space-between',
-    flexDirection: 'row',
     alignItems: 'center',
   },
-  headerDescription: {
+  headerCharacter: {
+    width: 151,
+    height: 151,
+  },
+  headerRightContents: {
+    gap: 10,
+  },
+  headerRightContentBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',   
+    height: 74,
+    backgroundColor: 'white',
+    borderRadius: 4,
+    gap: 11,
+    paddingVertical: 14,
+    paddingHorizontal: 15,
+  },
+  headerRightContentTexts: {
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    gap: 6,
-  },
-  headerBomb: {
-    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
   },
-  bomb: {
-    marginLeft: 16,
+  headerRightContentTextDescription: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.darkGrey,
+  },
+  headerRightContentTextValue: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: COLORS.mainPurple,
+  },
+  headerRightCharacter: {
+    width: 43,
+    height: 43,
+  },
+  character: {
+    width: 151,
+    height: 151,
   },  
   headerText: {
     color: '#FFFFFF',

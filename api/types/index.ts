@@ -80,12 +80,9 @@ export interface PopularChallenge {
 export interface HomeData {
   userData: {
     userName: string;
-    finishedProjects: number;
-    registeredProjects: number;
-  };
-  categories: {
-    [key: string]: string;
-  };
+    serviceUsedDays: number;
+    completeProjects: number;
+  },
   popularChallenges: PopularChallenge[];
 }
 
