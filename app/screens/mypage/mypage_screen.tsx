@@ -14,7 +14,11 @@ const menuList: MyPageMenu[] = [
     image: require('../../../assets/images/mypage/mypge_chevron_right.png'),
   },
   {
-    title: '탈퇴하기',
+    title: '계정명 변경',
+    image: require('../../../assets/images/mypage/mypge_chevron_right.png'),
+  },
+  {
+    title: '의견 남기기',
     image: require('../../../assets/images/mypage/mypge_chevron_right.png'),
   },
   {
@@ -22,12 +26,8 @@ const menuList: MyPageMenu[] = [
     image: require('../../../assets/images/mypage/mypge_chevron_right.png'),
   },
   {
-    title: '환경설정',
+    title: '탈퇴하기',
     image: require('../../../assets/images/mypage/mypge_chevron_right.png'),
-  },
-  {
-    title: '앱버전',
-    appVersion: DeviceInfo.getVersion(),
   },
 ];
 
