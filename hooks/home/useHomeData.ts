@@ -10,26 +10,38 @@ export const useHomeData = () => {
 
   const [homeData, setHomeData] = useState<HomeData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if (userId) {
+        const response = await HomeService.getHome(userId);
+        setHomeData(response.data);
+      } else {
+        console.log('userId가 없습니다.');
+      }
+    } catch (error) {
+      console.error('홈 데이터 로딩 오류:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = await AsyncStorage.getItem('userId');
-        if (userId) {
-          const response = await HomeService.getHome(userId);
-          setHomeData(response.data);
-        } else {
-          console.log('userId가 없습니다.');
-        }
-      } catch (error) {
-        console.error('홈 데이터 로딩 오류:', error);
-      } finally {
-        setLoading(false);
-      }
+    const loadInitialData = async () => {
+      setLoading(true);
+      await fetchData();
+      setLoading(false);
     };
 
-    fetchData();
+    loadInitialData();
   }, []);
+
+  // Pull to refresh 함수
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
+  };
 
   // 도전중인 목표 클릭 이벤트 핸들러
   const handleChallengingGoalsClick = () => {
@@ -77,10 +89,12 @@ export const useHomeData = () => {
   return { 
     homeData, 
     loading, 
+    refreshing,
     handleChallengingGoalsClick,
     handleCompletedGoalsClick,
     handleCategoryClick,
     handlePopularChallengeClick,
-    handleViewAllPopularChallenges
+    handleViewAllPopularChallenges,
+    onRefresh
   };
 };

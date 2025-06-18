@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, SafeAreaView, FlatList, RefreshControl } from 'react-native';
 import { COLORS } from '../../../assets/colors/colors'
 import { SubHeadText, CaptionText } from '@/app/components/texts';
 import { useHomeData } from '../../../hooks/home/useHomeData';
@@ -9,11 +9,13 @@ export const HomeScreen = () => {
   const { 
     homeData, 
     loading, 
+    refreshing,
     handleChallengingGoalsClick,
     handleCompletedGoalsClick,
     handleCategoryClick,
     handlePopularChallengeClick,
-    handleViewAllPopularChallenges
+    handleViewAllPopularChallenges,
+    onRefresh
   } = useHomeData();
 
   const navigationSection = () => {
@@ -133,6 +135,14 @@ export const HomeScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.popularChallengeScrollContainer}
           columnWrapperStyle={styles.popularChallengeRow}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={COLORS.mainPurple}
+              colors={[COLORS.mainPurple]}
+            />
+          }
           renderItem={({ item: challenge, index }) => (
             <HomeWishCard 
               wish={challenge}

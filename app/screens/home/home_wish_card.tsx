@@ -31,7 +31,6 @@ export const HomeWishCard = ({ wish, onPress}: HomeWishCardProps) => {
   );
 
 
-
   return (
     <TouchableOpacity onPress={tapWish}>
       {wishContent}
