@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Animated }
 import { Image } from 'expo-image';
 import { Challenge, WishInfoTodo } from '../../../../api/types';
 import { COLORS } from '../../../../assets/colors/colors';  
-import { CaptionText, SectionTitleText } from '@/app/components/texts';
+import { CaptionText, SectionTitleText, Body3 } from '@/app/components/texts';
 import { Swipeable } from 'react-native-gesture-handler';
 
 interface GoalCardProps {
@@ -100,13 +100,7 @@ export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isL
           >
             {renderCheckbox()}
           </TouchableOpacity>
-          <Text style={styles.todoTitle}>{todo.title || ''}</Text>
-          <Image
-            source={require('../../../../assets/images/mywish/wish_todo_menu.png')}
-            style={styles.todoMenu}
-            contentFit="contain"
-            cachePolicy="memory-disk"
-          />
+          <Body3 style={styles.todoTitle}>{todo.title || ''}</Body3>
         </View>
         {!isLast && (
           <TouchableOpacity onPress={tapTodoMenu}>
@@ -142,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkboxTouchable: {
-    paddingHorizontal: 16,
+    paddingLeft: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -150,7 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'regular',
     color: '#1E1E1E',
-    paddingLeft: 8,
+    paddingLeft: 11,
   },
   todoMenu: {
     width: 16,

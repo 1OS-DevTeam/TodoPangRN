@@ -25,19 +25,33 @@ export const WishListCard = ({
   handleTodoDelete
 }: WishCardProps) => {
 
+  // 모든 todo가 완료되었는지 확인하는 함수
+  const isAllTodosCompleted = () => {
+    if (challenge.todoList.length === 0) return false;
+    return challenge.todoList.every(todo => todo.status === 2);
+  };
+
   const wishHeaderSection = () => {
+    const allCompleted = isAllTodosCompleted();
+    
     return (
       <View style={styles.wishHeaderSection}>
           <Text style={styles.wishHeaderText}>{challenge.challengeName}</Text>
           <TouchableOpacity 
-            style={styles.wishCompleteButton}
+            style={[
+              styles.wishCompleteButton,
+              !allCompleted && styles.wishCompleteButtonDisabled
+            ]}
             onPress={() => handleWishComplete?.(challenge)}
-            disabled={isLoading}
+            disabled={isLoading || !allCompleted}
           >
             {isLoading ? (
               <ActivityIndicator size="small" color={COLORS.mainPurple} />
             ) : (
-              <Text style={styles.wishCompleteButtonText}>이루기</Text>
+              <Text style={[
+                styles.wishCompleteButtonText,
+                !allCompleted && styles.wishCompleteButtonTextDisabled
+              ]}>이루기</Text>
             )}
           </TouchableOpacity>
       </View>
@@ -81,6 +95,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   wishHeaderSection: {
+    marginTop: 6,
     flexDirection: 'row',
     height: 34,
     alignItems: 'center',
@@ -90,7 +105,7 @@ const styles = StyleSheet.create({
   },
   wishHeaderText: {
     fontSize: 17,
-    fontWeight: 'regular',
+    fontWeight: 'bold',
     color: '#1E1E1E',
     marginLeft: 16,
   },
@@ -102,15 +117,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E5E5E5',
     borderRadius: 20,
-    width: 78,
-    height: 32,
+    width: 61,
+    height: 30,
     position: 'absolute',
     right: 18,
+  },
+  wishCompleteButtonDisabled: {
+    backgroundColor: '#D9D9D9',
   },
   wishCompleteButtonText: {
     color: '#000000',
     fontSize: 14,
     fontWeight: 'regular',
+  },
+  wishCompleteButtonTextDisabled: {
+    color: '#1E1E1E',
   },
 });
 

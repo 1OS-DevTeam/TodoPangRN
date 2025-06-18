@@ -61,22 +61,18 @@ const MyWishScreen = () => {
       <View style={styles.headerSection}>
         <View style={styles.headerContents}>
           <Image
-            source={require('../../../assets/images/mywish/wish_balloon.png')}
-            style={styles.wishBalloon}
+            source={require('../../../assets/images/mywish/mywish_character.png')}
+            style={styles.wishCharacter}
           />
           <View style={styles.headerTexts}>
-              <Text style={styles.userName}>{wishInfoList?.userName},</Text>
+              <Text style={styles.wishText}>
+                <Text style={styles.boldText}>{wishInfoList?.userName}</Text> 님
+              </Text>
               <View style={styles.wishCountContainer}>
-                <Text style={styles.wishCount}>{wishInfoList?.challenges.length}개의 위시</Text>
-                <Text style={styles.wishText}>가 있어!</Text>
+                <Text style={styles.wishText}>
+                  등록된 <Text style={styles.boldText}>{wishInfoList?.challenges.length} 개</Text>의 위시가 있어요!
+                </Text>
               </View>
-          </View>
-          <View style={styles.headerFilterButton}>
-            <Image
-              source={require('../../../assets/images/mywish/wish_filter.png')}
-              style={styles.wishFilter}
-            />
-            <Text>추천순</Text>
           </View>
         </View>
       </View>
@@ -190,11 +186,9 @@ const styles = StyleSheet.create({
     gap: 30,
   },
   headerSection: {
-    // flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // backgroundColor: 'red',
+    justifyContent: 'center',
     width: '100%',
+    paddingTop: 12
   },
   headerTitle: {
     height: 60,
@@ -208,12 +202,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
   },
-  wishBalloon: {
-    width: 36,
-    height: 47,
+  wishCharacter: {
+    width: 85,
+    height: 85,
     marginTop: 4,
-    marginLeft: 16,
-    marginRight: 19,
   },
   userName: {
     fontSize: 17,
@@ -221,7 +213,10 @@ const styles = StyleSheet.create({
   },
   headerTexts: {
     flexDirection: 'column',
+    paddingLeft: 8,
+    gap: 4
   },
+  
   wishCountContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -235,22 +230,8 @@ const styles = StyleSheet.create({
     fontWeight: 'regular',
     paddingBottom: 3,
   },
-  headerFilterButton: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-    borderRadius: 20,
-    width: 78,
-    height: 32,
-    position: 'absolute',
-    right: 18,
-  },
-  wishFilter: {
-    width: 13,
-    height: 13,
+  boldText: {
+    fontWeight: 'bold',
   },
   wishListSection: {
     flex: 1,
