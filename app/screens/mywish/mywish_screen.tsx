@@ -59,9 +59,6 @@ const MyWishScreen = () => {
   const headerSection = () => {
     return (
       <View style={styles.headerSection}>
-        <View style={styles.headerTitle}>
-          <HeadText>목표</HeadText>
-        </View>
         <View style={styles.headerContents}>
           <Image
             source={require('../../../assets/images/mywish/wish_balloon.png')}
@@ -129,17 +126,19 @@ const MyWishScreen = () => {
   const noWishSection = () => {
     return (
       <View style={styles.noWishContainer}>
-        <Text style={styles.noWishTitle}>위시가 비어 있어요</Text>
-        <View style={styles.noWishDescription}>
-          <Text style={styles.noWishDescriptionText}>당신의 마음이 이끄는대로-</Text>
-          <Text style={styles.noWishDescriptionText}>일상을 설레게 만들어줄 위시를 추가해봐!</Text>
-        </View>
         <Image
           source={require('../../../assets/images/mywish/wish_tung.png')}
           style={styles.noWishImage}
         />
+        <Text style={styles.noWishTitle}>
+          위시가 <Text style={styles.tungText}>텅!</Text> 비었어요
+        </Text>
+        <View style={styles.noWishDescription}>
+          <Text style={styles.noWishDescriptionText}>얼른 위시를 추가해보세요-</Text>
+        </View>
+
         <TouchableOpacity style={styles.noWishButton}>
-          <Text style={styles.noWishButtonText}>위시 탐색소 바로가기</Text>
+          <Text style={styles.noWishButtonText}>위시 추가하기</Text>
         </TouchableOpacity>
       </View>
     );
@@ -148,6 +147,9 @@ const MyWishScreen = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaView style={styles.container}>
+        <View style={styles.headerTitle}>
+          <HeadText>나의 위시</HeadText>
+        </View>
         {wishInfoList?.challenges.length === 0 ? noWishSection() : (
           <View style={styles.content}>
             {headerSection()}
@@ -264,17 +266,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   noWishContainer: {
-    marginTop: 70,
+    marginTop: 101,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  noWishTitle: {
-    fontSize: 24,
-    fontWeight: '800',
+  noWishTitle: {  
+    marginTop: 16,
+    fontSize: 14,
+    fontWeight: 'regular',
+    color: COLORS.black,
+  },
+  tungText: {
+    fontSize: 20,
+    fontWeight: 'bold',
     color: COLORS.mainPurple,
   },
   noWishDescription: {
-    marginTop: 16,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -282,17 +289,18 @@ const styles = StyleSheet.create({
   noWishDescriptionText: {
     fontSize: 14,
     fontWeight: 'regular',
-    color: COLORS.darkGrey,
+    color: COLORS.black,
   },
   noWishImage: {
     marginTop: 12,
-    width: 178,
-    height: 188,
+    width: 138,
+    height: 130,
   },
   noWishButton: {
-    marginTop: 19,
-    width: 200,
-    height: 44,
+    marginTop: 30,
+    marginHorizontal: 57,
+    width: '70%',
+    height: 39,
     backgroundColor: COLORS.mainPurple,
     borderRadius: 8,
     justifyContent: 'center',
@@ -300,7 +308,7 @@ const styles = StyleSheet.create({
   },
   noWishButtonText: {
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: '600',
     color: COLORS.white,
   },
 });
