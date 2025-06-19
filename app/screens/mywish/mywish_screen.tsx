@@ -22,7 +22,8 @@ const MyWishScreen = () => {
     handleWishComplete,
     handleTodoDelete,
     fetchData,
-    useWishNavigation
+    useWishNavigation,
+    handleAddWish
   } = useWishHome();
 
   const onTodoToggle = async (todoId: number) => {
@@ -129,7 +130,7 @@ const MyWishScreen = () => {
           <Text style={styles.noWishDescriptionText}>얼른 위시를 추가해보세요-</Text>
         </View>
 
-        <TouchableOpacity style={styles.noWishButton}>
+        <TouchableOpacity style={styles.noWishButton} onPress={handleAddWish}>
           <Text style={styles.noWishButtonText}>위시 추가하기</Text>
         </TouchableOpacity>
       </View>

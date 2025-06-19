@@ -241,6 +241,10 @@ export const useWishHome = () => {
 
   }
 
+  const handleAddWish = () => {
+    router.push('/(tabs)/challenge');
+  }
+
   return { 
     wishInfoList, 
     loading,
@@ -250,6 +254,7 @@ export const useWishHome = () => {
     handleWishComplete,
     handleTodoDelete,
     fetchData,
-    useWishNavigation
+    useWishNavigation,
+    handleAddWish
   };
 };
