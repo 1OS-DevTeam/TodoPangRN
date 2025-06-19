@@ -28,7 +28,7 @@ export const WishListCard = ({
   // 모든 todo가 완료되었는지 확인하는 함수
   const isAllTodosCompleted = () => {
     if (challenge.todoList.length === 0) return false;
-    return challenge.todoList.every(todo => todo.status === 2);
+    return challenge.todoList.every(todo => todo.status === 1);
   };
 
   const wishHeaderSection = () => {
