@@ -8,7 +8,7 @@ export const SubHeadText = ({
   color?: string;
 }) => {
   return (
-    <Text style={{ fontSize: 20, fontWeight: 'semibold', color }}>{children}</Text>
+    <Text style={{ fontSize: 20, fontWeight: 600, color }}>{children}</Text>
   );
 };
 

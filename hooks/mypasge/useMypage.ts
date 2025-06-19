@@ -47,12 +47,12 @@ export const useMypage = () => {
     }
   };
 
-  const tapSetting = () => {
-    console.log('환경설정');
+  const tapSuggestion = () => {
+    console.log('의견 남기기');
   };
 
   const tapGuide = () => {
-    console.log('가이드북');
+    router.push('/onboarding/onboarding');
   };
 
   useEffect(() => {
@@ -95,12 +95,17 @@ export const useMypage = () => {
     bottomSheetRef.current?.expand();
   };
 
+  const tapChangeName = () => {
+    console.log('계정명 변경');
+  };
+
   return {
     loading,
     isLoggingOut,
     tapWithdraw,
+    tapChangeName,
     tapLogout,
-    tapSetting,
+    tapSuggestion,
     tapGuide,
     showWithdrawBottomSheet,
     showLogoutBottomSheet,

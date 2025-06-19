@@ -7,10 +7,11 @@ import DeviceInfo from 'react-native-device-info';
 import { useMypage } from '../../../hooks/mypasge/useMypage';
 import { TwoButtonBottomSheet } from '@/app/components/bottomSheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SubHeadText } from '@/app/components/texts';
 
 const menuList: MyPageMenu[] = [
   {
-    title: '가이드북',
+    title: '서비스 소개',
     image: require('../../../assets/images/mypage/mypge_chevron_right.png'),
   },
   {
@@ -34,8 +35,9 @@ const menuList: MyPageMenu[] = [
 export const MyPageScreen = () => {
   const { 
     tapWithdraw,
+    tapChangeName,
     tapLogout,
-    tapSetting,
+    tapSuggestion,
     tapGuide,
     showWithdrawBottomSheet,
     showLogoutBottomSheet,
@@ -48,13 +50,13 @@ export const MyPageScreen = () => {
   const headerSection = () => {
     return (
       <View style={styles.headerSection}>
-        <Text style={styles.headerTitle}>마이페이지</Text>
+        <SubHeadText >마이페이지</SubHeadText>
         <View style={styles.headerContents}>
           <Image
-            source={require('../../../assets/images/mypage/bomb_icon.png')}
+            source={require('../../../assets/images/mypage/mypage_character.png')}
             style={styles.headerImage}
           />
-          <Text style={styles.myName}>김하나님</Text>
+          <SubHeadText >김하나님</SubHeadText>
         </View>
       </View>
     );
@@ -63,17 +65,20 @@ export const MyPageScreen = () => {
   const menuSection = () => {
     const handleMenuPress = (menu: MyPageMenu) => {
       switch (menu.title) {
-        case '가이드북':
+        case '서비스 소개':
           tapGuide();
+          break;
+        case '계정명 변경':
+          tapChangeName();
+          break;
+        case '의견 남기기':
+          tapSuggestion();
           break;
         case '탈퇴하기':
           tapWithdraw();
           break;
         case '로그아웃':
           showLogoutBottomSheet();
-          break;
-        case '환경설정':
-          tapSetting();
           break;
       }
     };
@@ -102,7 +107,6 @@ export const MyPageScreen = () => {
 
         <TwoButtonBottomSheet
           ref={bottomSheetRef}
-          title={bottomSheetState.title}
           message={bottomSheetState.message}
           firstButtonLabel={bottomSheetState.firstButtonLabel}
           firstButtonEvent={bottomSheetState.onFirstButtonPress || (() => {})}
@@ -133,16 +137,12 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 8
+    gap: 8,
+    paddingBottom: 16
   },
   headerImage: {
-    width: 72,
-    height: 72,
-  },
-  myName: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: COLORS.black,
+    width: 119,
+    height: 119,
   },
   menuSection: {
     paddingHorizontal: 16,
