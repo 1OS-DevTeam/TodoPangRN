@@ -35,5 +35,21 @@ export const MypageService = {
       console.error('탈퇴 제출 중 오류 발생:', error);
       throw error;
     }
-  }
+  },
+
+  /**
+   * 닉네임 변경
+   */
+  changeName: async (newUserName: string) => {
+    try {
+      const response = await apiClient.post<ApiResponse<Boolean>>(
+        MypageEndpoints.CHANGE_NAME,
+        { newUserName }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('닉네임 변경 중 오류가 발생했습니다:', error);
+      throw error;
+    }
+  },
 };

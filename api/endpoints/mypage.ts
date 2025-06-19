@@ -10,3 +10,6 @@ export const WITHDRAW_REASON_LIST = '/mypage/withdraw/reason';
 
 // 탈퇴
 export const WITHDRAW = '/mypage/withdraw/process';
+
+// 닉네임 변경
+export const CHANGE_NAME = '/mypage/rename';

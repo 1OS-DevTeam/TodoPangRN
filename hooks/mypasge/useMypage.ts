@@ -8,7 +8,6 @@ import { auth } from '../../app/_layout';
 import { BottomSheetState } from '@/api/types';
 
 
-
 export const useMypage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -96,7 +95,7 @@ export const useMypage = () => {
   };
 
   const tapChangeName = () => {
-    console.log('계정명 변경');
+    router.push('/changeProfile/changeProfile');
   };
 
   return {
