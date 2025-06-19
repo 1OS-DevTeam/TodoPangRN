@@ -1,16 +1,18 @@
-import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image, ImageSourcePropType, ImageStyle, TextStyle } from 'react-native';
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop, BottomSheetBackdropProps } from '@gorhom/bottom-sheet';
 import { useCallback, useMemo, forwardRef } from 'react';
 import { Text } from 'react-native';
 import { COLORS } from '@/assets/colors/colors';
 
 interface TwoButtonBottomSheetProps {
-  title: string;
   message: string;
   firstButtonLabel: string;
   firstButtonEvent: () => void;
   secondButtonLabel: string;
   secondButtonEvent: () => void;
+  imageSource?: ImageSourcePropType;
+  imageStyle?: ImageStyle;
+  messageStyle?: TextStyle;
 }
 
 const TwoButtonBottomSheet = forwardRef<BottomSheet, TwoButtonBottomSheetProps>((props, ref) => {
@@ -39,12 +41,13 @@ const TwoButtonBottomSheet = forwardRef<BottomSheet, TwoButtonBottomSheetProps>(
     >
       <BottomSheetView style={styles.contentContainer}>
         <View style={styles.messageBox}>
-          <Text style={styles.title}>{props.title}</Text>
-          <Text style={styles.message}>{props.message}</Text>
+          <Text style={[styles.message, props.messageStyle]}>{props.message}</Text>
         </View>
-        <View style={styles.imageSection}>
-          <Image source={require('@/assets/images/mywish/wish_complete.png')} style={styles.image} />
-        </View>
+        {props.imageSource && (
+          <View style={styles.imageSection}>
+            <Image source={props.imageSource} style={[styles.image, props.imageStyle]} />
+          </View>
+        )}
         <View style={styles.buttonWrapper}>
           <View style={styles.buttonSection}>
             <TouchableOpacity onPress={props.firstButtonEvent} style={{ flex: 1 }}>
@@ -73,22 +76,15 @@ const styles = StyleSheet.create({
   },
   messageBox: {
     width: '100%',
-    paddingTop: 16,
+    // paddingTop: 16,
   },
   imageSection: {
-    paddingTop: 30,
+    paddingTop: 19,
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
 
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 8,
-    color: COLORS.mainPurple,
   },
   message: {
     fontSize: 14,

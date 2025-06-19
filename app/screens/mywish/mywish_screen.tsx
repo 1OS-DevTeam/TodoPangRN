@@ -154,20 +154,27 @@ const MyWishScreen = () => {
         )}
         <TwoButtonBottomSheet
           ref={bottomSheetRef}
-          title="위시"
-          message={`수빈지킴이! 이번 목표를 기반으로
-다른 목표들도 도전해봐! 넌 할 수 있어!`}
+          message={`축하해요!\n\`${selectedChallenge?.challengeName || ''}\`\n위시를 이루었어요`}
           firstButtonLabel="닫기"
           firstButtonEvent={() => {
             setSelectedChallenge(null);
             bottomSheetRef.current?.close();
           }}
-          secondButtonLabel="목표 후기 남기기"
+          secondButtonLabel="위시 리뷰 남기기"
           secondButtonEvent={() => {
             if (selectedChallenge) {
                 console.log('[MyWishScreen] originChallengeId:', selectedChallenge.originChallengeId);
                 useWishNavigation(selectedChallenge.originChallengeId);
             }
+          }}
+          imageSource={require('../../../assets/images/mywish/mywish_complete_character.png')}
+          imageStyle={{ width: 200, height: 200 }}
+          messageStyle={{
+            fontSize: 20,
+            fontWeight: '600',
+            color: COLORS.mainPurple,
+            textAlign: 'center',
+            lineHeight: 24
           }}
         />
       </SafeAreaView>
@@ -251,7 +258,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  noWishTitle: {  
+  noWishTitle: {
     marginTop: 16,
     fontSize: 14,
     fontWeight: 'regular',
