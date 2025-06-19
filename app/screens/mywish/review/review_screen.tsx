@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { useReview } from '../../../../hooks/wish/useReview';
-import { HeadText } from '@/app/components/texts';
+import { SubHeadText, Body1, Body2 } from '@/app/components/texts';
 import { COLORS } from '../../../../assets/colors/colors';
 import MainActionButton from '@/app/components/buttons/main_action_button';
 import { ReviewRow } from './review_row';
 import { ReviewResponse } from '@/api/types';
+import { TwoButtonBottomSheet } from '@/app/components/bottomSheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number } } }) => {    
+    const bottomSheetRef = useRef<BottomSheet>(null);
+    
     const {
         reviewList,
         loading,
@@ -17,8 +22,13 @@ const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number 
         handleRating,
         selectedReview,
         handleReviewSelect,
-        isNextButtonEnabled
+        isNextButtonEnabled,
+        userName
     } = useReview(route.params.originChallengeId);
+
+    const handleNextButtonPress = () => {
+        bottomSheetRef.current?.expand();
+    };
 
     if (loading) {
         return (
@@ -33,8 +43,8 @@ const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number 
     const satiesfiedSection = () => {
         return (
             <View style={styles.satisfiedSection}>
-                <HeadText>만족도 Check!</HeadText>
-                <Text style={{fontSize: 18, color: COLORS.darkGrey}}>해당 템플릿 만족도를 체크해줘!</Text>
+                <SubHeadText>만족도 남기기!</SubHeadText>
+                <Body1 color={COLORS.darkGrey}>이룬 위시의 만족도를 체크해주세요.</Body1>
                 <View style={styles.starsContainer}>
                     {[1, 2, 3, 4, 5].map((index) => (
                         <TouchableOpacity
@@ -59,10 +69,8 @@ const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number 
     const goalDescroptionSection = () => {
         return (
             <View style={styles.goalDescroptionSection}>
-                <HeadText>목표 키워드</HeadText>
-                <Text style={{fontSize: 18, color: COLORS.darkGrey}}>
-                    키워드를 골라주세요 (1개)
-                </Text>
+                <SubHeadText>리뷰 남기기!</SubHeadText>
+                <Body1 color={COLORS.darkGrey}>이룬 위시를 표현하는 키워드를 골라주세요.</Body1>
             </View>
         )
     }
@@ -100,7 +108,7 @@ const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number 
             <MainActionButton 
                 disabled={!isNextButtonEnabled || isProcessing} 
                 text={isProcessing ? "처리중..." : "다음"}
-                onClick={updateReview} 
+                onClick={handleNextButtonPress} 
             />
             {isProcessing && (
                 <View style={styles.processingSpinner}>
@@ -112,14 +120,38 @@ const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number 
     };
     
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                {satiesfiedSection()}
-                {goalDescroptionSection()}
-                {reviewListSection()}
-            </ScrollView>
-            {bottomButtonSection()}
-        </SafeAreaView>
+        <GestureHandlerRootView style={styles.container}>
+            <SafeAreaView style={styles.container}>
+                <ScrollView>
+                    {satiesfiedSection()}
+                    {goalDescroptionSection()}
+                    {reviewListSection()}
+                </ScrollView>
+                {bottomButtonSection()}
+                <TwoButtonBottomSheet
+                    ref={bottomSheetRef}
+                    message={`${userName}님의,\n소중한 리뷰를 등록할까요?`}
+                    firstButtonLabel="취소"
+                    firstButtonEvent={() => {
+                        bottomSheetRef.current?.close();
+                    }}
+                    secondButtonLabel="등록하기"
+                    secondButtonEvent={() => {
+                        updateReview();
+                        bottomSheetRef.current?.close();
+                    }}
+                    imageSource={require('../../../../assets/images/mywish/review_register_character.png')}
+                    imageStyle={{ width: 165, height: 183 }}
+                    messageStyle={{
+                        fontSize: 20,
+                        fontWeight: '600',
+                        color: COLORS.mainPurple,
+                        textAlign: 'center',
+                        lineHeight: 24
+                    }}
+                />
+            </SafeAreaView>
+        </GestureHandlerRootView>
     )
 }
 

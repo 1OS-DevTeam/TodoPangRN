@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: 'space-between',
-    paddingBottom: 16,
+    paddingBottom: 28,
   },
   messageBox: {
     width: '100%',

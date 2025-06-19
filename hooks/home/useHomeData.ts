@@ -18,6 +18,8 @@ export const useHomeData = () => {
       if (userId) {
         const response = await HomeService.getHome(userId);
         setHomeData(response.data);
+        let userName = response.data.userData.userName;
+        AsyncStorage.setItem('userName', userName);
       } else {
         console.log('userId가 없습니다.');
       }

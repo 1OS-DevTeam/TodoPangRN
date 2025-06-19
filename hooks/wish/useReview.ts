@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { ReviewResponse } from '@/api/types';
 import { ReviewService } from '@/api/services/reviewService';
 import { ReviewUpdateRequest } from '@/api/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const useReview = (originChallengeId: number) => {
     console.log('[useReview] originChallengeId received:', originChallengeId);
@@ -15,6 +16,7 @@ export const useReview = (originChallengeId: number) => {
   const [hasRated, setHasRated] = useState<boolean>(false);
   const [selectedReview, setSelectedReview] = useState<ReviewResponse | null>(null);
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string>('');
 
   useFocusEffect(
     useCallback(() => {
@@ -34,6 +36,8 @@ export const useReview = (originChallengeId: number) => {
         console.log('response: 성공', response);
         if (response.status === 200) {
             setReviewList(response.data);
+            const userName = await AsyncStorage.getItem('userName') || '이름 없음';
+            setUserName(userName);
         }
     } catch (error) {
         console.error('위시리스트 조회 오류:', error);
@@ -66,8 +70,6 @@ export const useReview = (originChallengeId: number) => {
     try {
         const response = await ReviewService.updateReview(review);
         if (response.status === 200) {
-            console.log('리뷰 업데이트 성공');
-            // 성공시에만 화면 이동
             router.replace('/(tabs)/mywish');
         }
     } catch (error) {
@@ -87,6 +89,7 @@ export const useReview = (originChallengeId: number) => {
     handleRating,
     selectedReview,
     handleReviewSelect,
-    isNextButtonEnabled
+    isNextButtonEnabled,
+    userName
   };
 }

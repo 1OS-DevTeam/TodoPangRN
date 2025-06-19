@@ -166,7 +166,7 @@ const MyWishScreen = () => {
             if (selectedChallenge) {
                 console.log('[MyWishScreen] originChallengeId:', selectedChallenge.originChallengeId);
                 useWishNavigation(selectedChallenge.originChallengeId);
-                bottomSheetRef.current?.close();
+                // bottomSheetRef.current?.close();
             }
           }}
           imageSource={require('../../../assets/images/mywish/mywish_complete_character.png')}
