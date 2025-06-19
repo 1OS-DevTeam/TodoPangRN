@@ -57,6 +57,8 @@ const MyWishScreen = () => {
   };
 
   const headerSection = () => {
+    if (!wishInfoList) return null;
+    
     return (
       <View style={styles.headerSection}>
         <View style={styles.headerContents}>
@@ -66,11 +68,11 @@ const MyWishScreen = () => {
           />
           <View style={styles.headerTexts}>
               <Text style={styles.wishText}>
-                <Text style={styles.boldText}>{wishInfoList?.userName}</Text> 님
+                <Text style={styles.boldText}>{wishInfoList.userName}</Text> 님
               </Text>
               <View style={styles.wishCountContainer}>
                 <Text style={styles.wishText}>
-                  등록된 <Text style={styles.boldText}>{wishInfoList?.challenges.length} 개</Text>의 위시가 있어요!
+                  등록된 <Text style={styles.boldText}>{wishInfoList.challenges.length} 개</Text>의 위시가 있어요!
                 </Text>
               </View>
           </View>
@@ -80,14 +82,8 @@ const MyWishScreen = () => {
   };
 
   const wishListSection = () => {
-    if (loading || !wishInfoList?.challenges) {
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.mainPurple} />
-        </View>
-      );
-    }
-
+    if (!wishInfoList) return null;
+    
     return (
       <View style={styles.wishListSection}>
         <FlatList
@@ -146,7 +142,11 @@ const MyWishScreen = () => {
         <View style={styles.headerTitle}>
           <HeadText>나의 위시</HeadText>
         </View>
-        {wishInfoList?.challenges.length === 0 ? noWishSection() : (
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={COLORS.mainPurple} />
+          </View>
+        ) : !wishInfoList || wishInfoList.challenges.length === 0 ? noWishSection() : (
           <View style={styles.content}>
             {headerSection()}
             {wishListSection()}
