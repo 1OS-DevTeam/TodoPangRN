@@ -8,6 +8,7 @@ import { useMypage } from '../../../hooks/mypasge/useMypage';
 import { TwoButtonBottomSheet } from '@/app/components/bottomSheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SubHeadText } from '@/app/components/texts';
+import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
 
 const menuList: MyPageMenu[] = [
   {
@@ -94,9 +95,13 @@ export const MyPageScreen = () => {
     );
   };
 
+  const handleContainerLayout = (event: any) => {
+    console.log('🔴 Container Layout:', event.nativeEvent.layout);
+  };
+
   return (
     <GestureHandlerRootView style={styles.container}>
-      <SafeAreaView style={styles.container}>
+      <ScreenWrapper backgroundColor={COLORS.white} onLayout={handleContainerLayout}>
         {loading && (
           <View>
             <ActivityIndicator size="large" color={COLORS.mainPurple} />
@@ -113,7 +118,7 @@ export const MyPageScreen = () => {
           secondButtonLabel={bottomSheetState.secondButtonLabel}
           secondButtonEvent={bottomSheetState.onSecondButtonPress || (() => {})}
         />
-      </SafeAreaView>
+      </ScreenWrapper>
     </GestureHandlerRootView>
   );
 };

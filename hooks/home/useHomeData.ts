@@ -81,11 +81,7 @@ export const useHomeData = () => {
 
   // 인기 목표 전체보기 기능 처리 함수
   const handleViewAllPopularChallenges = () => {
-    // 여기에 전체보기 클릭 시 실행할 코드를 작성합니다.
-    // 예: 인기 목표 전체 목록 화면으로 이동
-    console.log('인기 목표 전체보기 클릭됨');
-    // 네비게이션 기능이 추가되면 다음과 같이 구현할 수 있습니다:
-    // navigation.navigate('AllPopularChallenges');
+    router.push('/(tabs)/challenge');
   };
 
   return { 
