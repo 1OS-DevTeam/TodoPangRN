@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList, StatusBar, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, FlatList, StatusBar, Image, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HeadText, SectionTitleText, CaptionText, SubHeadText } from '@/app/components/texts';
 import MainActionButton from '@/app/components/buttons/main_action_button';
@@ -7,13 +7,47 @@ import { COLORS } from '../../../assets/colors/colors'
 import { TouchableOpacity } from 'react-native';
 import { useUserChallengeDetail } from '../../../hooks/challenge/userChallengeDetail';
 import ChallengeCard from './component/challenge_card';
+import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
+import { useRouter } from 'expo-router';
 
 export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeId: string } } }) => {
+  const router = useRouter();
+
   const {
     challengeDetail,
     loading,
     handleRegister
   } = useUserChallengeDetail(route.params.challengeId);
+
+  const showSuccessAlert = () => {
+    Alert.alert(
+      '성공',
+      '도전과제가 성공적으로 등록되었습니다!',
+      [
+        {
+          text: '확인',
+          onPress: () => router.back()
+        }
+      ]
+    );
+  };
+
+  const showErrorAlert = (message: string) => {
+    Alert.alert(
+      '오류',
+      message,
+      [
+        {
+          text: '확인',
+          style: 'default'
+        }
+      ]
+    );
+  };
+
+  const onRegister = () => {
+    handleRegister(showSuccessAlert, showErrorAlert);
+  };
 
   const titleSection = () => {
     return (
@@ -86,19 +120,19 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
   const bottomButtonSection = () => {
     return (
       <View style={styles.bottomButtonSection}>
-        <MainActionButton text="등록하기" onClick={handleRegister} />
+        <MainActionButton text="등록하기" onClick={onRegister} />
       </View>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
+    <ScreenWrapper backgroundColor={COLORS.white}>
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={COLORS.mainPurple} />
         </View>
       ) : (
-        <>
+        <View style={styles.container}>
           <ScrollView
             style={styles.scrollView}
             contentContainerStyle={styles.scrollViewContent}
@@ -111,9 +145,9 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
             {reviewSection()}
           </ScrollView>
           {bottomButtonSection()}
-        </>
-      )}
-    </SafeAreaView>
+        </View>
+              )}
+      </ScreenWrapper>
   );
 };
 
@@ -121,7 +155,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    // paddingTop: -59
   },
   scrollView: {
     flex: 1,
@@ -129,6 +162,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+    paddingBottom: 20,
   },
   titleSection: {
     paddingHorizontal: 20,
@@ -240,6 +274,8 @@ const styles = StyleSheet.create({
     elevation: 5,
     backgroundColor: COLORS.white,
     paddingHorizontal: 20,
+    paddingTop: 40,
+    paddingBottom: 42,
   },
   loadingContainer: {
     flex: 1,
