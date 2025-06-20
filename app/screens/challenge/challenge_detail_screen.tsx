@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList, StatusBar, Image, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, FlatList, StatusBar, Image, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HeadText, SectionTitleText, CaptionText, SubHeadText } from '@/app/components/texts';
 import MainActionButton from '@/app/components/buttons/main_action_button';
@@ -8,46 +8,13 @@ import { TouchableOpacity } from 'react-native';
 import { useUserChallengeDetail } from '../../../hooks/challenge/userChallengeDetail';
 import ChallengeCard from './component/challenge_card';
 import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
-import { useRouter } from 'expo-router';
 
 export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeId: string } } }) => {
-  const router = useRouter();
-
   const {
     challengeDetail,
     loading,
     handleRegister
   } = useUserChallengeDetail(route.params.challengeId);
-
-  const showSuccessAlert = () => {
-    Alert.alert(
-      '성공',
-      '도전과제가 성공적으로 등록되었습니다!',
-      [
-        {
-          text: '확인',
-          onPress: () => router.back()
-        }
-      ]
-    );
-  };
-
-  const showErrorAlert = (message: string) => {
-    Alert.alert(
-      '오류',
-      message,
-      [
-        {
-          text: '확인',
-          style: 'default'
-        }
-      ]
-    );
-  };
-
-  const onRegister = () => {
-    handleRegister(showSuccessAlert, showErrorAlert);
-  };
 
   const titleSection = () => {
     return (
@@ -120,7 +87,7 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
   const bottomButtonSection = () => {
     return (
       <View style={styles.bottomButtonSection}>
-        <MainActionButton text="등록하기" onClick={onRegister} />
+        <MainActionButton text="등록하기" onClick={handleRegister} />
       </View>
     );
   };
@@ -146,7 +113,7 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
           </ScrollView>
           {bottomButtonSection()}
         </View>
-              )}
+      )}
       </ScreenWrapper>
   );
 };
@@ -161,7 +128,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white
   },
   scrollViewContent: {
-    flexGrow: 1,
     paddingBottom: 20,
   },
   titleSection: {
@@ -261,7 +227,7 @@ const styles = StyleSheet.create({
     color: COLORS.mainPurple,
   },
   bottomButtonSection: {
-    height: 74,
+    height: 116,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: "#000",
@@ -274,7 +240,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     backgroundColor: COLORS.white,
     paddingHorizontal: 20,
-    paddingTop: 40,
+    paddingTop: 20,
     paddingBottom: 42,
   },
   loadingContainer: {
