@@ -8,12 +8,16 @@ import { TouchableOpacity } from 'react-native';
 import { useUserChallengeDetail } from '../../../hooks/challenge/userChallengeDetail';
 import ChallengeCard from './component/challenge_card';
 import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
+import OneButtonBottomSheet from '@/app/components/bottomSheet/one_button_bottomsheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeId: string } } }) => {
   const {
     challengeDetail,
     loading,
-    handleRegister
+    showBottomSheet,
+    handleActualRegister,
+    bottomSheetRef
   } = useUserChallengeDetail(route.params.challengeId);
 
   const titleSection = () => {
@@ -110,34 +114,44 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
   const bottomButtonSection = () => {
     return (
       <View style={styles.bottomButtonSection}>
-        <MainActionButton text="등록하기" onClick={handleRegister} />
+        <MainActionButton text="등록하기" onClick={showBottomSheet} />
       </View>
     );
   };
 
   return (
-    <ScreenWrapper backgroundColor={COLORS.white}>
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.mainPurple} />
-        </View>
-      ) : (
-        <View style={styles.container}>
-          <ScrollView
-            style={styles.scrollView}
-            contentContainerStyle={styles.scrollViewContent}
-            contentInsetAdjustmentBehavior="automatic"
-            showsVerticalScrollIndicator={false}
-            bounces={false}>
-            {titleSection()}
-            {boxeSection()}
-            {todoListSection()}
-            {reviewSection()}
-          </ScrollView>
-          {bottomButtonSection()}
-        </View>
-      )}
-      </ScreenWrapper>
+    <GestureHandlerRootView >
+      <ScreenWrapper backgroundColor={COLORS.white}>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={COLORS.mainPurple} />
+          </View>
+        ) : (
+          <View style={styles.container}>
+            <ScrollView
+              style={styles.scrollView}
+              contentContainerStyle={styles.scrollViewContent}
+              contentInsetAdjustmentBehavior="automatic"
+              showsVerticalScrollIndicator={false}
+              bounces={false}>
+              {titleSection()}
+              {boxeSection()}
+              {todoListSection()}
+              {reviewSection()}
+            </ScrollView>
+            {bottomButtonSection()}
+          </View>
+        )}
+        <OneButtonBottomSheet
+          ref={bottomSheetRef}
+          message={`"${challengeDetail?.title}"\n위시를 이뤄볼까요?`}
+          imageSource={require('../../../assets/images/mywish/wish_tung.png')}
+          imageStyle={{ width: 200, height: 200 }}
+          buttonLabel="등록하기"
+          buttonEvent={handleActualRegister}
+        />
+        </ScreenWrapper>
+      </GestureHandlerRootView>
   );
 };
 

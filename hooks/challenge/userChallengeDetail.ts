@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChallengeService } from '../../api/services/challengeService';
 import { ChallengeDetail } from '../../api/types';
 import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 export const useUserChallengeDetail = (challengeId: string) => {
     const [challengeDetail, setChallengeDetail] = useState<ChallengeDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+    const bottomSheetRef = useRef<BottomSheet>(null);
 
     useEffect(() => {
         const fetchChallengeDetail = async () => {
@@ -51,7 +53,11 @@ export const useUserChallengeDetail = (challengeId: string) => {
         );
     };
 
-    const handleRegister = async () => {
+    const showBottomSheet = () => {
+        bottomSheetRef.current?.snapToIndex(0);
+    };
+
+    const handleActualRegister = async () => {
         try {
             const challengeId = challengeDetail?.challengeId;
             const todoIds = challengeDetail?.todoList.map((todo) => todo.todoId);
@@ -59,6 +65,7 @@ export const useUserChallengeDetail = (challengeId: string) => {
             if (challengeId && todoIds) {
                 console.log('등록하기', challengeId, todoIds);
                 const response = await ChallengeService.registerChallenge(challengeId, todoIds);
+                bottomSheetRef.current?.close();
                 showSuccessAlert();
             } else {
                 const message = '도전과제 또는 할일 정보가 없습니다.';
@@ -75,6 +82,8 @@ export const useUserChallengeDetail = (challengeId: string) => {
     return { 
         challengeDetail, 
         loading,
-        handleRegister
+        showBottomSheet,
+        handleActualRegister,
+        bottomSheetRef
     };
 }   
