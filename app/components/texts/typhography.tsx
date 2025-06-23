@@ -3,25 +3,24 @@ import { COLORS } from '../../../assets/colors/colors';
 
 interface TypographyProps extends TextProps {
   mode?:
-    | 'heading1'
-    | 'heading2'
-    | 'heading3'
-    | 'subtitle1'
-    | 'subtitle2'
-    | 'subtitle3'
-    | 'subtitle4'
-    | 'caption1'
-    | 'caption2'
-    | 'body1'
-    | 'body2';
+    | 'Head'
+    | 'SubHead'
+    | 'Body1'
+    | 'Body2'
+    | 'Body2_bold'
+    | 'Body3'
+    | 'Body3_bold'
+    | 'C1'
+    | 'C1_bold'
+    | 'C2'
   color?: keyof typeof COLORS;
   disableFontScaling?: boolean;
 }
 
 const Typography: React.FC<TypographyProps> = ({ 
   style, 
-  mode = 'body1', 
-  color = 'gray900', 
+  mode = 'Body1', 
+  color = COLORS.black, 
   children, 
   disableFontScaling,
   ...rest 
@@ -46,71 +45,65 @@ export default Typography;
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  heading1: {
-    fontFamily: 'NotoSansKR-Bold',
-    fontSize: 28,
-    letterSpacing: -1,
+  Head: {
+    fontFamily: 'Pretendard-ExtraBold',
+    fontSize: 40,
+    letterSpacing: 0,
     lineHeight: 42,
   },
-  heading2: {
-    fontFamily: 'NotoSansKR-Bold',
-    fontSize: 24,
+  SubHead: {
+    fontFamily: 'Pretendard-SemiBold',
+    fontSize: 20,
     letterSpacing: -1,
     lineHeight: 36,
   },
-  heading3: {
-    fontFamily: 'NotoSansKR-SemiBold',
-    fontSize: 20,
+  Body1: {
+    fontFamily: 'Pretendard-SemiBold',
+    fontSize: 18,
     letterSpacing: -1,
     lineHeight: 30,
   },
-  subtitle1: {
-    fontFamily: 'NotoSansKR-Bold',
-    fontSize: 18,
+  Body2: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 17,
     letterSpacing: -1,
     lineHeight: 27,
   },
-  subtitle2: {
-    fontFamily: 'NotoSansKR-SemiBold',
-    fontSize: 16,
+  Body2_bold: {
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 17,
     letterSpacing: -1,
     lineHeight: 24,
   },
-  subtitle3: {
-    fontFamily: 'NotoSansKR-SemiBold',
+  Body3: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 17,
+    letterSpacing: -1,
+    lineHeight: 27,
+  },
+  Body3_bold: {
+    fontFamily: 'Pretendard-Bold',
     fontSize: 14,
     letterSpacing: -1,
-    lineHeight: 21,
+    lineHeight: 24,
   },
-  subtitle4: {
-    fontFamily: 'NotoSansKR-SemiBold',
+  C1: {
+    fontFamily: 'Pretendard-Regular',
     fontSize: 12,
     letterSpacing: -1,
     lineHeight: 18,
   },
-  caption1: {
-    fontFamily: 'NotoSansKR-Regular',
+  C1_bold: {
+    fontFamily: 'Pretendard-Bold',
     fontSize: 12,
     letterSpacing: -1,
     lineHeight: 18,
   },
-  caption2: {
-    fontFamily: 'NotoSansKR-Regular',
+  C2: {
+    fontFamily: 'Pretendard-Regular',
     fontSize: 11,
     letterSpacing: -1,
-    lineHeight: 16.5,
-  },
-  body1: {
-    fontFamily: 'NotoSansKR-Regular',
-    fontSize: 16,
-    letterSpacing: -1,
-    lineHeight: 24,
-  },
-  body2: {
-    fontFamily: 'NotoSansKR-Regular',
-    fontSize: 14,
-    letterSpacing: -1,
-    lineHeight: 21,
+    lineHeight: 18,
   },
 });
 

@@ -6,4 +6,5 @@ export const COLORS = {
     white: '#FFFFFF',
     mainPurple: '#7248E1',
     mainBlue: '#60B9FF',
+    warning: '#C37171',
   };

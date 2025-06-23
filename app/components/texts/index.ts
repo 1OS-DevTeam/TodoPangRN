@@ -6,3 +6,4 @@ export { Body2 } from './body2_text';
 export { Body1 } from './body1_text';
 export { C1 } from './c1_text'
 export { Body3 } from './body3_text'
+export { Typography } from './typhography'
