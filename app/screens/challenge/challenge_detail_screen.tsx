@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, FlatList, StatusBar, Image, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { HeadText, SectionTitleText, CaptionText, SubHeadText } from '@/app/components/texts';
+import { HeadText, SectionTitleText, CaptionText, SubHeadText, Typography } from '@/app/components/texts';
 import MainActionButton from '@/app/components/buttons/main_action_button';
 import { COLORS } from '../../../assets/colors/colors'
 import { TouchableOpacity } from 'react-native';
@@ -19,8 +19,8 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
   const titleSection = () => {
     return (
       <View style={styles.titleSection}>
-        <Text style={styles.currentChallengeText}>💪🏻 현재 {challengeDetail?.popularity}명이 도전중이에요!</Text>
-        <SubHeadText>{challengeDetail?.title}</SubHeadText>
+        <Typography mode='C1_bold' color='mainBlue'>🙏🏻{challengeDetail?.popularity}명이 등록한 위시에요.</Typography>
+        <Typography mode='SubHead' color='black'>{challengeDetail?.title}</Typography>
       </View>
     );  
   };
@@ -30,16 +30,16 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
       <View style={styles.boxesSection}>
         <View style={styles.boxesContainer}>
           <View style={styles.box}>
-            <Text style={styles.boxTitleText}>카테고리</Text>
-            <Text style={styles.boxValueText}>{challengeDetail?.category}</Text>
+            <Typography mode='Body3_bold' color='mainPurple' style={styles.boxTitleText}>카테고리</Typography>
+            <Typography mode='Body3' color='darkGrey' style={styles.boxValueText}>{challengeDetail?.category}</Typography>
           </View>
           <View style={styles.box}>
-            <Text style={styles.boxTitleText}>기간</Text>
-            <Text style={styles.boxValueText}>{challengeDetail?.term}</Text>
+            <Typography mode='Body3_bold' color='mainPurple' style={styles.boxTitleText}>기간</Typography>
+            <Typography mode='Body3' color='darkGrey' style={styles.boxValueText}>{challengeDetail?.term}</Typography>
           </View>
           <View style={styles.box}>
-            <Text style={styles.boxTitleText}>난이도</Text>
-            <Text style={styles.boxValueText}>{challengeDetail?.diff}</Text>
+            <Typography mode='Body3_bold' color='mainPurple' style={styles.boxTitleText}>난이도</Typography>
+            <Typography mode='Body3' color='darkGrey' style={styles.boxValueText}>{challengeDetail?.diff}</Typography>
           </View>
         </View>
       </View>
@@ -49,10 +49,10 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
   const todoListSection = () => {
     return (
       <View style={styles.todoListSection}>
-        <SectionTitleText color={COLORS.mainPurple} >아래 할 일들을 완료해보세요!</SectionTitleText>
+        <Typography mode='SubHead' color='mainPurple'>아래 할 일들을 완료해보세요!</Typography>
         <View style={styles.todoListContainer}>
-          {challengeDetail?.todoList.map((todo) => (
-            <View style={styles.todoItem}>
+          {challengeDetail?.todoList.map((todo, index) => (
+            <View style={styles.todoItem} key={index}>
               <Image 
                 source={require('../../../assets/images/challenge/todolist_divider.png')} 
                 style={{
@@ -60,7 +60,14 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
                   height: 1,
                 }}
               />  
-              <Text style={styles.todoItemTitle}>{todo.desc}</Text>
+              <View style={styles.todoItemContentContainer}>
+                <View style={styles.todoItemTitleContainer}>
+                  <View style={styles.indexCircle}>
+                    <Typography mode='Body2' color='mainPurple' style={styles.indexText}>{index + 1}</Typography>
+                  </View>
+                  <Typography mode='Body3' color='black' style={styles.todoItemTitle}>{todo.desc}</Typography>
+                </View>
+              </View>
             </View>
           ))}
         </View>
@@ -71,14 +78,30 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
   const reviewSection = () => {
     return (
       <View style={styles.reviewSection}>
-        <SectionTitleText color={COLORS.mainPurple} >목표를 이룬 사람들의 한마디</SectionTitleText>
-        <View style={styles.reviewContainer}>
-          {challengeDetail?.reviewList.map((review) => (
-            <View style={styles.reviewItem}>
-              <Text style={styles.reviewItemTitle}>"{review.desc}"</Text>
-              <Text style={styles.reviewItemCount}>{review.count}</Text>
-            </View>
-          ))}
+        <Typography mode='SubHead' color='mainPurple'>위시를 이룬 사람들의 한마디</Typography>
+        {challengeDetail?.reviewList.length === 0 ? (
+          noReviewContent()
+        ) : (
+          <View style={styles.reviewContainer}>
+            {challengeDetail?.reviewList.map((review) => (
+              <View style={styles.reviewItem}>
+                <Text style={styles.reviewItemTitle}>"{review.desc}"</Text>
+                <Text style={styles.reviewItemCount}>{review.count}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  const noReviewContent = () => {
+    return (
+      <View style={styles.noReviewContent}>
+        <Image source={require('../../../assets/images/mywish/wish_tung.png')} style={styles.noReviewimage} />
+        <View style={styles.noReviewDescription}>
+          <Typography mode='Body2' color='black'>해당 위시에 대한</Typography>
+          <Typography mode='Body2' color='black'>충분한 리뷰가 아직 쌓이지 않았어요!</Typography>
         </View>
       </View>
     );
@@ -165,15 +188,9 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   boxTitleText: {
-    fontSize: 14,
-    fontWeight: 'regular',
-    color: COLORS.mainPurple,
     paddingTop: 9,
   },
   boxValueText: {
-    fontSize: 14,
-    fontWeight: 'regular',
-    color: COLORS.darkGrey,
     paddingTop: 14, 
   },
   todoListSection: {
@@ -183,20 +200,38 @@ const styles = StyleSheet.create({
   todoListContainer: {
     paddingTop: 24,
   },
+  todoItemTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+  },
+  indexCircle: {
+    width: 25,
+    height: 25,
+    borderRadius: 12.5,
+    borderWidth: 1,
+    borderColor: COLORS.whiteGrey,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 20,
+  },
+  indexText: {
+    textAlign: 'center',
+    lineHeight: 25,
+  },
   reviewSection: {
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 50,
   },
   todoItem: {
-    height: 50,   
+    height: 60,   
+  },
+  todoItemContentContainer: {
+    flex: 1,
+    justifyContent: 'center',
   },
   todoItemTitle: {
-    fontSize: 14,
-    fontWeight: 'regular',
-    color: COLORS.black,
-    paddingLeft: 56,
-    paddingTop: 18,
-    paddingRight: 12
+
   },
   todoItemDescription: {
     fontSize: 14, 
@@ -248,5 +283,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.white,
+  },
+  noReviewContent: {
+    paddingTop: 15,
+    alignItems: 'center',
+    gap: 14
+  },
+  noReviewimage: {
+    width: 137,
+    height: 130,
+  },
+  noReviewDescription: {
+    alignItems: 'center',
   },
 });
