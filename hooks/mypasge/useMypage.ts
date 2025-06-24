@@ -47,7 +47,7 @@ export const useMypage = () => {
   };
 
   const tapSuggestion = () => {
-    console.log('의견 남기기');
+    router.push('/feedback/feedback');
   };
 
   const tapGuide = () => {

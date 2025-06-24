@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MypageService } from '../../api/services/mypageService';
 import { useRouter } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
-import { AuthService } from '@/api/services/authService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { auth } from '../../app/_layout';
 import { BottomSheetState } from '@/api/types';
 
 export const useChangeProfile = () => {
