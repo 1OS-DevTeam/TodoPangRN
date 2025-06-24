@@ -23,6 +23,7 @@ export const useChangeProfile = () => {
 
   const tapChangeButton = () => {
     console.log('계정명 변경');
+    bottomSheetRef.current?.snapToIndex(0); // 바텀시트 열기
   }
 
   const handleNicknameChange = (text: string) => {
@@ -41,6 +42,10 @@ export const useChangeProfile = () => {
     }
   }
 
+  const handleCloseBottomSheet = () => {
+    bottomSheetRef.current?.close();
+  }
+
   return {
     loading,
     isLoggingOut,
@@ -50,5 +55,6 @@ export const useChangeProfile = () => {
     tapChangeButton,
     handleNicknameChange,
     handleChangeName,
+    handleCloseBottomSheet,
   };
 };

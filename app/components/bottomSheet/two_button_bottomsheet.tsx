@@ -3,9 +3,11 @@ import BottomSheet, { BottomSheetView, BottomSheetBackdrop, BottomSheetBackdropP
 import { useCallback, useMemo, forwardRef } from 'react';
 import { Text } from 'react-native';
 import { COLORS } from '@/assets/colors/colors';
+import { Typography } from '../texts';
 
 interface TwoButtonBottomSheetProps {
-  message: string;
+  title?: string;
+  message?: string;
   firstButtonLabel: string;
   firstButtonEvent: () => void;
   secondButtonLabel: string;
@@ -16,16 +18,17 @@ interface TwoButtonBottomSheetProps {
 }
 
 const TwoButtonBottomSheet = forwardRef<BottomSheet, TwoButtonBottomSheetProps>((props, ref) => {
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  // 바텀시트가 스냅될 수 있는 높이 위치들을 정의 (첫 번째 값이 초기 높이)
+  const snapPoints = useMemo(() => ['50%'], []);
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
       <BottomSheetBackdrop
         {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        pressBehavior="close"
-        opacity={0.5}
+        appearsOnIndex={0} // 몇 번째 snapPoint부터 backdrop을 보여줄지
+        disappearsOnIndex={-1} // 몇 번째 snapPoint에서 backdrop을 숨길지 (-1은 완전히 닫혔을 때)
+        pressBehavior="close" // backdrop 터치 시 동작 ("close" 또는 "none")
+        opacity={0.5} // backdrop 투명도
       />
     ),
     []
@@ -34,15 +37,20 @@ const TwoButtonBottomSheet = forwardRef<BottomSheet, TwoButtonBottomSheetProps>(
   return (
     <BottomSheet
       ref={ref}
-      index={-1}
-      snapPoints={snapPoints}
-      enablePanDownToClose={true}
-      backdropComponent={renderBackdrop}
+      index={-1} // 초기 snapPoint 인덱스 (-1: 닫힌 상태, 0: 첫 번째 snapPoint, 1: 두 번째 snapPoint)
+      snapPoints={snapPoints} // 스냅 포인트 배열
+      enablePanDownToClose={true} // 아래로 드래그해서 닫기 가능 여부
+      backdropComponent={renderBackdrop} // 배경 컴포넌트
     >
       <BottomSheetView style={styles.contentContainer}>
-        <View style={styles.messageBox}>
-          <Text style={[styles.message, props.messageStyle]}>{props.message}</Text>
-        </View>
+        {props.title && (
+          <Typography mode='SubHead' color='mainPurple' style={styles.title}>{props.title}</Typography>
+        )}
+        {props.message && (
+          <View style={styles.messageBox}>
+            <Text style={[styles.message, props.messageStyle]}>{props.message}</Text>
+          </View>
+        )}
         {props.imageSource && (
           <View style={styles.imageSection}>
             <Image source={props.imageSource} style={[styles.image, props.imageStyle]} />
@@ -74,12 +82,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 28,
   },
+  title: {
+    width: '100%',
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
   messageBox: {
     width: '100%',
     // paddingTop: 16,
   },
   imageSection: {
-    paddingTop: 19,
+    paddingTop: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -88,7 +101,7 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: 'regular',
     textAlign: 'center',
     color: COLORS.darkGrey,
     paddingTop: 12,

@@ -145,8 +145,8 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
         <OneButtonBottomSheet
           ref={bottomSheetRef}
           message={`"${challengeDetail?.title}"\n위시를 이뤄볼까요?`}
-          imageSource={require('../../../assets/images/mywish/wish_tung.png')}
-          imageStyle={{ width: 200, height: 200 }}
+          imageSource={require('../../../assets/images/mywish/mywish_character.png')}
+          imageStyle={{ width: 160, height: 160 }}
           buttonLabel="등록하기"
           buttonEvent={handleActualRegister}
         />

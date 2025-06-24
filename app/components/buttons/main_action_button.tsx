@@ -1,5 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, ViewStyle, TextStyle, DimensionValue } from 'react-native';
+import { COLORS } from '../../../assets/colors/colors';
+import { Typography } from '../texts';
 
 interface BottomButtonProps {
   text: string;
@@ -35,7 +37,7 @@ const MainActionButton: React.FC<BottomButtonProps> = ({
       {loading ? (
         <ActivityIndicator color="white" />
       ) : (
-        <Text style={[styles.text, textStyle]}>{text}</Text>
+        <Typography mode='Body3_bold' color='white'>{text}</Typography>
       )}
     </TouchableOpacity>
   );
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
   button: {
     height: 48,
     borderRadius: 5,
-    backgroundColor: '#7248E1',
+    backgroundColor: COLORS.mainPurple,
     justifyContent: 'center',
     alignItems: 'center',
   },
