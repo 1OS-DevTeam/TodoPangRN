@@ -52,4 +52,20 @@ export const MypageService = {
       throw error;
     }
   },
+
+  /**
+   * 의견 남기기
+   */
+  feedback: async (satisfiedRating: number, comment: string) => {
+    try {
+      const response = await apiClient.post<ApiResponse<Boolean>>(
+        MypageEndpoints.FEEDBACK,
+        { satisfiedRating, comment }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('의견 남기기 중 오류가 발생했습니다:', error);
+      throw error;
+    }
+  }
 };

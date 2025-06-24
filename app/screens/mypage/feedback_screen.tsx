@@ -3,10 +3,9 @@ import { View, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, Ac
 import { Typography } from '@/app/components/texts';
 import { COLORS } from '../../../assets/colors/colors';
 import MainActionButton from '@/app/components/buttons/main_action_button';
-import { TwoButtonBottomSheet } from '@/app/components/bottomSheet';
+import { TwoButtonBottomSheet, OneButtonBottomSheet } from '@/app/components/bottomSheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import BottomSheet from '@gorhom/bottom-sheet';
-import { useFeedback } from '@/hooks/mypasge/useFeedback';
+import { useFeedback, FeedbackBottomSheetType } from '@/hooks/mypasge/useFeedback';
 
 export const FeedbackScreen = () => {
   const { 
@@ -16,17 +15,21 @@ export const FeedbackScreen = () => {
     hasRated,
     isNextButtonEnabled,
     feedback,
-    bottomSheetRef,
+    registerBottomSheetRef,
+    successBottomSheetRef,
+    failureBottomSheetRef,
+    bottomSheetType,
     bottomSheetState,
     tapRegisterButton,
     handleFeedbackRegister,
     handleCloseBottomSheet,
     handleRating,
-    handleFeedbackTextChange,
+    handleFeedbackTextChange, 
+    naviBack,
   } = useFeedback();
   
   const handleNextButtonPress = () => {
-    bottomSheetRef.current?.expand();
+    registerBottomSheetRef.current?.expand();
 };
 
 if (loading) {
@@ -99,9 +102,9 @@ const bottomButtonSection = () => {
           <Typography mode="C1" color="white">· 답변이 필요한 의견은 다운로드 받은 스토어 리뷰로 남겨주세요</Typography>
         </View>
         <MainActionButton 
-            disabled={false || isProcessing} 
+            disabled={!isNextButtonEnabled || isProcessing} 
             text="의견 등록하기"
-            onClick={handleNextButtonPress} 
+            onClick={tapRegisterButton} 
         />
         {isProcessing && (
             <View style={styles.processingSpinner}>
@@ -121,26 +124,45 @@ return (
             </ScrollView>
             <Image source={require('../../../assets/images/mypage/rename_bottom_bg.png')} style={styles.bottomImage} />
             {bottomButtonSection()}
+            
+            {/* 등록 확인 바텀시트 */}
             <TwoButtonBottomSheet
-                ref={bottomSheetRef}
-                message={`소중한 의견을 남겨주세요!`}
-                firstButtonLabel="취소"
-                firstButtonEvent={() => {
-                    bottomSheetRef.current?.close();
-                }}
-                secondButtonLabel="등록하기"
-                secondButtonEvent={() => {
-                    bottomSheetRef.current?.close();
-                }}
-                imageSource={require('../../../assets/images/mywish/review_register_character.png')}
-                imageStyle={{ width: 165, height: 183 }}
-                messageStyle={{
-                    fontSize: 20,
-                    fontWeight: '600',
-                    color: COLORS.mainPurple,
-                    textAlign: 'center',
-                    lineHeight: 24
-                }}
+              ref={registerBottomSheetRef}
+              title={`소중한 의견을\n등록할까요?`}
+              message={`소중한 목소리를 하나하나 되새기기 위해\n의견 남기기는 1달에 1번만 가능합니다.`}
+              firstButtonLabel="취소하기"
+              firstButtonEvent={() => {
+                registerBottomSheetRef.current?.close();
+              }}
+              secondButtonLabel="등록하기"
+              secondButtonEvent={handleFeedbackRegister}
+              imageSource={require('../../../assets/images/mywish/mywish_character.png')}
+              imageStyle={{ width: 180, height: 180 }}
+            />
+            
+            {/* 등록 성공 바텀시트 */}
+            <OneButtonBottomSheet
+              ref={successBottomSheetRef}
+              title={`소중한 의견이\n등록되었어요!`}
+              buttonLabel="돌아가기"
+              buttonEvent={() => {
+                naviBack();
+              }}
+              imageSource={require('../../../assets/images/mywish/mywish_character.png')}
+              imageStyle={{ width: 180, height: 180 }}
+            />
+            
+            {/* 등록 실패 바텀시트 */}
+            <OneButtonBottomSheet
+              ref={failureBottomSheetRef}
+              title={`소중한 의견이\n등록에 실패하였습니다...`}
+              message={`소중한 목소리를 하나하나 되새기기 위해\n의견 남기기는 1달에 1번만 가능합니다.`}
+              buttonLabel="확인"
+              buttonEvent={() => {
+                naviBack();
+              }}
+              imageSource={require('../../../assets/images/mywish/mywish_character.png')}
+              imageStyle={{ width: 180, height: 180 }}
             />
         </SafeAreaView>
     </GestureHandlerRootView>

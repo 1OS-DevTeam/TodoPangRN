@@ -4,6 +4,8 @@ import { useCallback, useMemo, forwardRef } from 'react';
 import { Text } from 'react-native';
 import { COLORS } from '@/assets/colors/colors';
 import { Typography } from '../texts';
+import { MypageService } from '@/api/services/mypageService';
+
 
 interface TwoButtonBottomSheetProps {
   title?: string;
@@ -86,6 +88,7 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     justifyContent: 'center',
+    lineHeight: 26,
   },
   messageBox: {
     width: '100%',

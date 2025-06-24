@@ -13,3 +13,6 @@ export const WITHDRAW = '/mypage/withdraw/process';
 
 // 닉네임 변경
 export const CHANGE_NAME = '/mypage/rename';
+
+// 의견 남기기
+export const FEEDBACK = '/mypage/opinion';

@@ -6,7 +6,8 @@ import { COLORS } from '@/assets/colors/colors';
 import Typography from '../texts/typhography';
 
 interface OneButtonBottomSheetProps {
-  message: string;
+  title?: string;
+  message?: string;
   buttonLabel: string;
   buttonEvent: () => void;
   imageSource?: ImageSourcePropType;
@@ -41,9 +42,14 @@ const OneButtonBottomSheet = forwardRef<BottomSheet, OneButtonBottomSheetProps>(
       backdropComponent={renderBackdrop}
     >
       <BottomSheetView style={styles.contentContainer}>
-        <View style={styles.messageBox}>
-          <Typography mode='SubHead' color='mainPurple' style={styles.messageText}>{props.message}</Typography>
-        </View>
+      {props.title && (
+          <Typography mode='SubHead' color='mainPurple' style={styles.title}>{props.title}</Typography>
+        )}
+        {props.message && (
+          <View style={styles.messageBox}>
+            <Text style={[styles.message, props.messageStyle]}>{props.message}</Text>
+          </View>
+        )}
         {props.imageSource && (
           <View style={styles.imageSection}>
             <Image source={props.imageSource} style={[styles.image, props.imageStyle]} />
@@ -69,6 +75,12 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'space-between',
     paddingBottom: 28,
+  },
+  title: {
+    width: '100%',
+    textAlign: 'center',
+    justifyContent: 'center',
+    lineHeight: 26,
   },
   messageBox: {
     width: '100%',
