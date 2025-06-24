@@ -112,11 +112,13 @@ export const MyPageScreen = () => {
 
         <TwoButtonBottomSheet
           ref={bottomSheetRef}
-          message={bottomSheetState.message}
+          title={`로그아웃\n하시겠습니까?`}
           firstButtonLabel={bottomSheetState.firstButtonLabel}
           firstButtonEvent={bottomSheetState.onFirstButtonPress || (() => {})}
           secondButtonLabel={bottomSheetState.secondButtonLabel}
           secondButtonEvent={bottomSheetState.onSecondButtonPress || (() => {})}
+          imageSource={require('../../../assets/images/mywish/mywish_character.png')}
+          imageStyle={{ width: 160, height: 160 }}
         />
       </ScreenWrapper>
     </GestureHandlerRootView>

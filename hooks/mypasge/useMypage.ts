@@ -58,30 +58,12 @@ export const useMypage = () => {
     setLoading(false);
   }, []);
 
-  const showWithdrawBottomSheet = () => {
-    setBottomSheetState({
-      visible: true,
-      title: '탈퇴하기',
-      message: '탈퇴하기 전에 확인해주세요!',
-      firstButtonLabel: '닫기',
-      secondButtonLabel: '탈퇴하기',
-      onFirstButtonPress: () => {
-        bottomSheetRef.current?.close();
-      },
-      onSecondButtonPress: () => {
-        tapWithdraw();
-        bottomSheetRef.current?.close();
-      },
-    });
-    bottomSheetRef.current?.expand();
-  };
-
   const showLogoutBottomSheet = () => {
     setBottomSheetState({
       visible: true,
       title: '로그아웃',
       message: '정말 로그아웃 하시겠습니까?',
-      firstButtonLabel: '취소',
+      firstButtonLabel: '취소하기',
       secondButtonLabel: '로그아웃',
       onFirstButtonPress: () => {
         bottomSheetRef.current?.close();
@@ -106,7 +88,6 @@ export const useMypage = () => {
     tapLogout,
     tapSuggestion,
     tapGuide,
-    showWithdrawBottomSheet,
     showLogoutBottomSheet,
     bottomSheetRef,
     bottomSheetState,

@@ -58,10 +58,10 @@ export const useFeedback = () => {
     
     // ===== 테스트용 코드 (API 개발 전까지 사용) =====
     // 성공 테스트
-    // setTimeout(() => {
-    //   setBottomSheetType(FeedbackBottomSheetType.SUCCESS);
-    //   successBottomSheetRef.current?.expand();
-    // }, 300);
+    setTimeout(() => {
+      setBottomSheetType(FeedbackBottomSheetType.SUCCESS);
+      successBottomSheetRef.current?.expand();
+    }, 300);
     
     // 실패 테스트 (성공 테스트와 교체해서 사용)
     // setTimeout(() => {
@@ -70,27 +70,27 @@ export const useFeedback = () => {
     // }, 300);
     
     // ===== 실제 API 호출 코드 (API 개발 완료 후 주석 해제) =====
-    try {
-      setIsProcessing(true);
-      const response = await MypageService.feedback(rating, feedback);
+    // try {
+    //   setIsProcessing(true);
+    //   const response = await MypageService.feedback(rating, feedback);
     
-      if (response.data) {
-        // API 성공 시
-        setTimeout(() => {
-          setBottomSheetType(FeedbackBottomSheetType.SUCCESS);
-          successBottomSheetRef.current?.expand();
-        }, 300);
-      }
-    } catch (error) {
-      console.error('의견 등록 중 오류가 발생했습니다:', error);
-      // API 실패 시
-      setTimeout(() => {
-        setBottomSheetType(FeedbackBottomSheetType.FAILURE);
-        failureBottomSheetRef.current?.expand();
-      }, 300);
-    } finally {
-      setIsProcessing(false);
-    }
+    //   if (response.data) {
+    //     // API 성공 시
+    //     setTimeout(() => {
+    //       setBottomSheetType(FeedbackBottomSheetType.SUCCESS);
+    //       successBottomSheetRef.current?.expand();
+    //     }, 300);
+    //   }
+    // } catch (error) {
+    //   console.error('의견 등록 중 오류가 발생했습니다:', error);
+    //   // API 실패 시
+    //   setTimeout(() => {
+    //     setBottomSheetType(FeedbackBottomSheetType.FAILURE);
+    //     failureBottomSheetRef.current?.expand();
+    //   }, 300);
+    // } finally {
+    //   setIsProcessing(false);
+    // }
   };
 
   const handleCloseBottomSheet = () => {

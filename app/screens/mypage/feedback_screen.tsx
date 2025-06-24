@@ -143,12 +143,12 @@ return (
             {/* 등록 성공 바텀시트 */}
             <OneButtonBottomSheet
               ref={successBottomSheetRef}
-              title={`소중한 의견이\n등록되었어요!`}
+              title={`소중한 의견이\n등록되었습니다!`}
               buttonLabel="돌아가기"
               buttonEvent={() => {
                 naviBack();
               }}
-              imageSource={require('../../../assets/images/mywish/mywish_character.png')}
+              imageSource={require('../../../assets/images/mywish/mywish_complete_character.png')}
               imageStyle={{ width: 180, height: 180 }}
             />
             
@@ -161,7 +161,7 @@ return (
               buttonEvent={() => {
                 naviBack();
               }}
-              imageSource={require('../../../assets/images/mywish/mywish_character.png')}
+              imageSource={require('../../../assets/images/mywish/fail_character.png')}
               imageStyle={{ width: 180, height: 180 }}
             />
         </SafeAreaView>
