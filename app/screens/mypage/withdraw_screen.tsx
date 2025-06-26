@@ -1,33 +1,43 @@
 import { useWithdraw } from '@/hooks/mypasge/useWithdraw';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Modal, FlatList } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Modal, FlatList, ActivityIndicator, ScrollView } from 'react-native';
 import { COLORS } from '../../../assets/colors/colors';
 import { Image } from 'expo-image';
 import { WithdrawReason } from '@/api/types';
+import { Typography } from '@/app/components/texts';
+import MainActionButton from '@/app/components/buttons/main_action_button';
+import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import TwoButtonBottomSheet from '@/app/components/bottomSheet/two_button_bottomsheet';
 
 const WithdrawScreen = () => {
+  console.log('🔥 WithdrawScreen 렌더링됨');
 
   const { 
-    withdrawReasonList, 
-    loading, 
-    bottomSheetRef, 
-    bottomSheetState, 
+    isProcessing,
+    buttonEnabled,
+    withdrawReasonList,
+    loading,
+    bottomSheetRef,
+    bottomSheetState,
+    userName,
+    selectedReason,
+    setSelectedReason,
+    setBottomSheetState,
+    setModalVisible,
     tapCancelButton,
-    handleSubmit,
+    handleWithdraw,
+    showMenu,
+    selectReason,
+    modalVisible,
+    tapWithdrawButton,
   } = useWithdraw();
 
-  const [selectedReason, setSelectedReason] = useState<WithdrawReason | null>(null);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-
-  const showMenu = () => {
-    // if (!withdrawReasonList || withdrawReasonList.reasonList.length === 0) return;
-    setModalVisible(true);
-  };
-
-  const selectReason = (reason: WithdrawReason) => {
-    setSelectedReason(reason);
-    setModalVisible(false);
-  };
+  // 안정적인 참조를 위해 useCallback 사용
+  const handleLayout = useCallback((event: any) => {
+    console.log('🟡 onLayout 호출됨:', new Date().toISOString());
+    console.log('🟡 Layout 정보:', event.nativeEvent.layout);
+  }, []);
 
   const renderReasonItem = ({ item }: { item: WithdrawReason }) => (
     <TouchableOpacity
@@ -41,8 +51,8 @@ const WithdrawScreen = () => {
   const descriptionSection = () => {
     return (
       <View style={styles.descriptionSection}>
-        <Text style={styles.descriptionTitleText}>OOO님과 항상 함께하고 싶었는데 떠나시나요?😢</Text>
-        <Text style={styles.descriptionSubText}>계정을 탈퇴하면 모든 활동 정보가 삭제됩니다.</Text>
+        <Typography mode='SubHead' color='mainPurple'>{userName}님</Typography>
+        <Typography mode='SubHead' color='mainPurple'>항상 함께하고 싶었는데 떠니사나요..?😢</Typography>
       </View>
     );
   };
@@ -50,7 +60,7 @@ const WithdrawScreen = () => {
   const selectReasonSection = () => {
     return (
       <View style={styles.selectReasonSection}>
-        <Text style={styles.selectReasonTitle}>OOO님이 투두팡을 떠나는 이유가 궁금해요</Text>
+        <Typography mode='Body2_bold' >투두팡을 떠나시는 이유가 궁금해요...😭</Typography>
         <TouchableOpacity style={styles.selectReasonBox} onPress={showMenu}>
           <Text style={selectedReason ? styles.selectedReasonText : styles.placeholderText}>
             {selectedReason?.reasonDesc || '선택해주세요'}
@@ -61,21 +71,42 @@ const WithdrawScreen = () => {
     );
   };
 
-  const buttonSection = () => {
+  // const buttonSection = () => {
+  //   return (
+  //     <View style={styles.buttonSection}>
+  //       <View style={styles.buttonSectionText}>
+  //         <Text style={styles.farewellText}>말씀해주신 소중한 의견을 반영하여 더 따뜻😭한 서비스를 만들어 가도록 노력할게요.</Text>
+  //         <Text style={styles.farewellText}>언제나 이 자리에서 기다리고 있을게요. 언제든지 돌아와 주세요. 지금까지 함께여서 진심으로 행복했어요.</Text>
+  //       </View>
+  //       <View style={styles.buttonSectionButton}>
+  //         <TouchableOpacity style={styles.cancelButton} onPress={tapCancelButton}>
+  //           <Text style={styles.cancelButtonText}>취소</Text>
+  //         </TouchableOpacity>
+  //         <TouchableOpacity style={styles.submitButton} onPress={() => handleSubmit(selectedReason?.reasonId ?? 0)}>
+  //           <Text style={styles.submitButtonText}>제출</Text>
+  //         </TouchableOpacity>
+  //       </View>
+  //     </View>
+  //   );
+  // };
+
+  const bottomButtonSection = () => {
     return (
-      <View style={styles.buttonSection}>
-        <View style={styles.buttonSectionText}>
-          <Text style={styles.farewellText}>말씀해주신 소중한 의견을 반영하여 더 따뜻한 서비스를 만들어 가도록 노력할게요.</Text>
-          <Text style={styles.farewellText}>언제나 이 자리에서 기다리고 있을게요. 언제든지 돌아와 주세요. 지금까지 함께여서 진심으로 행복했어요.</Text>
+      <View style={styles.bottomButtonSection}>
+        <View style={styles.buttonDescription}>
+          <Typography mode="C1" color="white">· 계정 탈퇴 시, </Typography>
+          <Typography mode="C1" color="white">· 답변이 필요한 의견은 다운로드 받은 스토어 리뷰로 남겨주세요</Typography>
         </View>
-        <View style={styles.buttonSectionButton}>
-          <TouchableOpacity style={styles.cancelButton} onPress={tapCancelButton}>
-            <Text style={styles.cancelButtonText}>취소</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.submitButton} onPress={() => handleSubmit(selectedReason?.reasonId ?? 0)}>
-            <Text style={styles.submitButtonText}>제출</Text>
-          </TouchableOpacity>
-        </View>
+        <MainActionButton 
+            // disabled={!buttonEnabled || isProcessing} 
+            text="회원 탈퇴하기"
+            onClick={tapWithdrawButton} 
+        />
+        {/* {isProcessing && (
+            <View style={styles.processingSpinner}>
+                <ActivityIndicator size="small" color={COLORS.mainPurple} />
+            </View>
+        )} */}
       </View>
     );
   };
@@ -93,15 +124,18 @@ const WithdrawScreen = () => {
             <Text style={styles.modalTitle}>탈퇴 사유를 선택해주세요</Text>
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
+              onPress={() => {
+                setModalVisible(false);
+                setSelectedReason(null);
+              }}
             >
               <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>
           </View>
           <FlatList
-            data={withdrawReasonList}
+            data={withdrawReasonList || []}
             renderItem={renderReasonItem}
-            keyExtractor={(item) => item.reasonId.toString()}
+            keyExtractor={(item: WithdrawReason) => item.reasonId.toString()}
             style={styles.reasonList}
           />
         </View>
@@ -110,16 +144,50 @@ const WithdrawScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}> 
-      <View style={styles.contents}>
-        {descriptionSection()}
-        {selectReasonSection()}
-        {selectedReason && buttonSection()}
-        {reasonModal()}
-      </View>
-    </SafeAreaView>
+    <GestureHandlerRootView onLayout={handleLayout}>
+      <ScreenWrapper backgroundColor={COLORS.white}> 
+        <ScrollView 
+          scrollEnabled={false} 
+          style={styles.contents}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <View style={styles.topSection}>
+            {descriptionSection()}
+            {selectReasonSection()}   
+            <View style={styles.bottomSection}>
+            <View style={styles.imageContainer}>
+              <Image source={require('../../../assets/images/mypage/rename_bottom_bg.png')} style={styles.bottomImage} />
+              <View style={styles.overlayButtonSection}>
+                {bottomButtonSection()}
+              </View>
+            </View>
+          </View>    
+          </View>
+
+        </ScrollView>
+            {/* 등록 확인 바텀시트 */}
+            <TwoButtonBottomSheet
+              ref={bottomSheetRef}
+              title={`${userName}님,\n그동안 감사했습니다!`}
+              message={`다음번에 다시 만나기를 기대하고 있겠습니다!`}
+              firstButtonLabel="탈퇴 취소하기"
+              firstButtonEvent={() => {
+                bottomSheetRef.current?.close();
+              }}
+              secondButtonLabel="탈퇴 완료하기"
+              secondButtonEvent={handleWithdraw}
+              imageSource={require('@/assets/images/mypage/onboarding_step3.png')}
+              imageStyle={{ width: 150, height: 150 }}
+            />
+       </ScreenWrapper>
+      {reasonModal()}
+
+
+    </GestureHandlerRootView>
   );
 };  
+
+export default WithdrawScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -127,39 +195,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contents: {
-    backgroundColor: COLORS.white,
-    paddingHorizontal: 20,
-    paddingVertical: 32,
-    gap: 32,
+    flex: 1,
+    // backgroundColor: COLORS.mainBlue,
+    // justifyContent: 'space-between',
+    // paddingHorizontal: 20,
+    paddingVertical: 20,
+    // backgroundColor: 'red',
+  },
+  topSection: {
+    // flex: 1,
   },
   descriptionSection: {
     backgroundColor: COLORS.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-  },
-  descriptionTitleText: {
-    fontSize: 18,
-    color: COLORS.black,
-    textAlign: 'center',
-    fontWeight: '600',
-    lineHeight: 26,
-  },
-  descriptionSubText: {
-    fontSize: 14,
-    color: '#666666',
-    textAlign: 'center',
-    lineHeight: 20,
+
   },
   selectReasonSection: {
+    paddingTop: 100,
     backgroundColor: COLORS.white,
-    gap: 16,
-  },
-  selectReasonTitle: {
-    fontSize: 16,
-    color: COLORS.black,
-    fontWeight: '500',
-    lineHeight: 22,
+    gap: 7,
   },
   selectReasonBox: {
     flexDirection: 'row',
@@ -168,19 +221,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderWidth: 1,
     borderColor: '#E5E5E5',
-    borderRadius: 12,
+    borderRadius: 4,
     paddingHorizontal: 16,
-    paddingVertical: 16,
-    minHeight: 56,
+    height: 40,
   },
   selectReasonBoxImage: {
-    width: 24,
-    height: 24,
+    width: 28,
+    height: 28,
     tintColor: '#999999',
-  },
-  buttonSection: {
-    backgroundColor: COLORS.white,
-    gap: 20,
   },
   selectedReasonText: {
     color: COLORS.black,
@@ -247,61 +295,44 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     fontWeight: '400',
   },
-  buttonSectionText: {
-    backgroundColor: COLORS.white,
-    gap: 8,
-  },
-  farewellText: {
-    fontSize: 14,
-    color: '#666666',
-    lineHeight: 20,
-    textAlign: 'center',
-    fontWeight: '400',
-  },
-  buttonSectionButton: {
-    backgroundColor: COLORS.white,
-    flexDirection: 'row',
+  contentContainer: {
+    flex: 1,
     justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 12,
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: '#F8F8F8',
-    borderRadius: 12,
-    paddingVertical: 16,
     paddingHorizontal: 20,
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 52,
   },
-  submitButton: {
-    flex: 1,
-    backgroundColor: COLORS.mainPurple,
-    borderRadius: 12,
-    paddingVertical: 16,
+
+  bottomSection: {
+    marginTop: 'auto',
+  },
+  imageContainer: {
+    position: 'relative',
+    width: '100%',
+  },
+  overlayButtonSection: {
+    position: 'absolute',
+    bottom: 50, // 이미지 하단에서 50px 위에 배치
+    left: 0,
+    right: 0,
     paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 52,
-    shadowColor: COLORS.mainPurple,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
   },
-  cancelButtonText: {
-    fontSize: 16,
-    color: '#333333',
-    fontWeight: '600',
+  bottomButtonSection: {
+    backgroundColor: 'transparent',
+    gap: 13,
   },
-  submitButtonText: {
-    fontSize: 16,
-    color: COLORS.white,
-    fontWeight: '600',
+  buttonDescription: {
+      
+  },
+  processingSpinner: {
+    position: 'absolute',
+    right: 40,
+  },
+  bottomImage: {
+    width: '100%',
+    resizeMode: 'stretch',
+    height: 300,
+  },
+  bottomFixedSection: {
+    marginTop: 'auto',
   },
 });
 
-export default WithdrawScreen;

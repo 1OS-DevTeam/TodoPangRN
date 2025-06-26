@@ -5,9 +5,8 @@ interface BottomButtonProps {
   onClick: () => void;
 }
 
-const NavBackButton: React.FC<BottomButtonProps> = ({
-  onClick,
-}) => {
+const NavBackButton: React.FC<BottomButtonProps> = ({ onClick }) => {
+  console.log('NavBackButton rendered');
   return (
     <TouchableOpacity onPress={onClick}>
         <Image source={require('../../../assets/images/common/nav_chevron_left.png')} style={styles.image} />

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import OnboardingScreen from '../screens/mypage/onboarding_screen';
+import NavBackButton from '../components/buttons/nav_back_button';
 
 
-export default function ReviewPage() {
+export default function Onboarding() {
     const router = useRouter();
 
     const navigateToMyWish = () => {
@@ -19,6 +20,9 @@ export default function ReviewPage() {
                     headerTitle: '',
                     headerBackTitle: '',
                     headerShadowVisible: false,
+                    // headerLeft: () => (
+                    //     <NavBackButton onClick={() => router.back()} />
+                    // )
                 }}
             />
             <OnboardingScreen/>

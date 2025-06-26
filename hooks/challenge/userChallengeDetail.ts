@@ -54,7 +54,7 @@ export const useUserChallengeDetail = (challengeId: string) => {
     };
 
     const showBottomSheet = () => {
-        bottomSheetRef.current?.snapToIndex(0);
+        bottomSheetRef.current?.expand();
     };
 
     const handleActualRegister = async () => {

@@ -40,12 +40,12 @@ export const MyPageScreen = () => {
     tapLogout,
     tapSuggestion,
     tapGuide,
-    showWithdrawBottomSheet,
     showLogoutBottomSheet,
     bottomSheetRef,
     bottomSheetState,
     isLoggingOut,
     loading,
+    userName,
   } = useMypage();
 
   const headerSection = () => {
@@ -57,7 +57,7 @@ export const MyPageScreen = () => {
             source={require('../../../assets/images/mypage/mypage_character.png')}
             style={styles.headerImage}
           />
-          <SubHeadText >김하나님</SubHeadText>
+          <SubHeadText >{userName}님</SubHeadText>
         </View>
       </View>
     );

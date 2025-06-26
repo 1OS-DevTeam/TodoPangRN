@@ -1,6 +1,6 @@
 import apiClient from '../client';
 import * as MypageEndpoints from '../endpoints/mypage';
-import { ApiResponse, WithdrawReasonList } from '../types';
+import { ApiResponse, WithdrawReason, WithdrawReasonList } from '../types';
 
 export const MypageService = {
 
@@ -9,7 +9,7 @@ export const MypageService = {
    */
   getWithdrawReasonList: async () => {
     try {
-      const response = await apiClient.get<ApiResponse<WithdrawReasonList>>(
+      const response = await apiClient.get<ApiResponse<WithdrawReason[]>>(
         MypageEndpoints.WITHDRAW_REASON_LIST
       );
 

@@ -13,6 +13,8 @@ export const useMypage = () => {
   const [loading, setLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const [userName, setUserName] = useState('');
+  
   const [bottomSheetState, setBottomSheetState] = useState<BottomSheetState>({
     visible: false,
     title: '',
@@ -21,10 +23,15 @@ export const useMypage = () => {
     secondButtonLabel: '',
   });
 
-  const tapWithdraw = () => {
-    console.log('탈퇴하기');
-    router.push('/withdraw/withdraw');
-  }
+  useEffect(() => {
+    const getUserName = async () => {
+      const userName = await AsyncStorage.getItem('userName') as string;
+      setUserName(userName);
+    }
+    getUserName();
+  }, []);
+
+
 
   const tapLogout = async () => {
     try {
@@ -45,6 +52,10 @@ export const useMypage = () => {
       setLoading(false);
     }
   };
+
+  const tapWithdraw = () => {
+    router.push('/withdraw/withdraw');
+  }
 
   const tapSuggestion = () => {
     router.push('/feedback/feedback');
@@ -91,5 +102,6 @@ export const useMypage = () => {
     showLogoutBottomSheet,
     bottomSheetRef,
     bottomSheetState,
+    userName,
   };
 };

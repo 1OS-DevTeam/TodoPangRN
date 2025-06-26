@@ -116,7 +116,9 @@ const bottomButtonSection = () => {
 };
 
 return (
-    <GestureHandlerRootView style={styles.container}>
+    <GestureHandlerRootView style={styles.container} onLayout={() => {
+        console.log('의견남기기 onLayout');
+      }}>
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 {satiesfiedSection()}

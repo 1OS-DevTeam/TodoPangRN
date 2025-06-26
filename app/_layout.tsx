@@ -1,11 +1,13 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 import { View, ActivityIndicator } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { initializeApp } from 'firebase/app';
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseConfig } from '../firebaseConfig';
 import { useFonts } from '../hooks/useFonts';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Firebase 초기화
 const app = initializeApp(firebaseConfig);
@@ -22,19 +24,26 @@ const AppLayout = () => {
   // 폰트가 로드되지 않았으면 로딩 화면 표시
   if (!fontsLoaded) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
+      <SafeAreaProvider>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      </SafeAreaProvider>
     );
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="screens/login/login_screen" options={{ title: '로그인' }} />
-      <Stack.Screen name="screens/signup/signup_screen" options={{ title: '회원가입' }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
+    <SafeAreaProvider>
+      <GestureHandlerRootView>
+        
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" options={{ headerShown: true }} />
+        <Stack.Screen name="screens/login/login_screen" options={{ title: '로그인' }} />
+        <Stack.Screen name="screens/signup/signup_screen" options={{ title: '회원가입' }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 };
 
