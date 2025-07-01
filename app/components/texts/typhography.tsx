@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-SemiBold',
     fontSize: 20,
     letterSpacing: -1,
-    lineHeight: 36,
+    lineHeight: 28,
   },
   Body1: {
     fontFamily: 'Pretendard-Regular',

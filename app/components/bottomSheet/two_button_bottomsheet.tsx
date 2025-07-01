@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     width: '100%',
     marginTop: 'auto',
+    marginBottom: 20,
   },
   buttonSection: {
     flexDirection: 'row',
