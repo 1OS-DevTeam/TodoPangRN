@@ -7,7 +7,10 @@ import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from '@env';
 import { useAuth } from '../../../hooks/login/useAuth';
 
 export const LoginScreen = () => {
-  const linearGradientColors = ['#60B9FF', '#7248E1'];
+  const linearGradientColors = [
+    'rgba(96, 185, 255, 0.6)',   // 60% 투명도
+    'rgba(114, 72, 225, 0.6)'
+  ];
   const { handleGoogleLogin, 
     handleAppleLogin, 
     handleTermsClick, 
@@ -27,21 +30,17 @@ export const LoginScreen = () => {
             style={{ zIndex: 2 }}
           />
           <Image
-            source={require('../../../assets/images/login/login_drop.png')}
-            style={{ position: 'absolute', left: -20, bottom: -75, zIndex: 1 }}
-          />
-          <Image
-            source={require('../../../assets/images/login/login_bomb.png')}
-            style={{ position: 'absolute', right: -20, bottom: -130, zIndex: 1 }}
+            source={require('../../../assets/images/login/login_character.png')}
+            style={{width: 216, height: 216, position: 'absolute', right: -20, bottom: -220, zIndex: 1 }}
           />
         </View>
         <Image
           source={require('../../../assets/images/login/login_diamond_mini.png')}
-          style={{ position: 'absolute', left: 10, bottom: -130, right: 150, zIndex: 0 }}
+          style={{ position: 'absolute', left:-5, bottom: -190, right: 150, zIndex: 0 }}
         />
         <Image
           source={require('../../../assets/images/login/login_diamond.png')}
-          style={{ position: 'absolute', left: -20, bottom: -70, left: 150, zIndex: 0 }}
+          style={{ position: 'absolute', left: -20, bottom: -150, left: 130, zIndex: 0 }}
         />
       </View>
     );
@@ -96,6 +95,8 @@ export const LoginScreen = () => {
 
   return (
     <LinearGradient
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
       colors={linearGradientColors}
       style={styles.container}
     >
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonContainer: {
-    marginTop: 100,
+    marginTop: 140,
     zIndex: 3,
     width: '100%',
     paddingHorizontal: 39,
