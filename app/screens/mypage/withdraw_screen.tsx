@@ -71,25 +71,6 @@ const WithdrawScreen = () => {
     );
   };
 
-  // const buttonSection = () => {
-  //   return (
-  //     <View style={styles.buttonSection}>
-  //       <View style={styles.buttonSectionText}>
-  //         <Text style={styles.farewellText}>말씀해주신 소중한 의견을 반영하여 더 따뜻😭한 서비스를 만들어 가도록 노력할게요.</Text>
-  //         <Text style={styles.farewellText}>언제나 이 자리에서 기다리고 있을게요. 언제든지 돌아와 주세요. 지금까지 함께여서 진심으로 행복했어요.</Text>
-  //       </View>
-  //       <View style={styles.buttonSectionButton}>
-  //         <TouchableOpacity style={styles.cancelButton} onPress={tapCancelButton}>
-  //           <Text style={styles.cancelButtonText}>취소</Text>
-  //         </TouchableOpacity>
-  //         <TouchableOpacity style={styles.submitButton} onPress={() => handleSubmit(selectedReason?.reasonId ?? 0)}>
-  //           <Text style={styles.submitButtonText}>제출</Text>
-  //         </TouchableOpacity>
-  //       </View>
-  //     </View>
-  //   );
-  // };
-
   const bottomButtonSection = () => {
     return (
       <View style={styles.bottomButtonSection}>
@@ -98,7 +79,7 @@ const WithdrawScreen = () => {
           <Typography mode="C1" color="white">· 답변이 필요한 의견은 다운로드 받은 스토어 리뷰로 남겨주세요</Typography>
         </View>
         <MainActionButton 
-            // disabled={!buttonEnabled || isProcessing} 
+            disabled={!selectedReason || isProcessing} 
             text="회원 탈퇴하기"
             onClick={tapWithdrawButton} 
         />
@@ -144,27 +125,18 @@ const WithdrawScreen = () => {
   );
 
   return (
-    <GestureHandlerRootView onLayout={handleLayout}>
-      <ScreenWrapper backgroundColor={COLORS.white}> 
-        <ScrollView 
-          scrollEnabled={false} 
-          style={styles.contents}
-          contentContainerStyle={styles.contentContainer}
-        >
+    <GestureHandlerRootView style={styles.container} onLayout={handleLayout}>
+      <SafeAreaView style={styles.container}> 
+        <ScrollView >
           <View style={styles.topSection}>
             {descriptionSection()}
             {selectReasonSection()}   
-            <View style={styles.bottomSection}>
-            <View style={styles.imageContainer}>
-              <Image source={require('../../../assets/images/mypage/rename_bottom_bg.png')} style={styles.bottomImage} />
-              <View style={styles.overlayButtonSection}>
-                {bottomButtonSection()}
-              </View>
-            </View>
-          </View>    
           </View>
 
         </ScrollView>
+        <Image source={require('../../../assets/images/mypage/rename_bottom_bg.png')} style={styles.bottomImage} />
+        {bottomButtonSection()}
+
             {/* 등록 확인 바텀시트 */}
             <TwoButtonBottomSheet
               ref={bottomSheetRef}
@@ -179,7 +151,7 @@ const WithdrawScreen = () => {
               imageSource={require('@/assets/images/mypage/onboarding_step3.png')}
               imageStyle={{ width: 150, height: 150 }}
             />
-       </ScreenWrapper>
+       </SafeAreaView>
       {reasonModal()}
 
 
@@ -204,6 +176,8 @@ const styles = StyleSheet.create({
   },
   topSection: {
     // flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
   descriptionSection: {
     backgroundColor: COLORS.white,
@@ -316,7 +290,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   bottomButtonSection: {
+    marginTop: 'auto',
     backgroundColor: 'transparent',
+    paddingHorizontal: 20,
+    paddingBottom: 18,
     gap: 13,
   },
   buttonDescription: {
@@ -328,6 +305,10 @@ const styles = StyleSheet.create({
   },
   bottomImage: {
     width: '100%',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
     resizeMode: 'stretch',
     height: 300,
   },
