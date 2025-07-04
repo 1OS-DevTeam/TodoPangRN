@@ -1,64 +1,71 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { Challenge } from '../../../../api/types';
 import { COLORS } from '../../../../assets/colors/colors';  
-import { CaptionText, SectionTitleText } from '@/app/components/texts';
+import { Body2, C1, Typography } from '@/app/components/texts';
 
 interface GoalCardProps {
   challenge: Challenge;
   onPress?: (challenge: Challenge) => void;
 }
 
+const screenWidth = Dimensions.get('window').width;
+const cardWidth = (screenWidth - 32 - 7) / 2; // 좌우패딩(16*2) - gap(7) / 2
+
 export const ChallengeCard = ({ challenge, onPress }: GoalCardProps) => {
-  const difficultyText = challenge.diff === 1 ? '쉬움' : challenge.diff === 2 ? '보통' : '어려움';
-  
-  return (
-    <TouchableOpacity 
-      style={styles.challengeCard} 
-      activeOpacity={0.7}
-      onPress={() => onPress && onPress(challenge)}
-    >
-        <View style={styles.challengeCardHeader}>   
-            <SectionTitleText>{challenge.title}</SectionTitleText>
-            <CaptionText color={COLORS.mainPurple}>난이도: {difficultyText}</CaptionText>
-        </View>
-      <View style={styles.challengeCardInfo}>
-        <Text style={styles.challengeCardPopularity}>도전중: {challenge.popularity}명</Text>
+
+  const tapWish = () => {
+    if (onPress) {
+      onPress(challenge);
+    }
+  };
+
+  const wishContent = (
+    <View style={styles.wishCard}>
+      <Body2 numberOfLines={2} ellipsizeMode="tail">{challenge.title}</Body2>
+      <View style={styles.wishCountContainer}>
+        <C1 color={COLORS.white}>🙏 {challenge.popularity}명의 위시</C1>
       </View>
+    </View>
+  );
+  
+
+    return (
+    <TouchableOpacity onPress={tapWish}>
+      {wishContent}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  challengeCard: {
-    width: '48%',
+  wishCard: {
+    width: cardWidth,
+    height: 101,
     backgroundColor: COLORS.white,
-    borderRadius: 4,
-    paddingTop: 12,
-    paddingLeft: 8,
-    minHeight: 158,
-    // iOS 그림자
+    borderRadius: 8,
+    marginBottom: 14,
+    justifyContent: 'space-between',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    // Android 그림자
-    elevation: 4,
-    margin: 1, // 그림자가 잘리지 않도록 여백 추가
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 10,
   },
-  challengeCardHeader: {
-    gap: 4,
-  },
-  challengeCardInfo: {
-    gap: 4,
-  },
-  challengeCardDifficulty: {
-    fontSize: 12,
-    color: COLORS.mainPurple,
-  },
-  challengeCardPopularity: {
-    fontSize: 12,
-    color: COLORS.darkGrey,
+  wishCountContainer: {
+    height: 28,
+    backgroundColor: COLORS.black,
+    opacity: 0.6,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    marginVertical: 6,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

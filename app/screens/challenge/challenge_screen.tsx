@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useChallengeHome } from '../../../hooks/challenge/useChallengeHome';
-import { HeadText, SectionTitleText, CaptionText } from '@/app/components/texts';
+import { HeadText, SectionTitleText, CaptionText, Typography } from '@/app/components/texts';
 import { COLORS } from '../../../assets/colors/colors'
 import { TouchableOpacity } from 'react-native';
 import { Challenge } from '../../../api/types';
@@ -21,10 +21,10 @@ export const ChallengeScreen = () => {
   const headerSection = () => {
     return (
       <View style={styles.headerSection}>
-        <HeadText>도전과제</HeadText>
+        <Typography mode='SubHead'>위시 탐색소</Typography>
         <View style={styles.headerSubSection}>
-          <SectionTitleText>뭐부터 해야할지 모르겠나요?</SectionTitleText>
-         <CaptionText color={COLORS.darkGrey}>그래서 투두팡이 준비했어요! 따라해보며 목표달성의 쾌감을 느껴보세요</CaptionText>
+          <Typography mode='Body2_bold' color='darkGrey'>뭐부터 해야할지 모르겠나요?</Typography>
+          <Typography mode='C1' color='darkGrey'>그래서 투두팡이 준비했어요! 따라해보며 목표달성의 성취감을 느껴보세요</Typography>
         </View>
       </View>
     );
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   challengeCardGridSection: {
     paddingHorizontal: 16,
-    paddingTop: 20,
+    paddingTop: 32,
     flex: 1,
   },
   loadingText: {
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   },
   challengeCardRow: {
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 7,
   }
 });
 
