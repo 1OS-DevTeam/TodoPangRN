@@ -13,7 +13,6 @@ export const useWithdraw = () => {
   const router = useRouter();
 
   const [withdrawReasonList, setWithdrawReasonList] = useState<WithdrawReason[]>();
-  const [loading, setLoading] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [userName, setUserName] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -33,7 +32,6 @@ export const useWithdraw = () => {
     const fetchWithdrawReasonList = async () => {
       const response = await MypageService.getWithdrawReasonList();
       setWithdrawReasonList(response.data);
-      setLoading(false);
     };
     fetchWithdrawReasonList();
   }, []);
@@ -83,7 +81,6 @@ export const useWithdraw = () => {
     isProcessing,
     buttonEnabled,
     withdrawReasonList,
-    loading,
     bottomSheetRef,
     bottomSheetState,
     userName,

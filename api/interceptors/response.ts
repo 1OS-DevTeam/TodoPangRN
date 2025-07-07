@@ -1,11 +1,15 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { retryRequestWithNewToken } from '../utils/tokenRefresher';
+import { loadingManager } from '../utils/loadingManager';
 
 /**
  * 성공 응답 인터셉터
  * 모든 API 응답이 성공적으로 받아졌을 때 실행됩니다.
  */
 export const responseSuccessInterceptor = (response: AxiosResponse): AxiosResponse => {
+  // 로딩 종료
+  loadingManager.decrementLoading();
+  
   // 자세한 응답 로깅 (개발 환경에서만)
   if (__DEV__) {
     // 전체 URL 구성 (baseURL + path)
@@ -32,6 +36,12 @@ export const responseSuccessInterceptor = (response: AxiosResponse): AxiosRespon
  * API 요청 중 오류가 발생했을 때 실행됩니다.
  */
 export const responseErrorInterceptor = (error: AxiosError): Promise<any> => {
+  // 로딩 종료 (토큰 갱신 재시도 제외)
+  const shouldRetry = error.response?.status === 401 && error.config;
+  if (!shouldRetry) {
+    loadingManager.decrementLoading();
+  }
+  
   const { response, request, message, config } = error;
   
   if (__DEV__) {

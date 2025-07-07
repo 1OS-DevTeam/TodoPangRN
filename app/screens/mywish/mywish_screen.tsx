@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useWishHome } from '../../../hooks/wish/useWishHome';
 import { HeadText } from '@/app/components/texts';
 import { WishListCard } from './component/wish_list_card';
@@ -17,7 +17,6 @@ const MyWishScreen = () => {
 
   const { 
     wishInfoList, 
-    loading,
     handleTodoToggle,
     handleWishComplete,
     handleTodoDelete,
@@ -143,11 +142,7 @@ const MyWishScreen = () => {
         <View style={styles.headerTitle}>
           <HeadText>나의 위시</HeadText>
         </View>
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={COLORS.mainPurple} />
-          </View>
-        ) : !wishInfoList || wishInfoList.challenges.length === 0 ? noWishSection() : (
+        {!wishInfoList || wishInfoList.challenges.length === 0 ? noWishSection() : (
           <View style={styles.content}>
             {headerSection()}
             {wishListSection()}
@@ -249,12 +244,7 @@ const styles = StyleSheet.create({
   wishList: {
     width: '100%',
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff'
-  },
+
   noWishContainer: {
     marginTop: 101,
     justifyContent: 'center',

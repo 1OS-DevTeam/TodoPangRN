@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseConfig } from '../firebaseConfig';
 import { useFonts } from '../hooks/useFonts';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { LoadingProvider } from './contexts/LoadingContext';
+import { LoadingSpinner } from './components/loading/LoadingSpinner';
 
 // Firebase 초기화
 const app = initializeApp(firebaseConfig);
@@ -34,15 +36,17 @@ const AppLayout = () => {
 
   return (
     <SafeAreaProvider>
-      <GestureHandlerRootView>
-        
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" options={{ headerShown: true }} />
-        <Stack.Screen name="screens/login/login_screen" options={{ title: '로그인' }} />
-        <Stack.Screen name="screens/signup/signup_screen" options={{ title: '회원가입' }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-      </GestureHandlerRootView>
+      <LoadingProvider>
+        <GestureHandlerRootView>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" options={{ headerShown: true }} />
+            <Stack.Screen name="screens/login/login_screen" options={{ title: '로그인' }} />
+            <Stack.Screen name="screens/signup/signup_screen" options={{ title: '회원가입' }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+          <LoadingSpinner />
+        </GestureHandlerRootView>
+      </LoadingProvider>
     </SafeAreaProvider>
   );
 };

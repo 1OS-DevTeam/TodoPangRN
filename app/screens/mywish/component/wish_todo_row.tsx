@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { Image } from 'expo-image';
 import { Challenge, WishInfoTodo } from '../../../../api/types';
 import { COLORS } from '../../../../assets/colors/colors';  
@@ -18,14 +18,12 @@ interface GoalCardProps {
 export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isLoading, handleTodoDelete }: GoalCardProps) => {
   
   const handleToggle = () => {  
-    if (isLoading) return;
     if (onToggleStatus) {
       onToggleStatus(todo.todoId);
     }
   };
 
   const handleDeleteTodo = () => {
-    if (isLoading) return;
     if (handleTodoDelete) {
       handleTodoDelete(todo);
     }
@@ -66,14 +64,6 @@ export const WishTodoRow = ({ todo, onPress, isLast = false, onToggleStatus, isL
   };
   
   const renderCheckbox = () => {
-    if (isLoading) {
-      return (
-        <View style={styles.checkboxContainer}>
-          <ActivityIndicator size="small" color={COLORS.mainPurple} />
-        </View>
-      );
-    }
-
     return (
       <Image
         source={todo.status === 2 
@@ -129,12 +119,7 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
-  checkboxContainer: {
-    width: 25,
-    height: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   checkboxTouchable: {
     paddingLeft: 16,
     justifyContent: 'center',

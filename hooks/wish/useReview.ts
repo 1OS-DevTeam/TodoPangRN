@@ -10,7 +10,6 @@ export const useReview = (originChallengeId: number) => {
     console.log('[useReview] originChallengeId received:', originChallengeId);
     
   const [reviewList, setReviewList] = useState<ReviewResponse[]>([]);
-  const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [hasRated, setHasRated] = useState<boolean>(false);
@@ -30,7 +29,6 @@ export const useReview = (originChallengeId: number) => {
   }, [hasRated, selectedReview]);
 
   const fetchData = async () => {
-    setLoading(true);
     try {
         const response = await ReviewService.getReviewList();
         console.log('response: 성공', response);
@@ -41,8 +39,6 @@ export const useReview = (originChallengeId: number) => {
         }
     } catch (error) {
         console.error('위시리스트 조회 오류:', error);
-    } finally {
-        setLoading(false);
     }
   };
 
@@ -81,7 +77,6 @@ export const useReview = (originChallengeId: number) => {
 
   return {
     reviewList,
-    loading,
     isProcessing,
     updateReview,
     rating,

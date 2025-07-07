@@ -6,6 +6,7 @@ import { auth } from '../../app/_layout';
 import { AuthService } from '../../api/services/authService';
 import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loadingManager } from '../../api/utils/loadingManager';
 GoogleSignin.configure({
     webClientId: GOOGLE_WEB_CLIENT_ID, // 파이어베이스 콘솔에서 받은 웹 클라이언트 ID
     iosClientId: GOOGLE_IOS_CLIENT_ID, // Google Cloud Console에서 받은 iOS 클라이언트 ID
@@ -27,6 +28,8 @@ export const useAuth = () => {
     const router = useRouter();
 
     const handleGoogleLogin = async () => {
+        loadingManager.incrementLoading(); // 로딩 시작
+        
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
@@ -79,11 +82,14 @@ export const useAuth = () => {
             } else {
                 console.log('알 수 없는 오류 형식:', error);
             }
+        } finally {
+            loadingManager.decrementLoading(); // 로딩 종료
         }
     };
 
     const handleAppleLogin = async () => {
         console.log('애플 로그인 시도');
+        loadingManager.incrementLoading(); // 로딩 시작
 
         try {
             const isAvailable = await AppleAuthentication.isAvailableAsync();
@@ -152,6 +158,8 @@ export const useAuth = () => {
             } else {
                 console.log('알 수 없는 오류 발생:', error);
             }
+        } finally {
+            loadingManager.decrementLoading(); // 로딩 종료
         }
     };
 

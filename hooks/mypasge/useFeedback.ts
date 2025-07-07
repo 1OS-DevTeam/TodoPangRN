@@ -12,7 +12,6 @@ export enum FeedbackBottomSheetType {
 
 export const useFeedback = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [hasRated, setHasRated] = useState<boolean>(false);
@@ -110,7 +109,6 @@ export const useFeedback = () => {
   }
 
   return {
-    loading,
     isProcessing,
     rating,
     hasRated,

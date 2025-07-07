@@ -9,20 +9,16 @@ export const useWishHome = () => {
   const router = useRouter();
   
   const [wishInfoList, setWishInfoList] = useState<WishInfoList | null>(null);
-  const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [loadingTodoId, setLoadingTodoId] = useState<number | null>(null);
 
   const fetchData = async () => {
-    setLoading(true);
     try {
       const response = await WishService.getWishInfoList();
       console.log('위시리스트 정보:', JSON.stringify(response.data, null, 2));
       setWishInfoList(response.data);
     } catch (error) {
       console.error('위시리스트 조회 오류:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -247,7 +243,6 @@ export const useWishHome = () => {
 
   return { 
     wishInfoList, 
-    loading,
     isProcessing,
     loadingTodoId,
     handleTodoToggle,

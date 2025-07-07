@@ -9,7 +9,6 @@ export const useHomeData = () => {
   const router = useRouter();
 
   const [homeData, setHomeData] = useState<HomeData | null>(null);
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchData = async () => {
@@ -30,9 +29,7 @@ export const useHomeData = () => {
 
   useEffect(() => {
     const loadInitialData = async () => {
-      setLoading(true);
       await fetchData();
-      setLoading(false);
     };
 
     loadInitialData();
@@ -86,7 +83,6 @@ export const useHomeData = () => {
 
   return { 
     homeData, 
-    loading, 
     refreshing,
     handleChallengingGoalsClick,
     handleCompletedGoalsClick,

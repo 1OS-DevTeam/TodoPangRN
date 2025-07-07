@@ -149,10 +149,7 @@ const styles = StyleSheet.create({
   buttonDescription: {
       
   },
-  processingSpinner: {
-      position: 'absolute',
-      right: 40,
-  },
+
   bottomImage: {
     width: '100%',
     position: 'absolute',

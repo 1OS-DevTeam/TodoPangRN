@@ -7,7 +7,6 @@ import { useRouter } from 'expo-router';
 export const useChallengeHome = () => {
   const router = useRouter();
   const [challengeInfoList, setChallengeInfoList] = useState<ChallengeInfoList | null>(null);
-  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [filteredChallenges, setFilteredChallenges] = useState<Challenge[]>([]);
 
@@ -22,8 +21,6 @@ export const useChallengeHome = () => {
         }
       } catch (error) {
         console.error('도전과제 목록 조회 오류:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -92,7 +89,6 @@ export const useChallengeHome = () => {
 
   return { 
     challengeInfoList, 
-    loading,
     selectedCategory,
     filteredChallenges,
     handleCategoryClick,

@@ -10,7 +10,6 @@ import { BottomSheetState } from '@/api/types';
 
 export const useMypage = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [userName, setUserName] = useState('');
@@ -36,7 +35,6 @@ export const useMypage = () => {
   const tapLogout = async () => {
     try {
       setIsLoggingOut(true);
-      setLoading(true);
       const response = await AuthService.logout();
       if (response.data === true) {
         await auth.signOut();
@@ -49,7 +47,6 @@ export const useMypage = () => {
       // 에러 처리 로직 추가
     } finally {
       setIsLoggingOut(false);
-      setLoading(false);
     }
   };
 
@@ -65,9 +62,7 @@ export const useMypage = () => {
     router.push('/onboarding/onboarding');
   };
 
-  useEffect(() => {
-    setLoading(false);
-  }, []);
+
 
   const showLogoutBottomSheet = () => {
     setBottomSheetState({
@@ -92,7 +87,6 @@ export const useMypage = () => {
   };
 
   return {
-    loading,
     isLoggingOut,
     tapWithdraw,
     tapChangeName,

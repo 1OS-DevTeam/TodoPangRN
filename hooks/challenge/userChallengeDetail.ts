@@ -7,7 +7,6 @@ import BottomSheet from '@gorhom/bottom-sheet';
 
 export const useUserChallengeDetail = (challengeId: string) => {
     const [challengeDetail, setChallengeDetail] = useState<ChallengeDetail | null>(null);
-    const [loading, setLoading] = useState(true);
     const router = useRouter();
     const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -19,8 +18,6 @@ export const useUserChallengeDetail = (challengeId: string) => {
                 
             } catch (error) {
                 console.error('도전과제 상세 조회 오류:', error);
-            } finally {
-                setLoading(false);
             }
         };
         
@@ -81,7 +78,6 @@ export const useUserChallengeDetail = (challengeId: string) => {
 
     return { 
         challengeDetail, 
-        loading,
         showBottomSheet,
         handleActualRegister,
         bottomSheetRef

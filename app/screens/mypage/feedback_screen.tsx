@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, ActivityIndicator, TextInput } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { Typography } from '@/app/components/texts';
 import { COLORS } from '../../../assets/colors/colors';
 import MainActionButton from '@/app/components/buttons/main_action_button';
@@ -9,7 +9,6 @@ import { useFeedback, FeedbackBottomSheetType } from '@/hooks/mypasge/useFeedbac
 
 export const FeedbackScreen = () => {
   const { 
-    loading,
     isProcessing,
     rating,
     hasRated,
@@ -32,15 +31,7 @@ export const FeedbackScreen = () => {
     registerBottomSheetRef.current?.expand();
 };
 
-if (loading) {
-    return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color={COLORS.mainPurple} />
-            </View>
-        </SafeAreaView>
-    );
-}
+
 
 const satiesfiedSection = () => {
     return (
@@ -102,15 +93,10 @@ const bottomButtonSection = () => {
           <Typography mode="C1" color="white">· 답변이 필요한 의견은 다운로드 받은 스토어 리뷰로 남겨주세요</Typography>
         </View>
         <MainActionButton 
-            disabled={!isNextButtonEnabled || isProcessing} 
+            disabled={!isNextButtonEnabled} 
             text="의견 등록하기"
             onClick={tapRegisterButton} 
         />
-        {isProcessing && (
-            <View style={styles.processingSpinner}>
-                <ActivityIndicator size="small" color={COLORS.mainPurple} />
-            </View>
-        )}
       </View>
     );
 };
@@ -178,11 +164,7 @@ container: {
     flex: 1,
     backgroundColor: COLORS.white,
 },
-loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-},
+
 satisfiedSection: {
     paddingHorizontal: 16,
     paddingTop: 16,
@@ -227,10 +209,7 @@ bottomButtonSection: {
 buttonDescription: {
     
 },
-processingSpinner: {
-    position: 'absolute',
-    right: 40,
-},
+
 bottomImage: {
   width: '100%',
   position: 'absolute',

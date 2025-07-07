@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, FlatList, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, FlatList, Dimensions } from 'react-native';
 import { useReview } from '../../../../hooks/wish/useReview';
 import { SubHeadText, Body1, Body2 } from '@/app/components/texts';
 import { COLORS } from '../../../../assets/colors/colors';
@@ -15,7 +15,6 @@ const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number 
     
     const {
         reviewList,
-        loading,
         isProcessing,
         updateReview,
         rating,  
@@ -30,15 +29,7 @@ const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number 
         bottomSheetRef.current?.expand();
     };
 
-    if (loading) {
-        return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="large" color={COLORS.mainPurple} />
-                </View>
-            </SafeAreaView>
-        );
-    }
+
 
     const satiesfiedSection = () => {
         return (
@@ -106,15 +97,10 @@ const ReviewScreen = ({ route }: { route: { params: { originChallengeId: number 
         return (
           <View style={styles.bottomButtonSection}>
             <MainActionButton 
-                disabled={!isNextButtonEnabled || isProcessing} 
-                text={isProcessing ? "처리중..." : "다음"}
+                disabled={!isNextButtonEnabled} 
+                text="다음"
                 onClick={handleNextButtonPress} 
             />
-            {isProcessing && (
-                <View style={styles.processingSpinner}>
-                    <ActivityIndicator size="small" color={COLORS.mainPurple} />
-                </View>
-            )}
           </View>
         );
     };
@@ -162,11 +148,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLORS.white,
     },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
+
     satisfiedSection: {
         paddingHorizontal: 16,
         paddingTop: 16,
@@ -204,8 +186,5 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         paddingHorizontal: 20,
     },
-    processingSpinner: {
-        position: 'absolute',
-        right: 40,
-    }
+
 });

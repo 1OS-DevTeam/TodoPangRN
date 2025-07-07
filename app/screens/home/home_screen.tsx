@@ -8,7 +8,6 @@ import { HomeWishCard } from './home_wish_card';
 export const HomeScreen = () => {
   const { 
     homeData, 
-    loading, 
     refreshing,
     handleChallengingGoalsClick,
     handleCompletedGoalsClick,
@@ -158,13 +157,7 @@ export const HomeScreen = () => {
     );
   };
 
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>로딩 중...</Text>
-      </View>
-    );
-  }
+
 
   return (
     <View style={styles.container}>

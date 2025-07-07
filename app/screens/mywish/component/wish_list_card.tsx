@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { WishInfoChallenge, WishCompleteRequest, WishInfoTodo } from '../../../../api/types';
 import { COLORS } from '../../../../assets/colors/colors';  
 import { CaptionText, SectionTitleText } from '@/app/components/texts';
@@ -43,16 +43,12 @@ export const WishListCard = ({
               !allCompleted && styles.wishCompleteButtonDisabled
             ]}
             onPress={() => handleWishComplete?.(challenge)}
-            disabled={isLoading || !allCompleted}
+            disabled={!allCompleted}
           >
-            {isLoading ? (
-              <ActivityIndicator size="small" color={COLORS.mainPurple} />
-            ) : (
-              <Text style={[
-                styles.wishCompleteButtonText,
-                !allCompleted && styles.wishCompleteButtonTextDisabled
-              ]}>이루기</Text>
-            )}
+            <Text style={[
+              styles.wishCompleteButtonText,
+              !allCompleted && styles.wishCompleteButtonTextDisabled
+            ]}>이루기</Text>
           </TouchableOpacity>
       </View>
     );

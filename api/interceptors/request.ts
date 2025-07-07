@@ -1,11 +1,15 @@
 import { InternalAxiosRequestConfig } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loadingManager } from '../utils/loadingManager';
 
 /**
  * 요청 인터셉터
  * 모든 API 요청이 발생하기 전에 실행됩니다.
  */
 export const requestInterceptor = async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
+  // 로딩 시작
+  loadingManager.incrementLoading();
+  
   // 로컬 스토리지에서 토큰 가져오기
   const token = await AsyncStorage.getItem('auth_token');
   console.log('토큰확인');

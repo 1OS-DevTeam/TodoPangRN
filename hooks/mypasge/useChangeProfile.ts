@@ -6,7 +6,6 @@ import { BottomSheetState } from '@/api/types';
 
 export const useChangeProfile = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [nickname, setNickname] = useState('');
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -29,13 +28,10 @@ export const useChangeProfile = () => {
 
   const handleChangeName = async (name: string) => {
     try {
-      setLoading(true);
       const response = await MypageService.changeName(name);
     } catch (error) {
       console.error('계정명 변경 중 오류가 발생했습니다:', error);
       // 에러 처리 로직 추가
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -44,7 +40,6 @@ export const useChangeProfile = () => {
   }
 
   return {
-    loading,
     isLoggingOut,
     nickname,
     bottomSheetRef,
