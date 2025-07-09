@@ -31,10 +31,14 @@ export const useChallengeHome = () => {
   const handleChallengePress = (challenge: Challenge) => {
     console.log('챌린지 선택됨:', challenge);
 
+    // 카테고리 이름 가져오기
+    const categoryName = challengeInfoList?.categories?.[challenge.category] || '';
+
     router.push({
       pathname: '/challenge/challenge-detail',
       params: { 
         challengeId: challenge.id,
+        categoryName: categoryName,
         headerTitle: '목표 상세',
         headerBackTitle: '도전과제',
       }

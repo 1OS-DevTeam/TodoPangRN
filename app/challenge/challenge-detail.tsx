@@ -7,7 +7,7 @@ import NavBackButton from '../components/buttons/nav_back_button';
 export default function ChallengeDetailPage() {
     const router = useRouter();
 
-    const { challengeId } = useLocalSearchParams();
+    const { challengeId, categoryName } = useLocalSearchParams();
 
     return (
         <>
@@ -22,7 +22,7 @@ export default function ChallengeDetailPage() {
                     )
                 }}
             />
-            <ChallengeDetailScreen route={{ params: { challengeId: challengeId as string } }} />
+            <ChallengeDetailScreen route={{ params: { challengeId: challengeId as string, categoryName: categoryName as string } }} />
         </>
     );
 } 

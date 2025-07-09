@@ -11,14 +11,20 @@ import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
 import OneButtonBottomSheet from '@/app/components/bottomSheet/one_button_bottomsheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeId: string } } }) => {
+export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeId: string, categoryName: string } } }) => {
   const {
     challengeDetail,
-    loading,
     showBottomSheet,
     handleActualRegister,
     bottomSheetRef
   } = useUserChallengeDetail(route.params.challengeId);
+
+  const getDifficultyText = (diff: number) => {
+    if (diff >= 1 && diff <= 3) return "상";
+    if (diff >= 4 && diff <= 6) return "중";
+    if (diff >= 7) return "하";
+    return "상"; // 기본값
+  };
 
   const titleSection = () => {
     return (
@@ -35,15 +41,15 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
         <View style={styles.boxesContainer}>
           <View style={styles.box}>
             <Typography mode='Body3_bold' color='mainPurple' style={styles.boxTitleText}>카테고리</Typography>
-            <Typography mode='Body3' color='darkGrey' style={styles.boxValueText}>{challengeDetail?.category}</Typography>
+            <Typography mode='Body3' color='darkGrey' style={styles.boxValueText}>{route.params.categoryName}</Typography>
           </View>
           <View style={styles.box}>
-            <Typography mode='Body3_bold' color='mainPurple' style={styles.boxTitleText}>기간</Typography>
-            <Typography mode='Body3' color='darkGrey' style={styles.boxValueText}>{challengeDetail?.term}</Typography>
+            <Typography mode='Body3_bold' color='mainPurple' style={styles.boxTitleText}>권장 기간</Typography>
+            <Typography mode='Body3' color='darkGrey' style={styles.boxValueText}>{challengeDetail?.term}일</Typography>
           </View>
           <View style={styles.box}>
             <Typography mode='Body3_bold' color='mainPurple' style={styles.boxTitleText}>난이도</Typography>
-            <Typography mode='Body3' color='darkGrey' style={styles.boxValueText}>{challengeDetail?.diff}</Typography>
+            <Typography mode='Body3' color='darkGrey' style={styles.boxValueText}>{challengeDetail?.diff ? getDifficultyText(challengeDetail.diff) : ''}</Typography>
           </View>
         </View>
       </View>
@@ -122,12 +128,7 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
   return (
     <GestureHandlerRootView >
       <ScreenWrapper backgroundColor={COLORS.white}>
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={COLORS.mainPurple} />
-          </View>
-        ) : (
-          <View style={styles.container}>
+      <View style={styles.container}>
             <ScrollView
               style={styles.scrollView}
               contentContainerStyle={styles.scrollViewContent}
@@ -141,7 +142,6 @@ export const ChallengeDetailScreen = ({ route }: { route: { params: { challengeI
             </ScrollView>
             {bottomButtonSection()}
           </View>
-        )}
         <OneButtonBottomSheet
           ref={bottomSheetRef}
           message={`"${challengeDetail?.title}"\n위시를 이뤄볼까요?`}
