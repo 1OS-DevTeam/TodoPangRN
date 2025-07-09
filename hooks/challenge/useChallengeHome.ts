@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 export const useChallengeHome = () => {
   const router = useRouter();
   const [challengeInfoList, setChallengeInfoList] = useState<ChallengeInfoList | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>('0'); // 디폴트를 'all'로 설정
   const [filteredChallenges, setFilteredChallenges] = useState<Challenge[]>([]);
 
   // 데이터 로드
@@ -55,15 +55,15 @@ export const useChallengeHome = () => {
   // 카테고리에 따른 도전과제 필터링
   useEffect(() => {
     if (challengeInfoList?.infoData) {
-      if (selectedCategory) {
+      if (selectedCategory === '0' || !selectedCategory) {
+        // "전체" 선택 시 모든 도전과제 표시
+        setFilteredChallenges(challengeInfoList.infoData);
+      } else {
         // 선택된 카테고리에 따라 도전과제 필터링
         const filtered = challengeInfoList.infoData.filter(
           challenge => challenge.category.toString() === selectedCategory
         );
         setFilteredChallenges(filtered);
-      } else {
-        // 카테고리가 선택되지 않았으면 전체 도전과제 표시
-        setFilteredChallenges(challengeInfoList.infoData);
       }
     }
   }, [selectedCategory, challengeInfoList]);
@@ -77,12 +77,7 @@ export const useChallengeHome = () => {
 
   // 카테고리 선택/해제 핸들러
   const handleCategorySelection = (id: string, name: string) => {
-    // 이미 선택된 카테고리를 다시 클릭하면 선택 해제
-    if (selectedCategory === id) {
-      setSelectedCategory(null);
-    } else {
-      setSelectedCategory(id);
-    }
+    setSelectedCategory(id);
     // 원래 핸들러 호출
     handleCategoryClick(id, name);
   };

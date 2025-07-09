@@ -11,9 +11,9 @@ import { ChallengeCard } from './component/challenge_card';
 export const ChallengeScreen = () => {
   const {
     challengeInfoList,
-    loading,
     selectedCategory,
     filteredChallenges,
+    handleCategoryClick,
     handleCategorySelection,
     handleChallengePress
   } = useChallengeHome();
@@ -38,6 +38,15 @@ export const ChallengeScreen = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.categoryScrollContainer}
         >
+          {/* 전체 카테고리 추가 */}
+          <TouchableOpacity 
+            style={[styles.categoryItem, selectedCategory === '0' && styles.selectedCategoryItem]}
+            onPress={() => handleCategorySelection('0', '전체')}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.categoryItemText, selectedCategory === '0' && styles.selectedCategoryItemText]}>전체</Text>
+          </TouchableOpacity>
+          
           {challengeInfoList?.categories && 
             Object.keys(challengeInfoList.categories).map(id => {
               const name = challengeInfoList.categories[id];
@@ -62,9 +71,8 @@ export const ChallengeScreen = () => {
   const challengeCardGridSection = () => {
     return (
       <View style={styles.challengeCardGridSection}>
-        {loading ? (
-          <Text style={styles.loadingText}>로딩 중...</Text>
-        ) : filteredChallenges.length === 0 ? (
+        {
+        filteredChallenges.length === 0 ? (
           <Text style={styles.emptyText}>도전과제가 없습니다</Text>
         ) : (
           <FlatList

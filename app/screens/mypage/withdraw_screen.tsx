@@ -17,7 +17,6 @@ const WithdrawScreen = () => {
     isProcessing,
     buttonEnabled,
     withdrawReasonList,
-    loading,
     bottomSheetRef,
     bottomSheetState,
     userName,
