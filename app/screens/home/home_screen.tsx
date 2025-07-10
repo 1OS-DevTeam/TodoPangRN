@@ -52,64 +52,6 @@ export const HomeScreen = () => {
     );
   };
 
-  // const challengeBoxSection = () => {
-  //   return (
-  //     <View style={styles.challengeBoxSection}>
-  //       <TouchableOpacity 
-  //         style={styles.challengingBox}
-  //         onPress={handleChallengingGoalsClick}
-  //         activeOpacity={0.7}
-  //       >
-  //         <Image source={require('../../../assets/images/home/home_arm.png')} style={styles.arm} />
-  //         <View style={styles.challengingContent}>
-  //           <Text style={styles.challengingTitle}>도전중인 목표</Text>
-  //           <Text style={styles.challengingNumber}>{homeData?.userData?.registeredProjects}</Text>
-  //         </View>
-  //         <Image source={require('../../../assets/images/home/home_chevron_right.png')} style={styles.arrow} />
-  //       </TouchableOpacity>
-  //       <TouchableOpacity 
-  //         style={styles.completedBox}
-  //         onPress={handleCompletedGoalsClick}
-  //         activeOpacity={0.7}
-  //       >
-  //         <View style={styles.completedContent}>
-  //           <Text style={styles.completedTitle}>달성한 목표</Text>
-  //           <Text style={styles.completedNumber}>{homeData?.userData?.finishedProjects}</Text>
-  //         </View>
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // };
-
-  // const categorySection = () => {
-  //   return (
-  //     <View style={styles.categorySection}>
-  //       <SubHeadText>키워드별 도전 목표</SubHeadText>
-  //       <ScrollView 
-  //         horizontal
-  //         showsHorizontalScrollIndicator={false}
-  //         contentContainerStyle={styles.categoryScrollContainer}
-  //       >
-  //         {homeData?.categories && 
-  //           Object.keys(homeData.categories).map(id => {
-  //             const name = homeData.categories[id];
-  //             return (
-  //               <TouchableOpacity 
-  //                 key={id} 
-  //                 style={styles.categoryItem}
-  //                 onPress={() => handleCategoryClick(id, name)}
-  //                 activeOpacity={0.7}
-  //               >
-  //                 <Text style={styles.categoryItemText}>{name}</Text>
-  //               </TouchableOpacity>
-  //             );
-  //           })
-  //         }
-  //       </ScrollView>
-  //     </View>
-  //   );
-  // };
-
   const popularChallengeSection = () => {
     return (
       <View style={styles.popularChallengeSection}>
@@ -132,16 +74,10 @@ export const HomeScreen = () => {
           data={homeData?.popularChallenges?.slice(0, 10) || []}
           numColumns={2}
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
+          nestedScrollEnabled={true}
           contentContainerStyle={styles.popularChallengeScrollContainer}
           columnWrapperStyle={styles.popularChallengeRow}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={COLORS.mainPurple}
-              colors={[COLORS.mainPurple]}
-            />
-          }
           renderItem={({ item: challenge, index }) => (
             <HomeWishCard 
               wish={challenge}
@@ -164,8 +100,16 @@ export const HomeScreen = () => {
       <ScrollView 
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
-        showsVerticalScrollIndicator={false}
-        bounces={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={COLORS.mainPurple}
+            colors={[COLORS.mainPurple]}
+          />
+        }
+        // showsVerticalScrollIndicator={false}
+        // bounces={false}
       >
         <View style={styles.topSection}>
           <Image 
@@ -175,9 +119,9 @@ export const HomeScreen = () => {
           <View style={styles.topContent}>
             {navigationSection()}
             {headerSection()}
-            {popularChallengeSection()}
           </View>
         </View>
+        {popularChallengeSection()}
       </ScrollView>
     </View>
   );
@@ -202,7 +146,7 @@ const styles = StyleSheet.create({
   },
   // 상단 섹션 컨테이너
   // position: 'relative'로 내부 요소들의 절대 위치 기준점 설정
-  // height: 390으로 고정된 높이 설정
+  // height: 390으로 고정된 높이 설정 (디자인 유지)
   topSection: {
     position: 'relative',
     height: 390,
@@ -396,6 +340,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
+    height: 500
   },
   categoryItem: {
     paddingVertical: 8,
@@ -412,7 +357,8 @@ const styles = StyleSheet.create({
   },
   popularChallengeSection: {
     paddingHorizontal: 16,
-    paddingTop: 80,
+    paddingTop: 24,
+    paddingBottom: 20,
   },
   popularChallengeTitleContainer: {
     flexDirection: 'row',
