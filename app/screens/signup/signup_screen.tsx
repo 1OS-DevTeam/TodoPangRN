@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TextInput, Image, Keyboard } from 'react-native';
 import { HeadText, SubHeadText, Typography } from '../../components/texts';
 import { MainActionButton } from '../../components/buttons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -7,6 +7,8 @@ import { AuthService } from '../../../api/services/authService';
 import { COLORS } from '../../../assets/colors/colors';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { TwoButtonBottomSheet } from '@/app/components/bottomSheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
 
 const SignupScreen = () => {
 const [nickname, setNickname] = useState('');
@@ -80,6 +82,7 @@ const bottomButtonSection = () => {
             disabled={!isButtonEnabled} 
             text="시작하기"
             onClick={() => {
+                Keyboard.dismiss();
                 registerBottomSheetRef.current?.expand();
             }} 
         />
@@ -88,45 +91,53 @@ const bottomButtonSection = () => {
 };
 
 return (
-      <SafeAreaView style={styles.safeArea}>
-        {greetingSection()}
-        {nicknameInputSection()}
-        <Image source={require('../../../assets/images/mypage/rename_bottom_bg.png')} style={styles.bottomImage} />
-        {bottomButtonSection()}
+      <GestureHandlerRootView style={styles.container}>
+        <ScreenWrapper backgroundColor={COLORS.white}>
+          <View style={styles.contents}>
+            {greetingSection()}
+            {nicknameInputSection()}
+          </View>
+          <Image source={require('../../../assets/images/mypage/rename_bottom_bg.png')} style={styles.bottomImage} />
+          {bottomButtonSection()}
+        </ScreenWrapper>
+        
         {/* 등록 확인 바텀시트 */}
         <TwoButtonBottomSheet
-              ref={registerBottomSheetRef}
-              title={`${nickname}\n으로 시작할까요?`}
-              message={`이후 '마이페이지'에서 변경 가능합니다!`}
-              firstButtonLabel="다시 입력하기"
-              firstButtonEvent={() => {
-                registerBottomSheetRef.current?.close();
-              }}
-              secondButtonLabel="시작하기"
-              secondButtonEvent={trySignup}
-              imageSource={require('../../../assets/images/mywish/mywish_character.png')}
-              imageStyle={{ width: 180, height: 180 }}
-            />
-      </SafeAreaView>
+          ref={registerBottomSheetRef}
+          title={`${nickname}\n으로 시작할까요?`}
+          message={`이후 '마이페이지'에서 변경 가능합니다!`}
+          firstButtonLabel="다시 입력하기"
+          firstButtonEvent={() => {
+            registerBottomSheetRef.current?.close();
+          }}
+          secondButtonLabel="시작하기"
+          secondButtonEvent={trySignup}
+          imageSource={require('../../../assets/images/mywish/mywish_character.png')}
+          imageStyle={{ width: 180, height: 180 }}
+        />
+      </GestureHandlerRootView>
   );
 };
 
 const styles = StyleSheet.create({
-    safeArea: {
-    flex: 1,
+  container: {
+    flex: 1,      
+    backgroundColor: '#fff',
+  },
+  contents: {
+    // flex: 1,
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 16,
+    paddingTop: 120,
   },
   greetingContainer: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    paddingTop: 120,
-    paddingLeft: 16,
-    // backgroundColor: 'red'
     gap: 0
   },
   nicknameInputContainer: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    paddingHorizontal: 16,
     paddingTop: 71,
     gap: 10
   },
@@ -143,13 +154,12 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     backgroundColor: 'transparent',
     paddingHorizontal: 20,
-    paddingBottom: 18,
+    paddingBottom: 32,
     gap: 13,
   },
   buttonDescription: {
       
   },
-
   bottomImage: {
     width: '100%',
     position: 'absolute',

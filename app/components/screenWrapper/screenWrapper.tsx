@@ -11,7 +11,7 @@ interface ScreenWrapperProps {
 const ScreenWrapper: React.FC<ScreenWrapperProps> = ({ children, backgroundColor, onLayout }) => {
   // 안전 영역 상단 높이
   const insets = useSafeAreaInsets();
-  const offset = insets.top + 62;
+  const offset =  0;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor }} onLayout={onLayout}> 
