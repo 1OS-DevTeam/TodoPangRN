@@ -10,7 +10,7 @@ interface GoalCardProps {
 }
 
 const screenWidth = Dimensions.get('window').width;
-const cardWidth = (screenWidth - 32 - 7) / 2; // 좌우패딩(16*2) - gap(7) / 2
+const cardWidth = (screenWidth - 32 - 7 - 8 ) / 2; // 좌우패딩(16*2) - gap(7) / 2
 
 export const ChallengeCard = ({ challenge, onPress }: GoalCardProps) => {
 
@@ -22,10 +22,10 @@ export const ChallengeCard = ({ challenge, onPress }: GoalCardProps) => {
 
   const wishContent = (
     <View style={styles.wishCard}>
-      <Body2 numberOfLines={2} ellipsizeMode="tail">{challenge.title}</Body2>
       <View style={styles.wishCountContainer}>
-        <C1 color={COLORS.white}>🙏 {challenge.popularity}명의 위시</C1>
+        <C1 color={COLORS.white}>{challenge.category}</C1>
       </View>
+      <Body2 numberOfLines={2} ellipsizeMode="tail">{challenge.title}</Body2>
     </View>
   );
   
@@ -40,7 +40,7 @@ export const ChallengeCard = ({ challenge, onPress }: GoalCardProps) => {
 const styles = StyleSheet.create({
   wishCard: {
     width: cardWidth,
-    height: 101,
+    height: 120,
     backgroundColor: COLORS.white,
     borderRadius: 8,
     marginBottom: 14,
@@ -50,9 +50,9 @@ const styles = StyleSheet.create({
       width: 0,
       height: 0,
     },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.08,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 3,
     paddingHorizontal: 8,
     paddingVertical: 10,
   },
