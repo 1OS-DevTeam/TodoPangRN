@@ -54,7 +54,7 @@ export const ChallengeService = {
    */
   registerChallenge: async (challengeId: number, todoIds: number[]) => {
     try {
-      const response = await apiClient.post<ApiResponse<Boolean>>(
+      const response = await apiClient.post<ApiResponse<any>>(
         ChallengeEndpoints.CHALLENGE_REGISTER,
         { challengeId, todoIds }
       );  
@@ -65,7 +65,8 @@ export const ChallengeService = {
       
       return response.data;
     } catch (error) {
-      
+      console.error('도전과제 등록 중 오류 발생:', error);
+      throw error;
     }
   }
 }; 

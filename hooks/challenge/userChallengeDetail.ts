@@ -62,8 +62,9 @@ export const useUserChallengeDetail = (challengeId: string) => {
             if (challengeId && todoIds) {
                 console.log('등록하기', challengeId, todoIds);
                 const response = await ChallengeService.registerChallenge(challengeId, todoIds);
-                bottomSheetRef.current?.close();
-                showSuccessAlert();
+                if (response.data === true) {
+                    showSuccessAlert();
+                } 
             } else {
                 const message = '도전과제 또는 할일 정보가 없습니다.';
                 console.error(message);
@@ -73,7 +74,9 @@ export const useUserChallengeDetail = (challengeId: string) => {
             console.error('도전과제 등록 오류:', error);
             const message = '도전과제 등록 중 오류가 발생했습니다.';
             showErrorAlert(message);
-        }   
+        } finally {
+            bottomSheetRef.current?.close();
+        }
     }
 
     return { 
