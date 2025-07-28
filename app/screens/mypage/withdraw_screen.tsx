@@ -74,8 +74,8 @@ const WithdrawScreen = () => {
     return (
       <View style={styles.bottomButtonSection}>
         <View style={styles.buttonDescription}>
-          <Typography mode="C1" color="white">· 계정 탈퇴 시, </Typography>
-          <Typography mode="C1" color="white">· 답변이 필요한 의견은 다운로드 받은 스토어 리뷰로 남겨주세요</Typography>
+          <Typography mode="C1" color="white">· 계정 탈퇴 시, 모든 앱 서비스 활동 정보가 삭제됩니다.</Typography>
+          <Typography mode="C1" color="white">· 이후 재가입 시, 기존 정보에 대한 복구는 불가능합니다.</Typography>
         </View>
         <MainActionButton 
             disabled={!selectedReason || isProcessing} 
