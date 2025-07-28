@@ -377,10 +377,11 @@ const styles = StyleSheet.create({
   popularChallengeScrollContainer: {
     paddingTop: 16,
     paddingBottom: 8,
+    paddingHorizontal: 2, // 그림자가 잘리지 않도록 좌우 패딩 추가
   },
   popularChallengeRow: {
     justifyContent: 'space-between',
-    paddingHorizontal: 0,
+    paddingHorizontal: 2, // 추가 패딩으로 그림자 공간 확보
     gap: 7,
   },
   popularChallengeCard: {

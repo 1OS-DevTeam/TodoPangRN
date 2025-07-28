@@ -6,7 +6,7 @@ import { Body2, C1 } from '../../components/texts';
 import { PopularChallenge } from '../../../api/types';
 
 const screenWidth = Dimensions.get('window').width;
-const cardWidth = (screenWidth - 32 - 7) / 2; // 좌우패딩(16*2) - gap(7) / 2
+const cardWidth = (screenWidth - 32 - 7 - 8) / 2; // 좌우패딩(16*2) - gap(7) - 추가패딩(8*2) / 2
 
 
 interface HomeWishCardProps {
@@ -23,10 +23,10 @@ export const HomeWishCard = ({ wish, onPress}: HomeWishCardProps) => {
   
   const wishContent = (
     <View style={styles.wishCard}>
-      <Body2 numberOfLines={2} ellipsizeMode="tail">{wish.title}</Body2>
       <View style={styles.wishCountContainer}>
-        <C1 color={COLORS.white}>🙏 {wish.popularity}명의 위시</C1>
+        <C1 color={COLORS.white}>{wish.category}</C1>
       </View>
+      <Body2 numberOfLines={2} ellipsizeMode="tail">{wish.title}</Body2>
     </View>
   );
 
@@ -41,9 +41,9 @@ export const HomeWishCard = ({ wish, onPress}: HomeWishCardProps) => {
 const styles = StyleSheet.create({
   wishCard: {
     width: cardWidth,
-    height: 101,
+    height: 120,
     backgroundColor: COLORS.white,
-    borderRadius: 8,
+    borderRadius: 4,
     marginBottom: 14,
     padding: 16,
     justifyContent: 'space-between',
@@ -52,9 +52,9 @@ const styles = StyleSheet.create({
       width: 0,
       height: 0,
     },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.08,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 3,
   },
   wishCountContainer: {
     height: 28,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 12,
     marginVertical: 6,
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-start',
     alignItems: 'center',
     justifyContent: 'center',
   },
