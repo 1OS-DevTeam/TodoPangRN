@@ -1,6 +1,7 @@
 import { auth } from '../../app/_layout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { loadingManager } from './loadingManager';
 
 /**
  * Firebase 토큰을 갱신합니다.
@@ -48,6 +49,8 @@ export const retryRequestWithNewToken = async (config: any): Promise<any> => {
     const newToken = await refreshFirebaseToken();
     
     if (!newToken) {
+      // 토큰 갱신 실패 시 로딩 종료
+      loadingManager.decrementLoading();
       throw new Error('토큰 갱신에 실패했습니다.');
     }
     
@@ -60,6 +63,8 @@ export const retryRequestWithNewToken = async (config: any): Promise<any> => {
     return await axios(newConfig);
   } catch (error) {
     console.error('요청 재시도 중 오류 발생:', error);
+    // 재시도 실패 시 로딩 종료
+    loadingManager.decrementLoading();
     throw error;
   }
 }; 
