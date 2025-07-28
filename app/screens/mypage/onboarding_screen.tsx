@@ -6,7 +6,11 @@ import { router } from 'expo-router';
 import { SubHeadText, Body1 } from '@/app/components/texts';
 
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
+// 작은 화면 감지 (iPhone SE 2세대, iPhone 13 Mini 등)
+const isSmallScreen = screenHeight < 850;
+const isSuperSmallScreen = screenHeight < 700;
 
 interface OnboardingItem {
   id: number;
@@ -138,11 +142,11 @@ const styles = StyleSheet.create({
 
   },
   imageContainer: {
-    paddingTop: 130,
+    paddingTop: isSuperSmallScreen ? 40 : isSmallScreen ? 100 : 130,
   },
   image: {
-    width: 280,
-    height: 280,
+    width: isSmallScreen ? 230 : 280,
+    height: isSmallScreen ? 230 : 280,
     resizeMode: 'contain',
   },
   textContainer: {
@@ -168,7 +172,7 @@ const styles = StyleSheet.create({
     borderRadius: 15 / 2,
   },
   buttonContainer: {
-    paddingBottom: 40,
+    paddingBottom: isSuperSmallScreen ? 10 : 40,
   },
   buttonRow: {
     flexDirection: 'row',
