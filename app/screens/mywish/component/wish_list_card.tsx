@@ -36,7 +36,12 @@ export const WishListCard = ({
     
     return (
       <View style={styles.wishHeaderSection}>
-          <Text style={styles.wishHeaderText}>{challenge.challengeName}</Text>
+          <Text 
+            style={styles.wishHeaderText}
+            numberOfLines={0}
+          >
+            {challenge.challengeName}
+          </Text>
           <TouchableOpacity 
             style={[
               styles.wishCompleteButton,
@@ -93,8 +98,9 @@ const styles = StyleSheet.create({
   wishHeaderSection: {
     marginTop: 6,
     flexDirection: 'row',
-    height: 34,
-    alignItems: 'center',
+
+    alignItems: 'flex-start',
+    paddingHorizontal: 16,
   },
   todoListSection: {
     paddingTop: 8,
@@ -103,7 +109,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     color: '#1E1E1E',
-    marginLeft: 16,
+    flex: 1,
+    marginRight: 8,
   },
   wishCompleteButton: {
     flexDirection: 'row',
@@ -115,8 +122,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 61,
     height: 30,
-    position: 'absolute',
-    right: 18,
   },
   wishCompleteButtonDisabled: {
     backgroundColor: '#D9D9D9',
