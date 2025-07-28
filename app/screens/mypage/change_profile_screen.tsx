@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet, SafeAreaView, Image } from 'react-native';
 import { COLORS } from '../../../assets/colors/colors';
 import MainActionButton from '@/app/components/buttons/main_action_button';
 import { useChangeProfile } from '../../../hooks/mypasge/useChangeProfile';
-import { TwoButtonBottomSheet } from '@/app/components/bottomSheet';
+import { OneButtonBottomSheet, TwoButtonBottomSheet } from '@/app/components/bottomSheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Body2, SubHeadText, C1, Typography } from '@/app/components/texts';
 import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
@@ -12,14 +12,14 @@ import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
 export const ChangeProfileScreen = () => {
   const { 
     bottomSheetRef,
-    bottomSheetState,
-    isLoggingOut,
-    loading,
+    resultBottomSheetRef,
     nickname,
     tapChangeButton,
     handleNicknameChange,
     handleChangeName,
     handleCloseBottomSheet,
+    handleCloseResultBottomSheet,
+    getResultBottomSheetProps,
   } = useChangeProfile();
   
   const bottomButtonSection = () => {
@@ -28,11 +28,13 @@ export const ChangeProfileScreen = () => {
         <MainActionButton 
           text="닉네임 변경하기" 
           onClick={() => tapChangeButton()} 
-          disabled={!nickname.trim() || loading}
+          disabled={!nickname.trim()}
         />
       </View>
     );
   }
+
+  const resultProps = getResultBottomSheetProps();
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -56,13 +58,24 @@ export const ChangeProfileScreen = () => {
       <TwoButtonBottomSheet
         ref={bottomSheetRef}
         title={`"${nickname}"\n닉네임을 변경하시겠습니까?`}
-        message={'변경 후 10일강은 재변경이 불가능해요!'}
+        message={'변경 후 10일간은 재변경이 불가능해요!'}
         imageSource={require('../../../assets/images/mywish/mywish_character.png')}
         imageStyle={{ width: 160, height: 160 }}
         firstButtonLabel={'취소하기'}
         firstButtonEvent={() => {handleCloseBottomSheet()}}
         secondButtonLabel={'변경하기'}
         secondButtonEvent={() => {handleChangeName(nickname)}}
+      />
+      <OneButtonBottomSheet
+        ref={resultBottomSheetRef}
+        title={resultProps.title}
+        message={resultProps.message}
+        buttonLabel="돌아가기"
+        buttonEvent={() => {
+          handleCloseResultBottomSheet();
+        }}
+        imageSource={resultProps.imageSource}
+        imageStyle={{ width: 180, height: 180 }}
       />
     </GestureHandlerRootView>
   );

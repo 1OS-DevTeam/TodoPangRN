@@ -44,7 +44,6 @@ export const MyPageScreen = () => {
     bottomSheetRef,
     bottomSheetState,
     isLoggingOut,
-    loading,
     userName,
   } = useMypage();
 
@@ -102,11 +101,6 @@ export const MyPageScreen = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScreenWrapper backgroundColor={COLORS.white} onLayout={handleContainerLayout}>
-        {loading && (
-          <View>
-            <ActivityIndicator size="large" color={COLORS.mainPurple} />
-          </View>
-        )}
         {headerSection()}
         {menuSection()}
 
