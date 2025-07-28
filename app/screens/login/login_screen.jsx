@@ -1,10 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from '@env';
 import { useAuth } from '../../../hooks/login/useAuth';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
+// 작은 화면 감지 (iPhone SE 2세대, iPhone 13 Mini 등)
+const isSmallScreen = screenHeight < 850;
+const isSuperSmallScreen = screenHeight < 700;
 
 export const LoginScreen = () => {
   const linearGradientColors = [
@@ -19,7 +25,7 @@ export const LoginScreen = () => {
 
   const logoSection = () => {
     return (
-      <View style={{ alignItems: 'center', justifyContent: 'center', position: 'relative', height: 200, marginBottom: 150, paddingTop: 120 }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center', position: 'relative', height: 200, marginBottom: 150, paddingTop: isSmallScreen ? 50 : 120 }}>
         <Image
           source={require('../../../assets/images/login/login_description.png')}
           style={{ marginBottom: 40 }}
@@ -126,7 +132,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonContainer: {
-    marginTop: 140,
+    marginTop: isSmallScreen ? 100 : 140,
     zIndex: 3,
     width: '100%',
     paddingHorizontal: 39,
@@ -161,7 +167,7 @@ const styles = StyleSheet.create({
   },
   BottomTermsContainer: {
     position: 'absolute',
-    bottom: 60,
+    bottom: isSmallScreen ? 10 : 60,
     left: 0,
     right: 0,
     alignItems: 'center',
