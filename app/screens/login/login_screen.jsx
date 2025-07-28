@@ -9,7 +9,6 @@ import { useAuth } from '../../../hooks/login/useAuth';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 // 작은 화면 감지 (iPhone SE 2세대, iPhone 13 Mini 등)
-const isSmallScreen = screenHeight < 850;
 const isSuperSmallScreen = screenHeight < 700;
 
 export const LoginScreen = () => {
@@ -25,7 +24,7 @@ export const LoginScreen = () => {
 
   const logoSection = () => {
     return (
-      <View style={{ alignItems: 'center', justifyContent: 'center', position: 'relative', height: 200, marginBottom: 150, paddingTop: isSmallScreen ? 50 : 120 }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center', position: 'relative', height: 200, marginBottom: 150, paddingTop: isSuperSmallScreen ? 50 : 120 }}>
         <Image
           source={require('../../../assets/images/login/login_description.png')}
           style={{ marginBottom: 40 }}
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonContainer: {
-    marginTop: isSmallScreen ? 100 : 140,
+    marginTop: isSuperSmallScreen ? 100 : 140,
     zIndex: 3,
     width: '100%',
     paddingHorizontal: 39,
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
   },
   BottomTermsContainer: {
     position: 'absolute',
-    bottom: isSmallScreen ? 10 : 60,
+    bottom: isSuperSmallScreen ? 10 : 60,
     left: 0,
     right: 0,
     alignItems: 'center',
