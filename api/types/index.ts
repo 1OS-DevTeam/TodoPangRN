@@ -83,6 +83,9 @@ export interface HomeData {
     serviceUsedDays: number;
     completeProjects: number;
   },
+  categoryMap: {
+    [key: string]: string;
+  },
   popularChallenges: PopularChallenge[];
 }
 

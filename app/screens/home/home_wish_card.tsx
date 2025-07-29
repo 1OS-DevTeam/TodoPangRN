@@ -11,10 +11,11 @@ const cardWidth = (screenWidth - 32 - 7 - 8) / 2; // 좌우패딩(16*2) - gap(7)
 
 interface HomeWishCardProps {
   wish: PopularChallenge;
+  getCategoryName: (categoryKey: string | number) => string;
   onPress?: (menu: PopularChallenge) => void;
 }
 
-export const HomeWishCard = ({ wish, onPress}: HomeWishCardProps) => {
+export const HomeWishCard = ({ wish, getCategoryName, onPress}: HomeWishCardProps) => {
   const tapWish = () => {
     if (onPress) {
       onPress(wish);
@@ -24,7 +25,7 @@ export const HomeWishCard = ({ wish, onPress}: HomeWishCardProps) => {
   const wishContent = (
     <View style={styles.wishCard}>
       <View style={styles.wishCountContainer}>
-        <C1 color={COLORS.white}>{wish.category}</C1>
+        <C1 color={COLORS.white}>{getCategoryName(wish.category)}</C1>
       </View>
       <Body2 numberOfLines={2} ellipsizeMode="tail">{wish.title}</Body2>
     </View>

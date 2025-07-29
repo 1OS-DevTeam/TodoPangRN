@@ -14,6 +14,7 @@ export const HomeScreen = () => {
     handleCategoryClick,
     handlePopularChallengeClick,
     handleViewAllPopularChallenges,
+    getCategoryName,
     onRefresh
   } = useHomeData();
 
@@ -85,6 +86,7 @@ export const HomeScreen = () => {
                 console.log('클릭된 wish:', wish);
                 handlePopularChallengeClick(wish);
               }}
+              getCategoryName={getCategoryName}
             />
           )}
           keyExtractor={(item, index) => index.toString()}

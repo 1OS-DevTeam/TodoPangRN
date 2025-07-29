@@ -86,12 +86,19 @@ export const useChallengeHome = () => {
     handleCategoryClick(id, name);
   };
 
+  // 카테고리 키값을 카테고리명으로 매핑하는 함수
+  const getCategoryName = (categoryKey: string | number): string => {
+    if (!challengeInfoList?.categories) return categoryKey.toString();
+    return challengeInfoList.categories[categoryKey.toString()] || categoryKey.toString();
+  };
+
   return { 
     challengeInfoList, 
     selectedCategory,
     filteredChallenges,
     handleCategoryClick,
     handleCategorySelection,
-    handleChallengePress
+    handleChallengePress,
+    getCategoryName
   };
 };

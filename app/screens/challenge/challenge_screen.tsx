@@ -15,7 +15,8 @@ export const ChallengeScreen = () => {
     filteredChallenges,
     handleCategoryClick,
     handleCategorySelection,
-    handleChallengePress
+    handleChallengePress,
+    getCategoryName
   } = useChallengeHome();
 
   const headerSection = () => {
@@ -78,7 +79,11 @@ export const ChallengeScreen = () => {
           <FlatList
             data={filteredChallenges}
             renderItem={({ item }) => (
-              <ChallengeCard challenge={item} onPress={handleChallengePress} />
+              <ChallengeCard 
+                challenge={item} 
+                getCategoryName={getCategoryName}
+                onPress={handleChallengePress} 
+              />
             )}
             keyExtractor={(item) => item.id.toString()}
             numColumns={2}

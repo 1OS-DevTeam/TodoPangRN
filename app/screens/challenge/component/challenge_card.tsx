@@ -6,13 +6,14 @@ import { Body2, C1, Typography } from '@/app/components/texts';
 
 interface GoalCardProps {
   challenge: Challenge;
+  getCategoryName: (categoryKey: string | number) => string;
   onPress?: (challenge: Challenge) => void;
 }
 
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = (screenWidth - 32 - 7 - 8 ) / 2; // 좌우패딩(16*2) - gap(7) / 2
 
-export const ChallengeCard = ({ challenge, onPress }: GoalCardProps) => {
+export const ChallengeCard = ({ challenge, getCategoryName, onPress }: GoalCardProps) => {
 
   const tapWish = () => {
     if (onPress) {
@@ -23,7 +24,7 @@ export const ChallengeCard = ({ challenge, onPress }: GoalCardProps) => {
   const wishContent = (
     <View style={styles.wishCard}>
       <View style={styles.wishCountContainer}>
-        <C1 color={COLORS.white}>{challenge.category}</C1>
+        <C1 color={COLORS.white}>{getCategoryName(challenge.category)}</C1>
       </View>
       <Body2 numberOfLines={2} ellipsizeMode="tail">{challenge.title}</Body2>
     </View>

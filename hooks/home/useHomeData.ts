@@ -81,6 +81,12 @@ export const useHomeData = () => {
     router.push('/(tabs)/challenge');
   };
 
+  // 카테고리 키값을 카테고리명으로 매핑하는 함수
+  const getCategoryName = (categoryKey: string | number): string => {
+    if (!homeData?.categoryMap) return categoryKey.toString();
+    return homeData.categoryMap[categoryKey.toString()] || categoryKey.toString();
+  };
+
   return { 
     homeData, 
     refreshing,
@@ -89,6 +95,7 @@ export const useHomeData = () => {
     handleCategoryClick,
     handlePopularChallengeClick,
     handleViewAllPopularChallenges,
+    getCategoryName,
     onRefresh
   };
 };
