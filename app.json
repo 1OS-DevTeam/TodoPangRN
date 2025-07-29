@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "TodoPangRN",
-    "slug": "TodoPangRN",
+    "slug": "todopang",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -64,8 +64,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "fd98344b-57af-4585-b72c-4163c5e953ec"
+        "projectId": "21022fa0-ec8a-4808-8737-4e97367a4325"
       }
-    }
+    },
+    "owner": "sungyeonkim"
   }
 }
