@@ -1,6 +1,6 @@
 import { useWithdraw } from '@/hooks/mypasge/useWithdraw';
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Modal, FlatList, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import { COLORS } from '../../../assets/colors/colors';
 import { Image } from 'expo-image';
 import { WithdrawReason } from '@/api/types';
@@ -9,6 +9,7 @@ import MainActionButton from '@/app/components/buttons/main_action_button';
 import ScreenWrapper from '@/app/components/screenWrapper/screenWrapper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import TwoButtonBottomSheet from '@/app/components/bottomSheet/two_button_bottomsheet';
+import BottomSheet, { BottomSheetView, BottomSheetScrollView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 
 const WithdrawScreen = () => {
   console.log('🔥 WithdrawScreen 렌더링됨');
@@ -30,7 +31,11 @@ const WithdrawScreen = () => {
     selectReason,
     modalVisible,
     tapWithdrawButton,
+    // BottomSheet 관련 추가
+    reasonBottomSheetRef,
   } = useWithdraw();
+
+
 
   // 안정적인 참조를 위해 useCallback 사용
   const handleLayout = useCallback((event: any) => {
@@ -38,14 +43,20 @@ const WithdrawScreen = () => {
     console.log('🟡 Layout 정보:', event.nativeEvent.layout);
   }, []);
 
-  const renderReasonItem = ({ item }: { item: WithdrawReason }) => (
-    <TouchableOpacity
-      style={styles.reasonItem}
-      onPress={() => selectReason(item)}
-    >
-      <Text style={styles.reasonItemText}>{item.reasonDesc}</Text>
-    </TouchableOpacity>
+  // BottomSheet backdrop 렌더링
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        opacity={0.6}
+      />
+    ),
+    []
   );
+
+
   
   const descriptionSection = () => {
     return (
@@ -66,6 +77,8 @@ const WithdrawScreen = () => {
           </Text>
           <Image source={require('@/assets/images/mypage/chevron_down.png')} style={styles.selectReasonBoxImage} />
         </TouchableOpacity>
+        
+        
       </View>
     );
   };
@@ -91,37 +104,9 @@ const WithdrawScreen = () => {
     );
   };
 
-  const reasonModal = () => (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => setModalVisible(false)}
-    >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>탈퇴 사유를 선택해주세요</Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => {
-                setModalVisible(false);
-                setSelectedReason(null);
-              }}
-            >
-              <Text style={styles.closeButtonText}>✕</Text>
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={withdrawReasonList || []}
-            renderItem={renderReasonItem}
-            keyExtractor={(item: WithdrawReason) => item.reasonId.toString()}
-            style={styles.reasonList}
-          />
-        </View>
-      </View>
-    </Modal>
-  );
+
+
+
 
   return (
     <GestureHandlerRootView style={styles.container} onLayout={handleLayout}>
@@ -150,8 +135,36 @@ const WithdrawScreen = () => {
               imageSource={require('@/assets/images/mypage/onboarding_step3.png')}
               imageStyle={{ width: 150, height: 150 }}
             />
+
+            {/* 사유 선택 BottomSheet */}
+            <BottomSheet
+              ref={reasonBottomSheetRef}
+              index={-1}
+              snapPoints={['40%']}
+              enablePanDownToClose={true}
+              backdropComponent={renderBackdrop}
+            >
+              <BottomSheetView style={styles.bottomSheetContainer}>
+                <Text style={styles.bottomSheetTitle}>탈퇴 사유를 선택해주세요</Text>
+                <BottomSheetScrollView style={styles.bottomSheetScrollView}>
+                  {withdrawReasonList?.map((item) => (
+                    <TouchableOpacity
+                      key={item.reasonId}
+                      style={styles.bottomSheetItem}
+                      onPress={() => {
+                        setSelectedReason(item);
+                        reasonBottomSheetRef.current?.close();
+                      }}
+                    >
+                      <Text style={styles.bottomSheetItemText}>
+                        {item.reasonDesc}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </BottomSheetScrollView>
+              </BottomSheetView>
+            </BottomSheet>
        </SafeAreaView>
-      {reasonModal()}
 
 
     </GestureHandlerRootView>
@@ -213,61 +226,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: COLORS.white,
-    borderRadius: 20,
-    padding: 24,
-    width: '90%',
-    maxHeight: '70%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.15,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.black,
-    lineHeight: 24,
-  },
-  closeButton: {
-    padding: 8,
-    borderRadius: 20,
-    backgroundColor: '#F5F5F5',
-  },
-  closeButtonText: {
-    fontSize: 16,
-    color: '#666666',
-    fontWeight: '500',
-  },
-  reasonList: {
-    maxHeight: 320,
-  },
-  reasonItem: {
-    paddingVertical: 16,
-    paddingHorizontal: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
-  reasonItemText: {
-    fontSize: 16,
-    color: COLORS.black,
-    lineHeight: 22,
-    fontWeight: '400',
-  },
+
   contentContainer: {
     flex: 1,
     justifyContent: 'space-between',
@@ -313,6 +272,37 @@ const styles = StyleSheet.create({
   },
   bottomFixedSection: {
     marginTop: 'auto',
+  },
+
+  // BottomSheet 스타일
+  bottomSheetContainer: {
+    flex: 1,
+    padding: 20,
+  },
+  bottomSheetTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: COLORS.black,
+    textAlign: 'center',
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  bottomSheetScrollView: {
+    flex: 1,
+  },
+  bottomSheetItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+    backgroundColor: COLORS.white,
+  },
+  bottomSheetItemText: {
+    fontSize: 14,
+    color: COLORS.black,
+    lineHeight: 18,
   },
 });
 

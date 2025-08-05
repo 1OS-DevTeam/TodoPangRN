@@ -19,6 +19,7 @@ export const useWithdraw = () => {
   const [buttonEnabled, setButtonEnabled] = useState(false);
   const [selectedReason, setSelectedReason] = useState<WithdrawReason | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const reasonBottomSheetRef = useRef<BottomSheet>(null);
 
   const [bottomSheetState, setBottomSheetState] = useState<BottomSheetState>({
     visible: false,
@@ -61,18 +62,21 @@ export const useWithdraw = () => {
   };
 
   const showMenu = () => {
-    if (!withdrawReasonList || withdrawReasonList.length === 0) return;
-    setModalVisible(true);
+    // console.log('🔥 BottomSheet로 메뉴 열기');
+    if (!withdrawReasonList || withdrawReasonList.length === 0) {
+      console.log('🔥 withdrawReasonList가 비어있어서 BottomSheet 안 열림!');
+      return;
+    }
+    reasonBottomSheetRef.current?.expand();
   };
 
   const selectReason = (reason: WithdrawReason) => {
     setSelectedReason(reason);
-    setModalVisible(false);
   };
 
   const tapWithdrawButton = () => {
     bottomSheetRef.current?.expand();
-  }
+  };
 
 
 
@@ -94,5 +98,7 @@ export const useWithdraw = () => {
     selectReason,
     modalVisible,
     tapWithdrawButton,
+    // BottomSheet 관련 추가
+    reasonBottomSheetRef,
   };
 }

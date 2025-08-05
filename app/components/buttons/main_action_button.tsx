@@ -37,7 +37,7 @@ const MainActionButton: React.FC<BottomButtonProps> = ({
       {loading ? (
         <ActivityIndicator color="white" />
       ) : (
-        <Typography mode='Body3_bold' color='white'>{text}</Typography>
+        <Typography mode='Body3_bold' color='white'  numberOfLines={1}>{text}</Typography>
       )}
     </TouchableOpacity>
   );
