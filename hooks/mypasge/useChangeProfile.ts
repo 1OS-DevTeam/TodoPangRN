@@ -3,6 +3,7 @@ import { MypageService } from '../../api/services/mypageService';
 import { useRouter } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { BottomSheetState } from '@/api/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const useChangeProfile = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ export const useChangeProfile = () => {
       // 성공 시 처리 로직
       console.log('계정명 변경 성공:', response);
       setIsSuccess(true);
+      await AsyncStorage.setItem('userName', name);
       resultBottomSheetRef.current?.expand(); // 성공 바텀시트 열기
     } catch (error) {
       console.error('계정명 변경 중 오류가 발생했습니다:', error);

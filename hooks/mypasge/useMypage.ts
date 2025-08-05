@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { MypageService } from '../../api/services/mypageService';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { AuthService } from '@/api/services/authService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,13 +22,15 @@ export const useMypage = () => {
     secondButtonLabel: '',
   });
 
-  useEffect(() => {
-    const getUserName = async () => {
-      const userName = await AsyncStorage.getItem('userName') as string;
-      setUserName(userName);
-    }
-    getUserName();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const getUserName = async () => {
+        const userName = await AsyncStorage.getItem('userName') as string;
+        setUserName(userName);
+      }
+      getUserName();
+    }, [])
+  );
 
 
 
