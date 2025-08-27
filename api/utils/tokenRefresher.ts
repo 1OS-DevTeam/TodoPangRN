@@ -1,7 +1,12 @@
 import { auth } from '../../app/_layout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import { loadingManager } from './loadingManager';
+import apiClient from '../client';
+import { AxiosRequestConfig } from 'axios';
+
+interface RetryAxiosRequestConfig extends AxiosRequestConfig {
+  _isRetry?: boolean;
+}
 
 /**
  * Firebase 토큰을 갱신합니다.
@@ -43,7 +48,7 @@ export const refreshFirebaseToken = async (): Promise<string | null> => {
  * @param {object} config API 요청 설정
  * @returns {Promise} 재시도된 요청의 결과
  */
-export const retryRequestWithNewToken = async (config: any): Promise<any> => {
+export const retryRequestWithNewToken = async (config: RetryAxiosRequestConfig): Promise<any> => {
   try {
     // 새 토큰 발급
     const newToken = await refreshFirebaseToken();
@@ -55,12 +60,15 @@ export const retryRequestWithNewToken = async (config: any): Promise<any> => {
     }
     
     // 원래 요청의 설정을 복제해서 새 토큰으로 헤더 업데이트
-    const newConfig = { ...config };
+    const newConfig: RetryAxiosRequestConfig = { ...config };
     newConfig.headers = { ...newConfig.headers, Authorization: `Bearer ${newToken}` };
     
-    // 요청 재시도 (axios 직접 사용)
+    // 재시도 요청임을 표시
+    newConfig._isRetry = true;
+    
+    // 요청 재시도 (apiClient 사용)
     console.log('새 토큰으로 요청 재시도:', newConfig.url);
-    return await axios(newConfig);
+    return await apiClient(newConfig);
   } catch (error) {
     console.error('요청 재시도 중 오류 발생:', error);
     // 재시도 실패 시 로딩 종료
